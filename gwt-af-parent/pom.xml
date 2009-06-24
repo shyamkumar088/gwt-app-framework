@@ -1,0 +1,9 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.gwtaf</groupId>
+  <artifactId>gwt-af-parent</artifactId>
+  <packaging>pom</packaging>
+  <name>GWT App Framework Parent Project</name>
+  <version>0.0.1-SNAPSHOT</version>
+  <description>The parent module of the GWT App Framework project.</description>
+</project>
