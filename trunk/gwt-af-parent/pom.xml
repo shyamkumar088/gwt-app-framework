@@ -8,17 +8,52 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<description>The parent module of the GWT App Framework project.</description>
 
-	<properties>
+	<!-- Sub modules of the whole project. -->
+	<modules>
+		<module>../gwt-af-security</module>
+	</modules>
 
+	<!-- Properties declared to not copy version numbers around. -->
+	<properties>
 		<!--  tell the compiler we can use 1.5 -->
 		<maven.compiler.source>1.5</maven.compiler.source>
 		<maven.compiler.target>1.5</maven.compiler.target>
+		
+		<!-- convenience to define GWT version in one place -->
+		<gwt.version>1.6.4</gwt.version>
 	</properties>
 
 	<!-- Configure the build options. -->
 	<build>
+		<outputDirectory>war/WEB-INF/classes</outputDirectory>
 		<pluginManagement>
 			<plugins>
+				<!-- The GWT Maven plugin configuration. -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>gwt-maven-plugin</artifactId>
+					<version>1.1</version>
+
+					<!--
+						Exclude regular tests so the GWT compiler doesn't try to compile
+						them.
+					-->
+					<configuration>
+						<excludes>**/*Test.java</excludes>
+					</configuration>
+				</plugin>
+
+				<!-- Tell surefire to skip tests called GwtTest. -->
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.4.3</version>
+					<configuration>
+						<excludes>
+							<exclude>**/*GwtTest.java</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+				
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -45,6 +80,20 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.7</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<!--  GWT dependencies (from central repo) -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>${gwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

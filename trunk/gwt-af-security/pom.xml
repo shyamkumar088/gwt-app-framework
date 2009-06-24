@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.gwtaf</groupId>
+		<artifactId>gwt-af-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>org.gwtaf</groupId>
+	<artifactId>gwt-af-security</artifactId>
+	<packaging>jar</packaging>
+	<version>1.1</version>
+	<name>GWT App Framework Security</name>
+	<description>The security module of the GWT App Framework project.</description>
+
+	<build>
+		<!-- The GWT Maven plugin configuration. -->
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+
+		<!-- Include the Java source and module file in the JAR. -->
+		<resources>
+
+			<!-- The Java source. -->
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.java</include>
+				</includes>
+			</resource>
+
+			<!-- Include the whole resources directory. -->
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+	</build>
+</project>
