@@ -1,9 +1,74 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.gwtaf</groupId>
-  <artifactId>gwt-af-parent</artifactId>
-  <packaging>pom</packaging>
-  <name>GWT App Framework Parent Project</name>
-  <version>0.0.1-SNAPSHOT</version>
-  <description>The parent module of the GWT App Framework project.</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gwtaf</groupId>
+	<artifactId>gwt-af-parent</artifactId>
+	<packaging>pom</packaging>
+	<name>GWT App Framework Parent Project</name>
+	<version>0.0.1-SNAPSHOT</version>
+	<description>The parent module of the GWT App Framework project.</description>
+
+	<properties>
+
+		<!--  tell the compiler we can use 1.5 -->
+		<maven.compiler.source>1.5</maven.compiler.source>
+		<maven.compiler.target>1.5</maven.compiler.target>
+	</properties>
+
+	<!-- Configure the build options. -->
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<!-- Dependencies that EVERY module will need. -->
+	<dependencies>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>5.8</version>
+			<scope>test</scope>
+			<classifier>jdk15</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.7</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+
+	<!-- Internal repositories. -->
+	<distributionManagement>
+		<repository>
+			<id>local-libs-releases</id>
+			<name>Internal library releases</name>
+			<url>http://mshmaven/artifactory/libs-releases-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>local-libs-snapshots</id>
+			<name>Internal library snapshots</name>
+			<url>http://mshmaven/artifactory/libs-snapshots-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<!-- Cached repos -->
+	<repositories>
+		<repository>
+			<id>artifactory-repo</id>
+			<name>Internal Artifactory Repository</name>
+			<url>http://mshmaven/artifactory/repo</url>
+		</repository>
+	</repositories>
 </project>
