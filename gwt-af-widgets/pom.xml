@@ -29,8 +29,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.gwtaf</groupId>
 	<artifactId>gwt-af-widgets</artifactId>
-	<name>GWT Application Framework widgets module</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<name>GWT App Framework - Widgets</name>
 	<description>The module that contains custom widgets.</description>
 
 	<build>
