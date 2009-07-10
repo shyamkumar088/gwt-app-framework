@@ -1,3 +1,23 @@
+	<!--
+		Copyright 2008. Mount Sinai Hospital, Toronto, Canada. Licensed under
+		the Apache License, Version 2.0. You can find a copy of the license
+		at:
+	-->
+	<!-- http://www.apache.org/licenses/LICENSE-2.0 -->
+	<!--
+		IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR
+		DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES,
+		INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND
+		ITS DOCUMENTATION, EVEN IF MOUNT SINAI HOSPITAL HAS BEEN ADVISED OF
+		THE POSSIBILITY OF SUCH DAMAGE.
+	-->
+	<!--
+		MOUNT SINAI HOSPITAL SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTIES OF
+		MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE AND
+		ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS
+		IS". MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE,
+		SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+	-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -11,6 +31,7 @@
 	<!-- Sub modules of the whole project. -->
 	<modules>
 		<module>../gwt-af-security</module>
+		<module>../gwt-af-widgets</module>
 	</modules>
 
 	<!-- Properties declared to not copy version numbers around. -->
@@ -18,14 +39,13 @@
 		<!--  tell the compiler we can use 1.5 -->
 		<maven.compiler.source>1.5</maven.compiler.source>
 		<maven.compiler.target>1.5</maven.compiler.target>
-		
+
 		<!-- convenience to define GWT version in one place -->
 		<gwt.version>1.6.4</gwt.version>
 	</properties>
 
 	<!-- Configure the build options. -->
 	<build>
-		<outputDirectory>war/WEB-INF/classes</outputDirectory>
 		<pluginManagement>
 			<plugins>
 				<!-- The GWT Maven plugin configuration. -->
@@ -53,7 +73,7 @@
 						</excludes>
 					</configuration>
 				</plugin>
-				
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -65,6 +85,51 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<!-- Dependencies used by some modules. -->
+	<dependencyManagement>
+
+		<dependencies>
+
+			<!--  GWT dependencies (from central repo) -->
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt-servlet</artifactId>
+				<version>${gwt.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt-user</artifactId>
+				<version>${gwt.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt-dev</artifactId>
+				<version>${gwt.version}</version>
+				<classifier>${platform}</classifier>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- GWT libraries. -->
+			<dependency>
+				<groupId>com.google.code.gin</groupId>
+				<artifactId>google-gin</artifactId>
+				<version>0.107.svn</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.guice</groupId>
+				<artifactId>guice</artifactId>
+				<version>2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>aopalliance</groupId>
+				<artifactId>aopalliance</artifactId>
+				<version>1.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<!-- Dependencies that EVERY module will need. -->
 	<dependencies>
@@ -80,20 +145,6 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.7</version>
 			<scope>test</scope>
-		</dependency>
-		
-		<!--  GWT dependencies (from central repo) -->
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-servlet</artifactId>
-			<version>${gwt.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<version>${gwt.version}</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -120,4 +171,42 @@
 			<url>http://mshmaven/artifactory/repo</url>
 		</repository>
 	</repositories>
+
+	<!--  profiles (with activation per platform) for gwt-dev -->
+	<profiles>
+		<profile>
+			<id>gwt-dev-windows</id>
+			<properties>
+				<platform>windows</platform>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<os>
+					<family>Windows</family>
+				</os>
+			</activation>
+		</profile>
+		<profile>
+			<id>gwt-dev-mac</id>
+			<properties>
+				<platform>mac</platform>
+			</properties>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+		</profile>
+		<profile>
+			<id>gwt-dev-linux</id>
+			<properties>
+				<platform>linux</platform>
+			</properties>
+			<activation>
+				<os>
+					<name>Linux</name>
+				</os>
+			</activation>
+		</profile>
+	</profiles>
 </project>
