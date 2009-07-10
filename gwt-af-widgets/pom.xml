@@ -1,0 +1,84 @@
+
+	<!--
+		Copyright 2008. Mount Sinai Hospital, Toronto, Canada. Licensed under
+		the Apache License, Version 2.0. You can find a copy of the license
+		at:
+	-->
+	<!-- http://www.apache.org/licenses/LICENSE-2.0 -->
+	<!--
+		IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR
+		DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES,
+		INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND
+		ITS DOCUMENTATION, EVEN IF MOUNT SINAI HOSPITAL HAS BEEN ADVISED OF
+		THE POSSIBILITY OF SUCH DAMAGE.
+	-->
+	<!--
+		MOUNT SINAI HOSPITAL SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTIES OF
+		MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE AND
+		ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS
+		IS". MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE,
+		SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+	-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>gwt-af-parent</artifactId>
+		<groupId>org.gwtaf</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gwtaf</groupId>
+	<artifactId>gwt-af-widgets</artifactId>
+	<name>GWT Application Framework widgets module</name>
+	<version>0.0.1-SNAPSHOT</version>
+	<description>The module that contains custom widgets.</description>
+
+	<build>
+		<outputDirectory>war/WEB-INF/classes</outputDirectory>
+		<plugins>
+			<!-- The GWT Maven plugin configuration. -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+
+				<!-- Include resources since this is a library. -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- GWT dependencies. -->
+	<dependencies>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+			<classifier>${platform}</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gin</groupId>
+			<artifactId>google-gin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.guice</groupId>
+			<artifactId>guice</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>aopalliance</groupId>
+			<artifactId>aopalliance</artifactId>
+		</dependency>
+	</dependencies>
+</project>
