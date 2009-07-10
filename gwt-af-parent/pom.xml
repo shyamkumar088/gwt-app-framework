@@ -1,3 +1,4 @@
+
 	<!--
 		Copyright 2008. Mount Sinai Hospital, Toronto, Canada. Licensed under
 		the Apache License, Version 2.0. You can find a copy of the license
@@ -24,7 +25,7 @@
 	<groupId>org.gwtaf</groupId>
 	<artifactId>gwt-af-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>GWT App Framework Parent Project</name>
+	<name>GWT App Framework - Parent</name>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>The parent module of the GWT App Framework project.</description>
 
@@ -58,9 +59,14 @@
 						Exclude regular tests so the GWT compiler doesn't try to compile
 						them.
 					-->
-					<configuration>
-						<excludes>**/*Test.java</excludes>
-					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test</goal>
+							</goals>
+							<phase>test</phase>
+						</execution>
+					</executions>
 				</plugin>
 
 				<!-- Tell surefire to skip tests called GwtTest. -->
