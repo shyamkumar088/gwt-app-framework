@@ -20,30 +20,15 @@
  */
 package org.gwtaf.widgets.expanding;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Inject;
+import com.google.gwt.i18n.client.Constants;
 
 /**
- * A concrete implementation of {@link RemoveButton} using a {@link Label}.
+ * Externised constants for the {@link LabelRemoveButton}.
  * 
  * @author Arthur Kalmenson
  */
-public class LabelRemoveButton extends Label implements RemoveButton {
+public interface LabelRemoveButtonConstants extends Constants {
 
-	/**
-	 * Creates a new RemoveButton.
-	 * 
-	 * @param constants
-	 *            the externalised constants to use.
-	 */
-	@Inject
-	public LabelRemoveButton(LabelRemoveButtonConstants constants) {
-		this.setText(constants.removeLabel());
-		this.setStylePrimaryName("gwtaf-DynamicFlexTable-Remove");
-	}
-
-	public Widget getContainingWidget() {
-		return this;
-	}
+	@DefaultStringValue("remove")
+	String removeLabel();
 }

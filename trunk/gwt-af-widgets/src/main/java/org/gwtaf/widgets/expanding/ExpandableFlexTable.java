@@ -42,7 +42,7 @@ import com.google.inject.Provider;
  * @author Arthur Kalmenson
  * 
  * @param <T>
- *            the type of widget this <code>AbstractDynamicFlexTable</code> will
+ *            the type of widget this <code>ExpandableFlexTable</code> will
  *            be replicating.
  */
 public class ExpandableFlexTable<T extends Widget> extends Composite implements
