@@ -25,7 +25,6 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 
-import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.Assert;
@@ -125,7 +124,6 @@ public class RadioButtonGroupTest {
 		// check everything was set correctly.
 		verify(panelMock).add(radioMock);
 		verify(radioMock).setText("blah");
-		verify(panelMock).clear();
 
 		// make sure we have one in our array.
 		Assert.assertEquals(radioButtonGroup.size(), 1);
@@ -156,8 +154,38 @@ public class RadioButtonGroupTest {
 		verify(radioMock2).setText("hello");
 		verify(radioMock3).setText("test");
 
-		// make sure we have one in our array.
+		// make sure we have three in our array.
 		Assert.assertEquals(radioButtonGroup.size(), 3);
+	}
+
+	/**
+	 * Test to ensure that when choices are set multiple times the latest
+	 * choices are the ones present.
+	 */
+	@Test
+	public void setChoicesMultipleTimes() {
+
+		// set up the mocks.
+		RadioButton radioMock = mock(RadioButton.class);
+		RadioButton radioMock1 = mock(RadioButton.class);
+		RadioButton radioMock2 = mock(RadioButton.class);
+		when(radioButtonProviderMock.get()).thenReturn(radioMock, radioMock1,
+				radioMock2);
+
+		// set the first group.
+		radioButtonGroup.setChoices(new String[] { "yes" });
+
+		// make sure we have one in our array.
+		Assert.assertEquals(radioButtonGroup.size(), 1);
+
+		// set the first group.
+		radioButtonGroup.setChoices(new String[] { "maybe", "no" });
+		
+		// now set again and check the size and verify the panel was cleared.
+		Assert.assertEquals(radioButtonGroup.size(), 2);
+
+		// make sure clear was called on the main panel.
+		verify(panelMock, times(2)).clear();
 	}
 
 	/**
