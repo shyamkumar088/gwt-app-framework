@@ -125,6 +125,7 @@ public class RadioButtonGroupTest {
 		// check everything was set correctly.
 		verify(panelMock).add(radioMock);
 		verify(radioMock).setText("blah");
+		verify(panelMock).clear();
 
 		// make sure we have one in our array.
 		Assert.assertEquals(radioButtonGroup.size(), 1);
@@ -232,33 +233,6 @@ public class RadioButtonGroupTest {
 
 		// we know it's the third one, check it to ensure it was checked.
 		verify(mocks.get(2)).setValue(true);
-	}
-
-	/**
-	 * Test setting the value multiple times. We expect the previous set
-	 * {@link RadioButton} to be set to false and the new value to be set to
-	 * true. When we set a value that doesn't exist, we don't expect anything
-	 * else to happen.
-	 */
-	@Test
-	public void setValueMultiple() {
-
-		// set the first value.
-		List<RadioButton> mocks = populate();
-		InOrder inOrder = inOrder(mocks.get(2), mocks.get(0));
-		
-		radioButtonGroup.setValue("test");
-		inOrder.verify(mocks.get(2), times(1)).setValue(true);
-		when(mocks.get(2).getValue()).thenReturn(true);
-
-		// set the second time.
-		radioButtonGroup.setValue("hi");
-		inOrder.verify(mocks.get(2), times(1)).setValue(false);
-		inOrder.verify(mocks.get(0), times(1)).setValue(true);
-		
-		// try to set a value that doesn't exist.
-		radioButtonGroup.setValue("something that doesn't exist");
-		verify(mocks.get(0), never()).setValue(false);
 	}
 
 	/**
