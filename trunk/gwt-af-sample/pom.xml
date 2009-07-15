@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<!--
+    GWT-Maven archetype generated POM
+  -->
+	<parent>
+		<artifactId>gwt-af-parent</artifactId>
+		<groupId>org.gwtaf</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gwtaf</groupId>
+	<artifactId>gwt-af-sample</artifactId>
+	<packaging>war</packaging>
+	<name>GWT App Framework - Sample</name>
+	<description>Sample module that shows how the GWT App Framework is used.</description>
+
+	<dependencies>
+
+		<!-- GWT dependencies. -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
+
+		<!-- Internal dependencies. -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>gwt-af-widgets</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<outputDirectory>war/WEB-INF/classes</outputDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+
+				<configuration>
+					<runTarget>org.gwtaf.Sample/Sample.html</runTarget>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
