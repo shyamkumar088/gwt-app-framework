@@ -153,6 +153,7 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 			if (mainPanel.getWidget(row, 1) == removeButton
 					.getContainingWidget()) {
 				remove(row);
+				break;
 			}
 		}
 	}
