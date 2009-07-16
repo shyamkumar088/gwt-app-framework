@@ -33,6 +33,8 @@
 	<modules>
 		<module>../gwt-af-security</module>
 		<module>../gwt-af-widgets</module>
+		<module>../gwt-af-visibility</module>
+		<module>../gwt-af-sample</module>
 	</modules>
 
 	<!-- Properties declared to not copy version numbers around. -->
