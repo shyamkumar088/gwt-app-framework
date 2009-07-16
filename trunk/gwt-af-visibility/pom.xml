@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>gwt-af-parent</artifactId>
+		<groupId>org.gwtaf</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gwtaf</groupId>
+	<artifactId>gwt-af-visibility</artifactId>
+	<name>GWT App Framework - Visibility</name>
+	<description>A module to make visibility easier.</description>
+
+	<build>
+		<outputDirectory>war/WEB-INF/classes</outputDirectory>
+		<plugins>
+			<!-- The GWT Maven plugin configuration. -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+
+				<!-- Include resources since this is a library. -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<!-- Internal project dependencies. -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>gwt-af-widgets</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- GWT dependencies. -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+			<classifier>${platform}</classifier>
+		</dependency>
+
+		<!-- GWT library dependencies. -->
+		<dependency>
+			<groupId>com.google.code.gin</groupId>
+			<artifactId>google-gin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.guice</groupId>
+			<artifactId>guice</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>aopalliance</groupId>
+			<artifactId>aopalliance</artifactId>
+		</dependency>
+	</dependencies>
+</project>
