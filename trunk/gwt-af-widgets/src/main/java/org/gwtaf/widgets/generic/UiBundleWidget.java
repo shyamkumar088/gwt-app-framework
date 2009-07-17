@@ -49,5 +49,7 @@ public class UiBundleWidget<L extends Widget, W extends Widget> extends
 	public UiBundleWidget(Panel panel, L label, W widget) {
 		panel.add(label);
 		panel.add(widget);
+
+		initWidget(panel);
 	}
 }

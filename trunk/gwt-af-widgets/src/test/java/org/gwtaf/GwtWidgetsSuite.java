@@ -21,6 +21,7 @@
 package org.gwtaf;
 
 import org.gwtaf.widgets.expanding.ExpandableTableGwtTest;
+import org.gwtaf.widgets.generic.UiBundleWidgetGwtTest;
 
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.junit.tools.GWTTestSuite;
@@ -40,7 +41,8 @@ public class GwtWidgetsSuite extends TestCase {
 				"GWTTestSuite for gwt-af-widgets.");
 
 		suite.addTestSuite(ExpandableTableGwtTest.class);
-
+		suite.addTestSuite(UiBundleWidgetGwtTest.class);
+		
 		return suite;
 	}
 }
