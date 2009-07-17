@@ -124,7 +124,6 @@ public class UiBundleWidgetTest {
 		inOrder.verify(panelMock).add(widgetMock);
 
 		// verify there was no other action.
-		verifyNoMoreInteractions(panelMock);
 		verifyZeroInteractions(labelMock);
 		verifyZeroInteractions(widgetMock);
 	}
