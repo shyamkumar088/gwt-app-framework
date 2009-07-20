@@ -72,7 +72,8 @@ public class ExpandableTableGinModule extends AbstractGinModule {
 	@ExpandableTableDep
 	public HasClickHandlers addButtonProvider(
 			ExpandableFlexTableConstants constants) {
-
-		return new Label(constants.addLabel());
+		Label label = new Label(constants.addLabel());
+		label.setStylePrimaryName("gwtaf-DynamicFlexTable-Add");
+		return label;
 	}
 }
