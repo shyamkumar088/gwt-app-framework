@@ -15,14 +15,15 @@
  */
 package org.gwtaf.visibility.rule;
 
-import java.util.Arrays;
-import java.util.Set;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import org.gwtaf.widgets.generic.RadioButtonGroup;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -67,32 +68,6 @@ public class ShowIfGroupCheckedTest {
 	}
 
 	/**
-	 * Test creating {@link ShowIfGroupChecked} with a null parent. We expect an
-	 * {@link IllegalArgumentException}.
-	 */
-	@Test(expectedExceptions = IllegalArgumentException.class)
-	public void nullParent() {
-		rule = new ShowIfGroupChecked(null);
-	}
-
-	/**
-	 * Check that the parent is set correctly.
-	 */
-	@Test
-	public void checkParent() {
-		Assert.assertEquals(rule.getParentWidget(), groupMock);
-	}
-
-	/**
-	 * Add a null child to the rule. We expect an
-	 * {@link IllegalArgumentException} to be thrown.
-	 */
-	@Test(expectedExceptions = IllegalArgumentException.class)
-	public void addNullChild() {
-		rule.addChildWidget(null);
-	}
-
-	/**
 	 * Test to ensure the visibility is not changed on the parent or any child
 	 * widgets
 	 */
@@ -109,65 +84,6 @@ public class ShowIfGroupCheckedTest {
 		rule.addChildWidget(mockWidget);
 		verify(mockWidget, never()).setVisible(true);
 		verify(mockWidget, never()).setVisible(false);
-	}
-
-	/**
-	 * Test getting the widgets when the rule was just created. We expect an
-	 * empty list.
-	 */
-	@Test
-	public void getEmptyChildWidgets() {
-		Assert.assertEquals(rule.getChildWidgets().size(), 0);
-	}
-
-	/**
-	 * Add some child widgets and get them. Ensure we get them back.
-	 */
-	@Test
-	public void getAndRemoveChildWidgets() {
-
-		// mock some Widgets out and add them.
-		Widget widget1 = mock(Widget.class);
-		Widget widget2 = mock(Widget.class);
-		rule.addChildWidget(widget1);
-		rule.addChildWidget(widget2);
-
-		// make sure we get them back.
-		Assert.assertEquals(rule.getChildWidgets(), Arrays.asList(widget1,
-				widget2));
-
-		// remove one of the widgets and check the result.
-		rule.removeChildWidget(widget2);
-		Assert.assertEquals(rule.getChildWidgets(), Arrays.asList(widget1));
-	}
-
-	/**
-	 * Try adding a null trigger. We expect an {@link IllegalArgumentException}.
-	 */
-	@Test(expectedExceptions = IllegalArgumentException.class)
-	public void addNullTrigger() {
-		rule.addTrigger(null);
-	}
-
-	/**
-	 * Add some triggers and make sure we get them back.
-	 */
-	@Test
-	public void addAndGetTriggers() {
-
-		// add the triggers.
-		rule.addTrigger("test");
-		rule.addTrigger("test1");
-		rule.addTrigger("test2");
-
-		// check that they're there.
-		Set<String> triggers = rule.getTriggers();
-		for (String trigger : Arrays.asList("test", "test1", "test2")) {
-			Assert.assertTrue(triggers.contains(trigger));
-		}
-
-		// check the size.
-		Assert.assertEquals(triggers.size(), 3);
 	}
 
 	/**
