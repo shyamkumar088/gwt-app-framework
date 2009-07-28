@@ -15,12 +15,16 @@
  */
 package org.gwtaf.visibility.rule;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
 import java.util.Set;
 
-import org.gwtaf.widgets.generic.RadioButtonGroup;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -30,25 +34,26 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.google.gwt.junit.GWTMockUtilities;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * Test the {@link ShowIfGroupChecked} class.
+ * Test the {@link ShowIfSelected} class.
  * 
  * @author Arthur Kalmenson
  */
-public class ShowIfGroupCheckedTest {
+public class ShowIfSelectedTest {
 
 	/**
-	 * A mock of the {@link RadioButtonGroup}.
+	 * Mock of the list box.
 	 */
 	@Mock
-	private RadioButtonGroup groupMock;
+	private ListBox listBoxMock;
 
 	/**
-	 * The rule we're testing.
+	 * The {@link ShowIfSelected} rule we're testing.
 	 */
-	private ShowIfGroupChecked rule;
+	private ShowIfSelected rule;
 
 	@AfterClass
 	public void rearmGwt() {
@@ -63,16 +68,16 @@ public class ShowIfGroupCheckedTest {
 	@BeforeMethod
 	public void initBefore() {
 		MockitoAnnotations.initMocks(this);
-		rule = new ShowIfGroupChecked(groupMock);
+		rule = new ShowIfSelected(listBoxMock);
 	}
 
 	/**
-	 * Test creating {@link ShowIfGroupChecked} with a null parent. We expect an
+	 * Test creating {@link ShowIfSelected} with a null parent. We expect an
 	 * {@link IllegalArgumentException}.
 	 */
 	@Test(expectedExceptions = IllegalArgumentException.class)
 	public void nullParent() {
-		rule = new ShowIfGroupChecked(null);
+		rule = new ShowIfSelected(null);
 	}
 
 	/**
@@ -80,7 +85,7 @@ public class ShowIfGroupCheckedTest {
 	 */
 	@Test
 	public void checkParent() {
-		Assert.assertEquals(rule.getParentWidget(), groupMock);
+		Assert.assertEquals(rule.getParentWidget(), listBoxMock);
 	}
 
 	/**
@@ -99,9 +104,9 @@ public class ShowIfGroupCheckedTest {
 	@Test
 	public void visibilityNotChanged() {
 
-		// verify the group's visibility never changed.
-		verify(groupMock, never()).setVisible(true);
-		verify(groupMock, never()).setVisible(false);
+		// verify the ListBox's visibility never changed.
+		verify(listBoxMock, never()).setVisible(true);
+		verify(listBoxMock, never()).setVisible(false);
 
 		// add a child widget and make sure it also doesn't have visibility
 		// changed.
@@ -171,27 +176,27 @@ public class ShowIfGroupCheckedTest {
 	}
 
 	/**
-	 * Returns mocks of {@link RadioButtonGroup}s mocked with different values
-	 * to make visibility set different.
+	 * Returns mocks of {@link ListBox}es mocked with different behaviour to get
+	 * visibility of the child widgets to change.
 	 * 
-	 * @return mocks of {@link RadioButtonGroup}s.
+	 * @return mocks of {@link ListBox}es.
 	 */
 	@DataProvider(name = "executeProvider")
 	public Object[][] executeProvider() {
 
-		// radio not checked.
-		RadioButtonGroup notChecked = mock(RadioButtonGroup.class);
-		when(notChecked.isChecked()).thenReturn(false);
+		// ListBox not selected
+		ListBox notChecked = mock(ListBox.class);
+		when(notChecked.getSelectedIndex()).thenReturn(-1);
 
-		// radio checked but the value doesn't match.
-		RadioButtonGroup valueNotMatch = mock(RadioButtonGroup.class);
-		when(valueNotMatch.isChecked()).thenReturn(true);
-		when(valueNotMatch.getValue()).thenReturn("some other value");
+		// ListBox selected but not the right value.
+		ListBox valueNotMatch = mock(ListBox.class);
+		when(valueNotMatch.getSelectedIndex()).thenReturn(4);
+		when(valueNotMatch.getValue(4)).thenReturn("not equal value");
 
-		// radio checked and value matches.
-		RadioButtonGroup valueMatches = mock(RadioButtonGroup.class);
-		when(valueMatches.isChecked()).thenReturn(true);
-		when(valueMatches.getValue()).thenReturn("hello");
+		// ListBox selected and value matches.
+		ListBox valueMatches = mock(ListBox.class);
+		when(valueMatches.getSelectedIndex()).thenReturn(2);
+		when(valueMatches.getValue(2)).thenReturn("hello");
 
 		return new Object[][] { { notChecked, false },
 				{ valueNotMatch, false }, { valueMatches, true } };
@@ -201,16 +206,16 @@ public class ShowIfGroupCheckedTest {
 	 * Test to ensure the execute function sets the visibility of widgets
 	 * correctly based on the parent widget.
 	 * 
-	 * @param group
+	 * @param listBox
 	 *            the parent widget who's state is set by Mockito.
 	 * @param visible
 	 *            what the visibility of the child widgets should be.
 	 */
 	@Test(dataProvider = "executeProvider")
-	public void execute(RadioButtonGroup group, boolean visible) {
+	public void execute(ListBox listBox, boolean visible) {
 
 		// create the rule
-		rule = new ShowIfGroupChecked(group);
+		rule = new ShowIfSelected(listBox);
 
 		// add some widgets.
 		Widget widget1 = mock(Widget.class);
