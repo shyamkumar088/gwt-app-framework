@@ -20,11 +20,6 @@
  */
 package org.gwtaf.visibility.rule;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.gwtaf.visibility.VisibilityRule;
 import org.gwtaf.widgets.generic.RadioButtonGroup;
 
@@ -38,23 +33,8 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @author Arthur Kalmenson
  */
-public class ShowIfGroupChecked implements
-		VisibilityRule<RadioButtonGroup, Widget, String> {
-
-	/**
-	 * The parent concrete implementation of {@link RadioButtonGroup}.
-	 */
-	private RadioButtonGroup parent;
-
-	/**
-	 * The child widget.
-	 */
-	private List<Widget> children = new ArrayList<Widget>();
-
-	/**
-	 * The list of triggers that would show the child widget.
-	 */
-	private Set<String> triggers = new HashSet<String>();
+public class ShowIfGroupChecked extends
+		AbstractVisibilityRule<RadioButtonGroup, Widget, String> {
 
 	/**
 	 * Creates a new <code>ShowIfGroupChecked</code> with the given parent.
@@ -64,67 +44,25 @@ public class ShowIfGroupChecked implements
 	 */
 	public ShowIfGroupChecked(RadioButtonGroup radioButtonGroup) {
 
-		if (radioButtonGroup == null) {
-			throw new IllegalArgumentException("All constructor arguments to "
-					+ getClass().getName() + " must be instantiated.");
-		}
-
-		parent = radioButtonGroup;
-		parent.addClickHandler(new RadioClickedListener());
+		super(radioButtonGroup);
+		radioButtonGroup.addClickHandler(new RadioClickedListener());
 	}
 
 	public void execute() {
 
 		// if we found a valid checked RadioButton, we show the child widget,
 		// otherwise we hide it.
-		if (parent.isChecked() && triggers.contains(parent.getValue())) {
+		if (getParentWidget().isChecked()
+				&& getTriggers().contains(getParentWidget().getValue())) {
 			setChildrenVisibility(true);
 		} else {
 			setChildrenVisibility(false);
 		}
 	}
 
-	public RadioButtonGroup getParentWidget() {
-		return parent;
-	}
-
-	public void addChildWidget(Widget widget) {
-		if (widget == null) {
-			throw new IllegalArgumentException(getClass().getName()
-					+ ": Child widget cannot be null.");
-		}
-		children.add(widget);
-	}
-
-	public void removeChildWidget(Widget child) {
-		children.remove(child);
-	}
-
-	public List<Widget> getChildWidgets() {
-		return children;
-	}
-
-	public void addTrigger(String value) {
-		if (value == null) {
-			throw new IllegalArgumentException(getClass().getName()
-					+ ": Trigger cannot be null.");
-		}
-		triggers.add(value);
-	}
-
-	public Set<String> getTriggers() {
-		return triggers;
-	}
-
 	public class RadioClickedListener implements ClickHandler {
 		public void onClick(ClickEvent radioGroup) {
 			execute();
-		}
-	}
-
-	private void setChildrenVisibility(boolean visible) {
-		for (Widget child : children) {
-			child.setVisible(visible);
 		}
 	}
 }

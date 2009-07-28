@@ -21,11 +21,6 @@
 
 package org.gwtaf.visibility.rule;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.gwtaf.visibility.VisibilityRule;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -40,22 +35,8 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @author Arthur Kalmenson
  */
-public class ShowIfSelected implements VisibilityRule<ListBox, Widget, String> {
-
-	/**
-	 * The parent {@link ListBox} widget.
-	 */
-	private ListBox parent;
-
-	/**
-	 * The child widgets.
-	 */
-	private List<Widget> children = new ArrayList<Widget>();
-
-	/**
-	 * The set of triggers that would make the child widget appear.
-	 */
-	private Set<String> triggers = new HashSet<String>();
+public class ShowIfSelected extends
+		AbstractVisibilityRule<ListBox, Widget, String> {
 
 	/**
 	 * Creates a new <code>ShowIfSelected</code> with the given parent
@@ -65,61 +46,21 @@ public class ShowIfSelected implements VisibilityRule<ListBox, Widget, String> {
 	 *            the parent {@link ListBox}.
 	 */
 	public ShowIfSelected(ListBox parent) {
-		if (parent == null) {
-			throw new IllegalArgumentException(getClass().getName()
-					+ ": ListBox must be instantiated.");
-		}
-		this.parent = parent;
+
+		super(parent);
 
 		// add the change listener to the parent.
 		parent.addChangeHandler(new ListBoxSelectListener());
 	}
 
 	public void execute() {
-		int selectedIndex = parent.getSelectedIndex();
+		int selectedIndex = getParentWidget().getSelectedIndex();
 		if (selectedIndex != -1
-				&& triggers.contains(parent.getValue(selectedIndex))) {
+				&& getTriggers().contains(
+						getParentWidget().getValue(selectedIndex))) {
 			setChildrenVisibility(true);
 		} else {
 			setChildrenVisibility(false);
-		}
-	}
-
-	public ListBox getParentWidget() {
-		return parent;
-	}
-
-	public void addTrigger(String value) {
-		if (value == null) {
-			throw new IllegalArgumentException(getClass().getName()
-					+ ": Trigger cannot be null.");
-		}
-		triggers.add(value);
-	}
-
-	public Set<String> getTriggers() {
-		return triggers;
-	}
-
-	public void addChildWidget(Widget child) {
-		if (child == null) {
-			throw new IllegalArgumentException(getClass().getName()
-					+ ": child widget cannot be null.");
-		}
-		children.add(child);
-	}
-
-	public List<Widget> getChildWidgets() {
-		return children;
-	}
-
-	public void removeChildWidget(Widget child) {
-		children.remove(child);
-	}
-
-	private void setChildrenVisibility(boolean visible) {
-		for (Widget child : children) {
-			child.setVisible(visible);
 		}
 	}
 
