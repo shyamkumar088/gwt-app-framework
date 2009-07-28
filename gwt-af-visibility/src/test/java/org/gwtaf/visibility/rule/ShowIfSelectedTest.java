@@ -1,5 +1,10 @@
 /*
- * Copyright 2009. Mount Sinai Hospital, Toronto, Canada.
+ * Copyright 2008. Mount Sinai Hospital, Toronto, Canada.
+ * 
+ * Licensed under the Apache License, Version 2.0. You
+ * can find a copy of the license at:
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR DIRECT, 
  * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST 

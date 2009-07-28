@@ -18,7 +18,6 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-
 package org.gwtaf.visibility.rule;
 
 import org.gwtaf.visibility.VisibilityRule;
