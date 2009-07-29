@@ -24,6 +24,9 @@
 
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
+	<inherits name="org.gwt.beansbinding.BeansBinding" />
+	<inherits name="com.googlecode.gwtx.Java"></inherits>
+	<inherits name='org.gwtaf.GwtAfWidgets' />
 
 	<!-- Add the source path. -->
 	<source path="bindings" />
