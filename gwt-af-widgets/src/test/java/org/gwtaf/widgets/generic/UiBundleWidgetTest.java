@@ -24,6 +24,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -87,13 +88,20 @@ public class UiBundleWidgetTest {
 	 */
 	@DataProvider(name = "badArgs")
 	public Object[][] badConstructorArgProvider() {
-		return new Object[][] { { panelMock, null, null },
-				{ null, labelMock, null }, { panelMock, null, widgetMock } };
+
+		// mock out the panel and make it throw NullPointerException when adding
+		// nulls.
+		Panel panel = mock(Panel.class);
+		doThrow(new NullPointerException()).when(panel).add(null);
+
+		return new Object[][] { { panel, null, null },
+				{ null, labelMock, null }, { panel, null, widgetMock } };
 	}
 
 	/**
 	 * Test creating a {@link UiBundleWidget} with bad constructor arguments. We
-	 * expect a {@link NullPointerException} for nulls.
+	 * expect a {@link NullPointerException} for nulls, but this will depend on
+	 * the specific implementation of {@link Panel}.
 	 * 
 	 * @param panel
 	 *            the {@link Panel}.
@@ -104,7 +112,20 @@ public class UiBundleWidgetTest {
 	 */
 	@Test(expectedExceptions = NullPointerException.class, dataProvider = "badArgs")
 	public void badConstructorArgs(Panel panel, Label label, Widget widget) {
+
 		uiBundleWidget = new UiBundleWidget<Label, Widget>(panel, label, widget);
+	}
+
+	/**
+	 * Create a {@link UiBundleWidget} and check that the label and widget are
+	 * saved.
+	 */
+	@Test
+	public void createAndGet() {
+		uiBundleWidget = new UiBundleWidget<Label, Widget>(panelMock,
+				labelMock, widgetMock);
+		Assert.assertEquals(uiBundleWidget.getLabel(), labelMock);
+		Assert.assertEquals(uiBundleWidget.getWidget(), widgetMock);
 	}
 
 	/**

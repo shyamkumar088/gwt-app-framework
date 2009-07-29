@@ -26,6 +26,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 
+/**
+ * Integration test to ensure {@link UiBundleWidget} can be attached to the DOM.
+ * 
+ * @author Arthur Kalmenson
+ */
 public class UiBundleWidgetGwtTest extends GWTTestCase {
 
 	/**
