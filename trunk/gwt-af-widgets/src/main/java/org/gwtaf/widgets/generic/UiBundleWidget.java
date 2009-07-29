@@ -20,6 +20,7 @@
  */
 package org.gwtaf.widgets.generic;
 
+import org.gwtaf.widgets.IsWidget;
 import org.gwtaf.widgets.UiBundle;
 
 import com.google.gwt.user.client.ui.Composite;
@@ -33,7 +34,17 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Arthur Kalmenson
  */
 public class UiBundleWidget<L extends Widget, W extends Widget> extends
-		Composite {
+		Composite implements IsWidget {
+
+	/**
+	 * This <code>UiBundleWidget</code>'s label.
+	 */
+	private L label;
+
+	/**
+	 * This <code>UiBundleWidget</code>'s widget.
+	 */
+	private W widget;
 
 	/**
 	 * Create a new <code>UiBundleWidget</code> with the given Panel, L and W
@@ -47,9 +58,36 @@ public class UiBundleWidget<L extends Widget, W extends Widget> extends
 	 *            the widget.
 	 */
 	public UiBundleWidget(Panel panel, L label, W widget) {
+
+		this.label = label;
+		this.widget = widget;
+
+		// add to the panel.
 		panel.add(label);
 		panel.add(widget);
 
 		initWidget(panel);
+	}
+
+	/**
+	 * Returns this <code>UiBundleWidget</code>'s label.
+	 * 
+	 * @return this <code>UiBundleWidget</code>'s label.
+	 */
+	public L getLabel() {
+		return label;
+	}
+
+	/**
+	 * Returns this <code>UiBundleWidget</code>'s widget.
+	 * 
+	 * @return this <code>UiBundleWidget</code>'s widget.
+	 */
+	public W getWidget() {
+		return widget;
+	}
+
+	public Widget getContainingWidget() {
+		return this;
 	}
 }
