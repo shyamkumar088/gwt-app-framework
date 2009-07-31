@@ -72,7 +72,7 @@ public class TextAreaAdapterProviderGwtTest extends GWTTestCase {
 		// change the model value
 		serge.setFullname("coffee consumer");
 
-		// verify that the domain objects changed.
+		// verify that UI has changed.
 		Assert.assertEquals("coffee consumer", area.getText());
 	}
 
