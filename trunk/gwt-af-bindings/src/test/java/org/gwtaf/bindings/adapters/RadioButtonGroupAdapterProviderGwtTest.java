@@ -25,8 +25,8 @@ import junit.framework.Assert;
 import org.gwt.beansbinding.core.client.Binding;
 import org.gwt.beansbinding.core.client.util.GWTBeansBinding;
 import org.gwtaf.bindings.BindingBuilder;
+import org.gwtaf.bindings.DefaultBindingListener;
 import org.gwtaf.bindings.Person;
-import org.gwtaf.bindings.adapters.RadioButtonGroupAdapterProvider;
 import org.gwtaf.widgets.generic.RadioButtonGroup;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -84,6 +84,12 @@ public class RadioButtonGroupAdapterProviderGwtTest extends GWTTestCase {
 
 		buttonGroup.setValue(newName);
 		ValueChangeEvent.fire(buttonGroup, newName);
+
+		Assert.assertEquals(buttonGroup.getValue(), programmer.getFullname());
+
+		// other way around, set model
+
+		programmer.setFullname("Sergey Vesselov");
 
 		Assert.assertEquals(buttonGroup.getValue(), programmer.getFullname());
 	}

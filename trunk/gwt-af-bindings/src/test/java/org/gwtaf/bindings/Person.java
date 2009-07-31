@@ -82,7 +82,9 @@ public class Person implements HasPropertyChangeSupport {
 	}
 
 	public void setIsAlive(Boolean isAlive) {
+		Boolean oldIsAlive = this.isAlive;
 		this.isAlive = isAlive;
+		props.firePropertyChange("isAlive", oldIsAlive, isAlive);
 	}
 
 	public Boolean getIsAlive() {
