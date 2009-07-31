@@ -47,7 +47,7 @@ public final class TextAreaAdapterProvider implements BeanAdapterProvider {
 	/**
 	 * The property that will be set/get on the TextArea
 	 */
-	private static final String VALUE_P = "text";
+	private static final String TEXT_P = "text";
 
 	/**
 	 * The Adapter class that will be used to adapt the {@link TextArea} class
@@ -84,7 +84,7 @@ public final class TextAreaAdapterProvider implements BeanAdapterProvider {
 		 * @param inTextArea
 		 */
 		private Adapter(TextArea inTextArea) {
-			super(VALUE_P);
+			super(TEXT_P);
 			this.textArea = inTextArea;
 		}
 
@@ -150,7 +150,7 @@ public final class TextAreaAdapterProvider implements BeanAdapterProvider {
 	}
 
 	public boolean providesAdapter(Class<?> type, String property) {
-		return (type == TextArea.class) && property.intern() == VALUE_P;
+		return (type == TextArea.class) && property.intern() == TEXT_P;
 	}
 
 }
