@@ -263,6 +263,23 @@ public class RadioButtonGroupTest {
 		verify(mocks.get(2)).setValue(true);
 	}
 
+	@Test
+	public void setValueMultipleTimes() {
+
+		// set the value.
+		List<RadioButton> mocks = populate();
+		radioButtonGroup.setValue("test");
+
+		// we know it's the third one, check it to ensure it was checked.
+		verify(mocks.get(2)).setValue(true);
+		when(mocks.get(2).getValue()).thenReturn(true);
+		
+		// set the value to something else.
+		radioButtonGroup.setValue("hello");
+		verify(mocks.get(2)).setValue(false);
+		verify(mocks.get(1)).setValue(true);
+	}
+	
 	/**
 	 * Populate the {@link RadioButtonGroup} and returns a list of
 	 * {@link RadioButton} mocks used.
