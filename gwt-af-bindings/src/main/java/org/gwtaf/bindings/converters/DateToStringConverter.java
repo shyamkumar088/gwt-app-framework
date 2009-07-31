@@ -38,7 +38,7 @@ public class DateToStringConverter extends Converter<Date, String> {
 	 * A {@link SimpleDateFormat} that we will use to convert dates to strings
 	 * etc.
 	 */
-	private SimpleDateFormat sdf;
+	private SimpleDateFormat formatter;
 
 	/**
 	 * Creates a new {@code DateToStringConverter} using the specified date
@@ -48,21 +48,21 @@ public class DateToStringConverter extends Converter<Date, String> {
 	 *            the pattern to use with the {@link SimpleDateFormat}
 	 */
 	public DateToStringConverter(String dateFormat) {
-		sdf = new SimpleDateFormat(dateFormat);
+		formatter = new SimpleDateFormat(dateFormat);
 	}
 
 	@Override
 	public String convertForward(Date value) {
-		return sdf.format((Date) value);
+		return formatter.format((Date) value);
 	}
 
 	@Override
 	public Date convertReverse(String value) {
 		// target to source
 		try {
-			return sdf.parse((String) value);
+			return formatter.parse((String) value);
 		} catch (Exception e) {
-			return null;
+			throw new IllegalArgumentException("Unable to Convert");
 		}
 	}
 }

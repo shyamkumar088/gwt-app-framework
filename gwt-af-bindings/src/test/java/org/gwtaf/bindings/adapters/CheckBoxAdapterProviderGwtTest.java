@@ -71,6 +71,11 @@ public class CheckBoxAdapterProviderGwtTest extends GWTTestCase {
 		// check the value after
 		Assert.assertEquals(checkBox.getValue(), jason.getIsAlive());
 
+		// other direction i.e. via the model
+		jason.setIsAlive(true);
+
+		Assert.assertEquals(checkBox.getValue(), jason.getIsAlive());
+
 	}
 
 	@Override

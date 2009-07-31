@@ -20,6 +20,7 @@
  */
 package org.gwtaf.bindings.adapters;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import junit.framework.Assert;
@@ -40,6 +41,8 @@ import com.google.gwt.user.datepicker.client.DateBox;
  * 
  */
 public class DateBoxAdapterProviderGwtTest extends GWTTestCase {
+
+	private SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
 
 	/**
 	 * Tests the data binding to verify that the DateBox Adaptor works properly
@@ -70,6 +73,12 @@ public class DateBoxAdapterProviderGwtTest extends GWTTestCase {
 		ValueChangeEvent.fire(dateBox, newDate);
 
 		Assert.assertEquals(dateBox.getValue(), jason.getBirthday());
+
+		// check the other direction (model to view)
+		jason.setBirthday(new Date(86541231));
+
+		Assert.assertEquals(formatter.format(dateBox.getValue()), formatter
+				.format(jason.getBirthday()));
 	}
 
 	@Override
