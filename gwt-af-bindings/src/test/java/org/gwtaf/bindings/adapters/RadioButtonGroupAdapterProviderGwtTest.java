@@ -25,7 +25,6 @@ import junit.framework.Assert;
 import org.gwt.beansbinding.core.client.Binding;
 import org.gwt.beansbinding.core.client.util.GWTBeansBinding;
 import org.gwtaf.bindings.BindingBuilder;
-import org.gwtaf.bindings.DefaultBindingListener;
 import org.gwtaf.bindings.Person;
 import org.gwtaf.widgets.generic.RadioButtonGroup;
 
