@@ -27,7 +27,7 @@ import junit.framework.Assert;
 
 import org.gwt.beansbinding.core.client.Binding;
 import org.gwt.beansbinding.core.client.util.HasPropertyChangeSupport;
-import org.gwt.beansbinding.ui.client.adapters.TextBoxAdapterProvider;
+import org.gwtaf.bindings.adapters.TextBoxAdapterProvider;
 
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.ui.TextBox;
