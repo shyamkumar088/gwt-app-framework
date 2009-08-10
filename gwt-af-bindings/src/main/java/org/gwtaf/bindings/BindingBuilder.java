@@ -23,6 +23,7 @@ package org.gwtaf.bindings;
 import org.gwt.beansbinding.core.client.BeanProperty;
 import org.gwt.beansbinding.core.client.Binding;
 import org.gwt.beansbinding.core.client.Bindings;
+import org.gwt.beansbinding.core.client.Converter;
 import org.gwt.beansbinding.core.client.AutoBinding.UpdateStrategy;
 import org.gwt.beansbinding.core.client.ext.BeanAdapterFactory;
 import org.gwt.beansbinding.core.client.ext.BeanAdapterProvider;
@@ -60,6 +61,17 @@ public class BindingBuilder {
 			String sourcePropertyName, Class<SV> svClass, TS target,
 			String targetPropertyName, Class<TV> tvClass,
 			BeanAdapterProvider... adapterProviders) {
+		return createBindingWithConverter(source, sourcePropertyName, svClass,
+				target, targetPropertyName, tvClass, null, adapterProviders);
+	}
+
+	public <SS, SV, TS, TV> Binding<SS, SV, TS, TV> createBindingWithConverter(
+			SS source, String sourcePropertyName, Class<SV> svClass, TS target,
+			String targetPropertyName, Class<TV> tvClass,
+			Converter<SV, TV> converter,
+			BeanAdapterProvider... adapterProviders) {
+
+		// loop through the providers
 
 		for (BeanAdapterProvider provider : adapterProviders) {
 			BeanAdapterFactory.addProvider(provider);
@@ -75,14 +87,18 @@ public class BindingBuilder {
 		if (sourceProp.getValue(source) != null) {
 			if (!sourceProp.getValue(source).getClass().equals(svClass)) {
 				throw new IllegalArgumentException(
-						"Source Value Class type does not match svClass type");
+						"Source Value Class type does not match svClass type"
+								+ svClass + " doesn't match "
+								+ sourceProp.getValue(source).getClass() + ")");
 			}
 		}
 
 		if (targetProp.getValue(target) != null) {
 			if (!targetProp.getValue(target).getClass().equals(tvClass)) {
 				throw new IllegalArgumentException(
-						"Target Value Class type does not match tvClass type");
+						"Target Value Class type does not match tvClass type ("
+								+ tvClass + " doesn't match "
+								+ targetProp.getValue(target).getClass() + ")");
 			}
 		}
 
@@ -91,8 +107,14 @@ public class BindingBuilder {
 				UpdateStrategy.READ_WRITE, source, sourceProp, target,
 				targetProp);
 
+		// assign the converter if not null
+		if (converter != null) {
+			binding.setConverter(converter);
+		}
+
 		binding.bind();
 
 		return binding;
 	}
+
 }
