@@ -59,7 +59,7 @@ public class TextBoxAdapterProvider implements BeanAdapterProvider {
 		/**
 		 * The {@link TextBox} reference
 		 */
-		private TextBox TextBox;
+		private TextBox textBox;
 
 		/**
 		 * The {@link Handler} for handling data binding firing
@@ -85,7 +85,7 @@ public class TextBoxAdapterProvider implements BeanAdapterProvider {
 		 */
 		private Adapter(TextBox inTextBox) {
 			super(TEXT_P);
-			this.TextBox = inTextBox;
+			this.textBox = inTextBox;
 		}
 
 		/**
@@ -94,7 +94,7 @@ public class TextBoxAdapterProvider implements BeanAdapterProvider {
 		 * @return the value of the TextBox
 		 */
 		public String getText() {
-			return TextBox.getText();
+			return textBox.getText();
 		}
 
 		/**
@@ -104,14 +104,14 @@ public class TextBoxAdapterProvider implements BeanAdapterProvider {
 		 *            the value to set
 		 */
 		public void setText(String value) {
-			TextBox.setText(value);
+			textBox.setText(value);
 		}
 
 		@Override
 		protected void listeningStarted() {
 			handler = new Handler();
 			cachedText = getText();
-			registration = TextBox.addValueChangeHandler(handler);
+			registration = textBox.addValueChangeHandler(handler);
 		}
 
 		@Override
