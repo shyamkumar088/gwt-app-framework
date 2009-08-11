@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 import org.gwtaf.bindings.BindingBuilderGwtTest;
 import org.gwtaf.bindings.adapters.CheckBoxAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.DateBoxAdapterProviderGwtTest;
+import org.gwtaf.bindings.adapters.ListBoxAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.RadioButtonGroupAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.TextAreaAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.TextBoxAdapterProviderGwtTest;
@@ -44,6 +45,7 @@ public class GwtBindingsSuite extends TestCase {
 		suite.addTestSuite(CheckBoxAdapterProviderGwtTest.class);
 		suite.addTestSuite(TextAreaAdapterProviderGwtTest.class);
 		suite.addTestSuite(TextBoxAdapterProviderGwtTest.class);
+		suite.addTestSuite(ListBoxAdapterProviderGwtTest.class);
 		return suite;
 	}
 }
