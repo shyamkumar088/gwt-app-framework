@@ -28,9 +28,14 @@ import junit.framework.Assert;
 import org.gwt.beansbinding.core.client.Binding;
 import org.gwt.beansbinding.core.client.util.HasPropertyChangeSupport;
 import org.gwtaf.bindings.adapters.TextBoxAdapterProvider;
+import org.gwtaf.bindings.converters.StringToBooleanConverter;
+import org.gwtaf.widgets.generic.RadioButtonGroup;
 
 import com.google.gwt.junit.client.GWTTestCase;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.inject.Provider;
 
 /**
  * Gwt Tests for the {@link BindingBuilder} class
@@ -58,7 +63,42 @@ public class BindingBuilderGwtTest extends GWTTestCase {
 						"text", String.class, new TextBoxAdapterProvider());
 		// if all goes well we should pass
 		Assert.assertTrue(binding.isBound());
-		Assert.assertTrue(true);
+	}
+
+	/**
+	 * Tests creation of a binding using a converter
+	 */
+	public void testCreateBindingWithConverter() {
+		// we're going to bind a String value to a Boolean value using the the
+		// StringToBooleanConverter
+
+		Person personB = new Person();
+
+		// some setup
+		RadioButtonGroup buttonGroup = new RadioButtonGroup(
+				new HorizontalPanel(), new Provider<RadioButton>() {
+
+					public RadioButton get() {
+						return new RadioButton("testCreateBindingWithConverter");
+					}
+
+				});
+
+		buttonGroup.setChoices(new String[] { "Yes", "No" });
+
+		// set person to be live to ensure a conversion is called
+		personB.setIsAlive(true);
+
+		BindingBuilder builder = new BindingBuilder();
+
+		Binding<RadioButtonGroup, String, Person, Boolean> binding = builder
+				.createBindingWithConverter(buttonGroup, "value", String.class,
+						personB, "isAlive", Boolean.class,
+						new StringToBooleanConverter(),
+						new TextBoxAdapterProvider());
+
+		// if all goes well we should pass
+		Assert.assertTrue(binding.isBound());
 	}
 
 	/**
