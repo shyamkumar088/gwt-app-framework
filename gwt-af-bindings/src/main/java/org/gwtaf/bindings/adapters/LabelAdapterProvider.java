@@ -24,10 +24,6 @@ import org.gwt.beansbinding.core.client.ext.BeanAdapter;
 import org.gwt.beansbinding.core.client.ext.BeanAdapterProvider;
 import org.gwt.beansbinding.ui.client.adapters.BeanAdapterBase;
 
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Label;
 
 /**
@@ -59,23 +55,6 @@ public final class LabelAdapterProvider implements BeanAdapterProvider {
 		private Label label;
 
 		/**
-		 * The {@link Handler} for handling data binding firing
-		 */
-		private Handler handler;
-
-		/**
-		 * The {@link Label}'s cached value, which will be used to fire property
-		 * changes
-		 */
-		private String cachedText;
-
-		/**
-		 * The {@link HandlerRegistration} used to keep track of the added
-		 * handlers
-		 */
-		private HandlerRegistration registration;
-
-		/**
 		 * Constructs the adapter
 		 * 
 		 * @param inLabel
@@ -102,32 +81,6 @@ public final class LabelAdapterProvider implements BeanAdapterProvider {
 		 */
 		public void setText(String value) {
 			label.setText(value);
-		}
-
-		@Override
-		protected void listeningStarted() {
-			handler = new Handler();
-			cachedText = getText();
-			registration = label.addMouseDownHandler(handler);
-		}
-
-		@Override
-		protected void listeningStopped() {
-			registration.removeHandler();
-			handler = null;
-		}
-
-		/**
-		 * A {@link ValueChangeHandler} implementation for firing off property
-		 * changes
-		 * 
-		 * @author Jason Kong
-		 * 
-		 */
-		public class Handler implements MouseDownHandler {
-
-			public void onMouseDown(MouseDownEvent arg0) {
-			}
 		}
 
 	}
