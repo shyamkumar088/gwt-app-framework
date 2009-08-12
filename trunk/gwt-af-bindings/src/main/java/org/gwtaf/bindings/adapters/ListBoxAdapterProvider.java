@@ -220,7 +220,7 @@ public class ListBoxAdapterProvider implements BeanAdapterProvider {
 		// find the value
 		int index = -1;
 		for (int i = 0; i < list.getItemCount(); i++) {
-			if (value.equals(list.getValue(i))) {
+			if (list.getValue(i).equals(value)) {
 				index = i;
 			}
 		}
