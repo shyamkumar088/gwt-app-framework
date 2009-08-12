@@ -35,6 +35,8 @@
 		<module>../gwt-af-widgets</module>
 		<module>../gwt-af-visibility</module>
 		<module>../gwt-af-sample</module>
+		<module>../gwt-af-bindings</module>
+		<module>../gwt-af-eventbus</module>
 	</modules>
 
 	<!-- Properties declared to not copy version numbers around. -->
