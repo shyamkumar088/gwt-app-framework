@@ -45,6 +45,11 @@ public class Person implements HasPropertyChangeSupport {
 	private String fullname;
 
 	/**
+	 * The person's occupation
+	 */
+	private String occupation;
+
+	/**
 	 * Whether or not they are alive
 	 */
 	private Boolean isAlive;
@@ -89,6 +94,16 @@ public class Person implements HasPropertyChangeSupport {
 
 	public Boolean getIsAlive() {
 		return isAlive;
+	}
+
+	public String getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(String occupation) {
+		String oldOccupation = this.occupation;
+		this.occupation = occupation;
+		props.firePropertyChange("occupation", oldOccupation, occupation);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener l) {
