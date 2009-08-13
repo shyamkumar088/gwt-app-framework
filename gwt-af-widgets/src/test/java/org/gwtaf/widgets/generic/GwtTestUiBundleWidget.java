@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.TextBox;
  * 
  * @author Arthur Kalmenson
  */
-public class UiBundleWidgetGwtTest extends GWTTestCase {
+public class GwtTestUiBundleWidget extends GWTTestCase {
 
 	/**
 	 * Test creating it and adding it to a widget. This will check if it's been
@@ -58,7 +58,7 @@ public class UiBundleWidgetGwtTest extends GWTTestCase {
 
 	@Override
 	public String getModuleName() {
-		return "org.gwtaf.GwtAfWidgets";
+		return "org.gwtaf.GwtAfWidgetsTesting";
 	}
 
 }

@@ -20,14 +20,30 @@
  */
 package org.gwtaf.widgets.expanding;
 
-import org.gwtaf.widgets.IsWidget;
-
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 
 /**
- * The remove button that's part of the {@link ExpandableTable}.
+ * A concrete implementation of {@link AddButton} using a {@link Label}.
  * 
  * @author Arthur Kalmenson
  */
-public interface RemoveButton extends IsWidget, HasClickHandlers {
+public class LabelAddButton extends Label implements AddButton {
+
+	/**
+	 * Creates a new AddButton.
+	 * 
+	 * @param constants
+	 *            the externalised constants to use.
+	 */
+	@Inject
+	public LabelAddButton(ExpandableTableConstants constants) {
+		this.setText(constants.addLabel());
+		this.setStylePrimaryName("gwtaf-DynamicFlexTable-Remove");
+	}
+
+	public Widget getContainingWidget() {
+		return this;
+	}
 }

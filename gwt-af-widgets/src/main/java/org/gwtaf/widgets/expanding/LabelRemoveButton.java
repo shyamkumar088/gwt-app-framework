@@ -38,7 +38,7 @@ public class LabelRemoveButton extends Label implements RemoveButton {
 	 *            the externalised constants to use.
 	 */
 	@Inject
-	public LabelRemoveButton(LabelRemoveButtonConstants constants) {
+	public LabelRemoveButton(ExpandableTableConstants constants) {
 		this.setText(constants.removeLabel());
 		this.setStylePrimaryName("gwtaf-DynamicFlexTable-Remove");
 	}

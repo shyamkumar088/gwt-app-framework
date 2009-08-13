@@ -20,14 +20,37 @@
  */
 package org.gwtaf.widgets.expanding;
 
-import org.gwtaf.widgets.IsWidget;
+import org.gwtaf.widgets.expanding.gin.ExpandableTableGinModule;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.inject.client.GinModules;
+import com.google.gwt.inject.client.Ginjector;
+import com.google.gwt.junit.client.GWTTestCase;
 
 /**
- * The remove button that's part of the {@link ExpandableTable}.
+ * Run an integration test on the {@link ExpandableTablePresenter} to ensure
+ * that all the pieces can talk to each other correctly.
  * 
  * @author Arthur Kalmenson
  */
-public interface RemoveButton extends IsWidget, HasClickHandlers {
+public class GwtTestExpandableTablePresenter extends GWTTestCase {
+
+	/**
+	 * The test {@link Ginjector} we'll use to test injections for the
+	 * {@link ExpandableTablePresenter} implementation.
+	 * 
+	 * @author Arthur Kalmenson
+	 */
+	@GinModules(ExpandableTableGinModule.class)
+	public static interface ExpandableTableGwtTestGinjector extends Ginjector {
+		
+	}
+	
+	public void testExample() {
+		assertTrue(true);
+	}
+
+	@Override
+	public String getModuleName() {
+		return "org.gwtaf.GwtAfWidgetsTesting";
+	}
 }

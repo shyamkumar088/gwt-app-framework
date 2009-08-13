@@ -22,7 +22,9 @@ package org.gwtaf.widgets.expanding;
 
 import java.util.List;
 
-import org.gwtaf.widgets.IsWidget;
+import org.gwtaf.widgets.View;
+
+import com.google.gwt.event.dom.client.HasClickHandlers;
 
 /**
  * This interface provides the methods that would be required by a expandable
@@ -33,20 +35,22 @@ import org.gwtaf.widgets.IsWidget;
  * @param <T>
  *            the type of widget this table will replicate.
  */
-public interface ExpandableTable<T> extends IsWidget {
+public interface ExpandableTable<T> extends View, HasClickHandlers {
 
 	/**
 	 * Adds a new row to the dynamic table.
 	 */
-	public void add();
+	public void add(T widget);
 
 	/**
-	 * Removes the specific row from the table.
+	 * Removes the row with the given {@link RemoveButton} and returns the
+	 * containing widget of type T removed.
 	 * 
-	 * @param row
-	 *            the row to remove.
+	 * @param removeButton
+	 *            the remove button.
+	 * @return the containing widget of type T removed.
 	 */
-	public void remove(int row);
+	public T remove(RemoveButton removeButton);
 
 	/**
 	 * Clears the widgets in this <code>ExpandableTable</code>.

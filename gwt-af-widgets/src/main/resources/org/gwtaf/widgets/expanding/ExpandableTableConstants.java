@@ -20,14 +20,18 @@
  */
 package org.gwtaf.widgets.expanding;
 
-import org.gwtaf.widgets.IsWidget;
-
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.i18n.client.Constants;
 
 /**
- * The remove button that's part of the {@link ExpandableTable}.
+ * Externised constants for the {@link LabelRemoveButton}.
  * 
  * @author Arthur Kalmenson
  */
-public interface RemoveButton extends IsWidget, HasClickHandlers {
+public interface ExpandableTableConstants extends Constants {
+
+	@DefaultStringValue("remove")
+	String removeLabel();
+	
+	@DefaultStringValue("add")
+	String addLabel();
 }
