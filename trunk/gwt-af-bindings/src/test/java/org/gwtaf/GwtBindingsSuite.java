@@ -19,6 +19,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 
 import org.gwtaf.bindings.BindingBuilderGwtTest;
+import org.gwtaf.bindings.adapters.AnchorAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.CheckBoxAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.DateBoxAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.LabelAdapterProviderGwtTest;
@@ -48,6 +49,7 @@ public class GwtBindingsSuite extends TestCase {
 		suite.addTestSuite(TextBoxAdapterProviderGwtTest.class);
 		suite.addTestSuite(LabelAdapterProviderGwtTest.class);
 		suite.addTestSuite(ListBoxAdapterProviderGwtTest.class);
+		suite.addTestSuite(AnchorAdapterProviderGwtTest.class);
 		return suite;
 	}
 }

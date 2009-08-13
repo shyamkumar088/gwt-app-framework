@@ -28,41 +28,50 @@ import org.gwtaf.bindings.BindingBuilder;
 import org.gwtaf.bindings.Person;
 
 import com.google.gwt.junit.client.GWTTestCase;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Anchor;
 
 /**
- * Test of the {@link LabelAdapterProvider}
+ * Test of the {@link AnchorAdapterProvider}
  * 
  * @author Sergey Vesselov
  * 
  */
-public class LabelAdapterProviderGwtTest extends GWTTestCase {
+public class AnchorAdapterProviderGwtTest extends GWTTestCase {
 
 	/**
 	 * Verifies that data bindings reflect information from model to UI. Ui to
-	 * model will not be tested since the UI is a label which is not an input.
+	 * model will not be tested since the UI is a anchor which is not an input.
 	 */
-	public void testLabelBindings() {
+	public void testAnchorBindings() {
 		GWTBeansBinding.init();
 
 		// build the objects
-		Label nameLabel = new Label();
+		Anchor anchor = new Anchor();
 		Person serge = new Person();
 
-		// bind fullname to the name label.
+		// bind fullname to the name text.
 		BindingBuilder builder = new BindingBuilder();
-		Binding<Label, String, Person, String> binding = builder.createBinding(
-				nameLabel, "text", String.class, serge, "fullname",
-				String.class, new LabelAdapterProvider());
+		Binding<Anchor, String, Person, String> binding = builder
+				.createBinding(anchor, "text", String.class, serge, "fullname",
+						String.class, new AnchorAdapterProvider());
+
+		// bind occupation to the href.
+		Binding<Anchor, String, Person, String> bindingTwo = builder
+				.createBinding(anchor, "href", String.class, serge,
+						"occupation", String.class, new AnchorAdapterProvider());
 
 		// assert the binding is bound.
 		Assert.assertTrue(binding.isBound());
+		Assert.assertTrue(bindingTwo.isBound());
 
 		// change the model value
-		serge.setFullname("coffee consumer");
+		serge.setFullname("serge");
+		String url = "http://www.coffeeconsumer.com/";
+		serge.setOccupation(url);
 
 		// verify that UI has changed.
-		Assert.assertEquals("coffee consumer", nameLabel.getText());
+		Assert.assertEquals("serge", anchor.getText());
+		Assert.assertEquals(url, anchor.getHref().toString());
 	}
 
 	@Override
