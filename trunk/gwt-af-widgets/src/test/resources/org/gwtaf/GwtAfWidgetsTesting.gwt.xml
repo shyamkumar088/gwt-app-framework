@@ -25,10 +25,13 @@
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.inject.Inject" />
-	
-	<!-- Inherit gwt-af projects. -->
+
+	<!-- Inherit gwt-af modules. -->
 	<inherits name="org.gwtaf.GwtAfEventbus" />
 
 	<!-- Add the source path. -->
-	<source path="widgets" />
+	<source path="widgets">
+		<include name="**/*.java" />
+		<exclude name="**/*Test.java" />
+	</source>
 </module>

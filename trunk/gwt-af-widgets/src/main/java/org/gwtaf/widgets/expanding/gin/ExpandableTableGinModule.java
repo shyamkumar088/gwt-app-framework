@@ -20,16 +20,15 @@
  */
 package org.gwtaf.widgets.expanding.gin;
 
+import org.gwtaf.widgets.expanding.AddButton;
 import org.gwtaf.widgets.expanding.ExpandableTable;
+import org.gwtaf.widgets.expanding.LabelAddButton;
 import org.gwtaf.widgets.expanding.LabelRemoveButton;
 import org.gwtaf.widgets.expanding.RemoveButton;
-import org.gwtaf.widgets.expanding.ExpandableFlexTable.ExpandableFlexTableConstants;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.inject.Provides;
 
 /**
@@ -42,7 +41,8 @@ public class ExpandableTableGinModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {
-		bind(RemoveButton.class).to(LabelRemoveButton.class);
+		bind(RemoveButton.class).annotatedWith(ExpandableTableDep.class).to(LabelRemoveButton.class);
+		bind(AddButton.class).annotatedWith(ExpandableTableDep.class).to(LabelAddButton.class);
 	}
 
 	/**
@@ -59,21 +59,5 @@ public class ExpandableTableGinModule extends AbstractGinModule {
 		mainPanel.getRowFormatter().setVerticalAlign(0,
 				HasVerticalAlignment.ALIGN_TOP);
 		return mainPanel;
-	}
-
-	/**
-	 * Returns the {@link HasClickHandlers} to be used by
-	 * {@link ExpandableTable} implementations as an add button.
-	 * 
-	 * @return the {@link HasClickHandlers} to be used by
-	 *         {@link ExpandableTable} implementations as an add button.
-	 */
-	@Provides
-	@ExpandableTableDep
-	public HasClickHandlers addButtonProvider(
-			ExpandableFlexTableConstants constants) {
-		Label label = new Label(constants.addLabel());
-		label.setStylePrimaryName("gwtaf-DynamicFlexTable-Add");
-		return label;
 	}
 }

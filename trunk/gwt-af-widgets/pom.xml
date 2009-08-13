@@ -39,11 +39,15 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
+				<configuration>
+                  <excludes>**/GwtTest*.java</excludes>
+                </configuration>
 
 				<!-- Include resources since this is a library. -->
 				<executions>
 					<execution>
 						<goals>
+							<goal>test</goal>
 							<goal>resources</goal>
 						</goals>
 					</execution>
@@ -52,8 +56,16 @@
 		</plugins>
 	</build>
 
-	<!-- GWT dependencies. -->
 	<dependencies>
+
+		<!-- Internal project dependencies. -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>gwt-af-eventbus</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- GWT dependencies. -->
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>

@@ -20,8 +20,9 @@
  */
 package org.gwtaf;
 
-import org.gwtaf.widgets.expanding.ExpandableTableGwtTest;
-import org.gwtaf.widgets.generic.UiBundleWidgetGwtTest;
+import org.gwtaf.widgets.expanding.GwtTestExpandableTable;
+import org.gwtaf.widgets.expanding.GwtTestExpandableTablePresenter;
+import org.gwtaf.widgets.generic.GwtTestUiBundleWidget;
 
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.junit.tools.GWTTestSuite;
@@ -40,8 +41,9 @@ public class GwtWidgetsSuite extends TestCase {
 		GWTTestSuite suite = new GWTTestSuite(
 				"GWTTestSuite for gwt-af-widgets.");
 
-		suite.addTestSuite(ExpandableTableGwtTest.class);
-		suite.addTestSuite(UiBundleWidgetGwtTest.class);
+		suite.addTestSuite(GwtTestExpandableTable.class);
+		suite.addTestSuite(GwtTestUiBundleWidget.class);
+		suite.addTestSuite(GwtTestExpandableTablePresenter.class);
 		
 		return suite;
 	}

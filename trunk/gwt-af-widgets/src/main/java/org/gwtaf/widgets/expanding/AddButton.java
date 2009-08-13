@@ -25,9 +25,9 @@ import org.gwtaf.widgets.IsWidget;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 
 /**
- * The remove button that's part of the {@link ExpandableTable}.
+ * The button that adds additional elements to an {@link ExpandableTable}.
  * 
  * @author Arthur Kalmenson
  */
-public interface RemoveButton extends IsWidget, HasClickHandlers {
+public interface AddButton extends IsWidget, HasClickHandlers {
 }

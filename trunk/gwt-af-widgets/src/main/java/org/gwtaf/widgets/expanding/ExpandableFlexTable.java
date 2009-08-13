@@ -23,13 +23,13 @@ package org.gwtaf.widgets.expanding;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.Constants;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 /**
@@ -42,8 +42,8 @@ import com.google.inject.Provider;
  * @author Arthur Kalmenson
  * 
  * @param <T>
- *            the type of widget this <code>ExpandableFlexTable</code> will
- *            be replicating.
+ *            the type of widget this <code>ExpandableFlexTable</code> will be
+ *            replicating.
  */
 public class ExpandableFlexTable<T extends Widget> extends Composite implements
 		ExpandableTable<T> {
@@ -75,12 +75,7 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 	/**
 	 * The add button to add new items to the expandable table.
 	 */
-	private HasClickHandlers addButton;
-
-	/**
-	 * A {@link Provider} of the type we're making copies of.
-	 */
-	private Provider<T> typeProvider;
+	private AddButton addButton;
 
 	/**
 	 * Creates a new <code>ExpandableFlexTable</code> with the given text to
@@ -89,13 +84,12 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 	 * @param label
 	 *            the label that describes this table.
 	 */
-	public ExpandableFlexTable(FlexTable flexTable,
-			Provider<T> typeProvider,
-			HasClickHandlers addButton,
+	@Inject
+	public ExpandableFlexTable(FlexTable flexTable, AddButton addButton,
 			Provider<RemoveButton> removeButtonProvider) {
 
 		// check the parameters.
-		if (flexTable == null || typeProvider == null || addButton == null
+		if (flexTable == null || addButton == null
 				|| removeButtonProvider == null) {
 			throw new IllegalArgumentException(getClass().getName()
 					+ ": null constructor arguments aren't accepted.");
@@ -103,64 +97,61 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 
 		// save the given variables.
 		mainPanel = flexTable;
-		this.typeProvider = typeProvider;
 		this.addButton = addButton;
 		this.removeButtonProvider = removeButtonProvider;
 
 		// set up the add button.
-		addButton.addClickHandler(new AddButtonHandler());
-		mainPanel.setWidget(0, 0, (Widget) addButton);
+		mainPanel.setWidget(0, 0, addButton.getContainingWidget());
 		this.addButton = addButton;
 
 		// init the widget.
 		initWidget(mainPanel);
 	}
 
-	public void add() {
+	public void add(T widget) {
 
 		// add to the row right before the add button and the first column.
 		int rowNum = mainPanel.getRowCount() - 1;
 		int colNum = 0;
 
 		// get the widget to add from its provider and add it.
-		T widgetToAdd = typeProvider.get();
-		mainPanel.setWidget(rowNum, colNum, widgetToAdd);
+		mainPanel.setWidget(rowNum, colNum, widget);
 		colNum++;
 
 		// add a remove button to the new row.
 		RemoveButton removeButton = removeButtonProvider.get();
-		removeButton.addClickHandler(new RemoveButtonListener());
 		mainPanel.setWidget(rowNum, colNum, removeButton.getContainingWidget());
 
 		// put the add another button at the bottom.
 		rowNum++;
-		mainPanel.setWidget(rowNum, 0, (Widget) addButton);
+		mainPanel.setWidget(rowNum, 0, addButton.getContainingWidget());
+
+		// finally add the new widget to our list of widgets.
 	}
 
-	public void remove(int i) {
-		mainPanel.removeRow(i);
-	}
+	@SuppressWarnings("unchecked")
+	public T remove(RemoveButton removeButton) {
 
-	/**
-	 * Removes the row that contains the given {@link RemoveButton}.
-	 * 
-	 * @param removeButton
-	 *            the row to remove with the given button.
-	 */
-	protected void remove(RemoveButton removeButton) {
+		// the removed element.
+		T removed = null;
 
+		// find the location of the remove button given.
 		for (int row = 0; row < mainPanel.getRowCount(); row++) {
 			if (mainPanel.getWidget(row, 1) == removeButton
 					.getContainingWidget()) {
-				remove(row);
+
+				// remove the button but save the item that was removed.
+				removed = (T) mainPanel.getWidget(row, 0);
+				mainPanel.removeRow(row);
 				break;
 			}
 		}
+		return removed;
 	}
 
 	public void clear() {
 		mainPanel.clear();
-		mainPanel.setWidget(0, 0, (Widget) addButton);
+		mainPanel.setWidget(0, 0, addButton.getContainingWidget());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -171,7 +162,7 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 
 			// don't add the add button.
 			Widget widget = mainPanel.getWidget(row, 0);
-			if (widget != addButton) {
+			if (widget != addButton.getContainingWidget()) {
 
 				result.add((T) mainPanel.getWidget(row, 0));
 			}
@@ -184,30 +175,7 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 		return this;
 	}
 
-	/**
-	 * The {@link ClickHandler} added to the add button for this
-	 * {@link ExpandableTable}.
-	 * 
-	 * @author Arthur Kalmenson
-	 */
-	protected class AddButtonHandler implements ClickHandler {
-		public void onClick(ClickEvent arg0) {
-			add();
-		}
-	}
-
-	/**
-	 * The {@link ClickHandler} added to the remove buttons in this
-	 * {@link ExpandableTable}.
-	 * 
-	 * @author Arthur Kalmenson
-	 */
-	protected class RemoveButtonListener implements ClickHandler {
-		public void onClick(ClickEvent arg0) {
-			Object source = arg0.getSource();
-			if (source instanceof RemoveButton) {
-				remove((RemoveButton) source);
-			}
-		}
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return addClickHandler(handler);
 	}
 }

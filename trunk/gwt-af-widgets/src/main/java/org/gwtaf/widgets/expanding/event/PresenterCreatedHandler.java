@@ -18,16 +18,28 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.widgets.expanding;
+package org.gwtaf.widgets.expanding.event;
 
-import org.gwtaf.widgets.IsWidget;
+import org.gwtaf.widgets.Presenter;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.EventHandler;
 
 /**
- * The remove button that's part of the {@link ExpandableTable}.
+ * The {@link EventHandler} that handles {@link PresenterCreatedEvent}s.
  * 
  * @author Arthur Kalmenson
+ * 
+ * @param <P>
+ *            the type of Presenter.
  */
-public interface RemoveButton extends IsWidget, HasClickHandlers {
+public interface PresenterCreatedHandler<P extends Presenter<?, ?>> extends
+		EventHandler {
+
+	/**
+	 * Handle the given {@link PresenterCreatedEvent}.
+	 * 
+	 * @param presenterCreated
+	 *            the event to handle.
+	 */
+	void onPresenterCreated(PresenterCreatedEvent<P> presenterCreated);
 }

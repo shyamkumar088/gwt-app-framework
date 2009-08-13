@@ -20,15 +20,23 @@
  */
 package org.gwtaf.widgets.expanding;
 
-import com.google.gwt.i18n.client.Constants;
+import java.util.List;
+
+import org.gwtaf.widgets.Presenter;
+import org.gwtaf.widgets.View;
 
 /**
- * Externised constants for the {@link LabelRemoveButton}.
+ * A {@link Presenter} for the {@link ExpandableTable}.
  * 
  * @author Arthur Kalmenson
+ * 
+ * @param <P>
+ *            the type of Presenter
+ * @param <V>
+ *            the type of widget the {@link ExpandableTable} is adding.
+ * @param <M>
+ *            the model that we're working with.
  */
-public interface LabelRemoveButtonConstants extends Constants {
-
-	@DefaultStringValue("remove")
-	String removeLabel();
+public interface ExpandableTablePresenter<P extends Presenter<V, M>, V extends View, M>
+		extends Presenter<ExpandableTable<V>, List<M>> {
 }
