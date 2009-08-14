@@ -31,6 +31,7 @@ import org.gwtaf.widgets.View;
 import org.gwtaf.widgets.expanding.event.PresenterCreatedEvent;
 import org.gwtaf.widgets.expanding.event.PresenterRemovedEvent;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.inject.Inject;
@@ -57,18 +58,54 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	 */
 	private EventBus eventBus;
 
+	/**
+	 * The list of models that are linked to the views in the
+	 * {@link ExpandableTable}.
+	 */
 	private List<M> models = new ArrayList<M>();
 
+	/**
+	 * A map of views to the presenters that contain them. This map is only for
+	 * convenience sake making removal simpler.
+	 */
 	private Map<V, P> viewToPresenter = new HashMap<V, P>();
 
+	/**
+	 * The {@link ExpandableTable} that acts as the View for this Presenter.
+	 */
 	private ExpandableTable<V> view;
 
+	/**
+	 * A {@link Provider} for the Presenters that this Presenter is replicating
+	 * (those Presenter's views are what go into the {@link ExpandableTable}).
+	 */
 	private Provider<P> presenterProvider;
 
+	/**
+	 * A {@link Provider} of {@link PresenterCreatedEvent}s.
+	 */
 	private Provider<PresenterCreatedEvent<P>> presenterCreatedEventProvider;
 
+	/**
+	 * A {@link Provider} of {@link PresenterRemovedEvent}s.
+	 */
 	private Provider<PresenterRemovedEvent<P>> presenterRemovedEventProvider;
 
+	/**
+	 * Creates a new <code>ExpandableTablePresenterImpl</code> with the given
+	 * injected parameters.
+	 * 
+	 * @param eventBus
+	 *            the {@link EventBus}.
+	 * @param view
+	 *            the {@link ExpandableTable} as the view.
+	 * @param presenterProvider
+	 *            the Provider of Presenters to replicate.
+	 * @param presenterCreatedEventProvider
+	 *            a provider for {@link PresenterCreatedEvent}s.
+	 * @param presenterRemovedEventProvider
+	 *            a provider for {@link PresenterRemovedEvent}s.
+	 */
 	@Inject
 	public ExpandableTablePresenterImpl(EventBus eventBus,
 			ExpandableTable<V> view, Provider<P> presenterProvider,
@@ -82,7 +119,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 
 		this.view.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				viewClicked(event.getSource());
+				viewClicked(Element.as(event.getNativeEvent().getEventTarget()));
 			}
 		});
 	}
@@ -107,7 +144,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		view.clear();
 		viewToPresenter.clear();
 		models.clear();
-		
+
 		for (M modelToAdd : model) {
 			addAndFireEvent(modelToAdd);
 		}
@@ -197,13 +234,19 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		}
 	}
 
-	protected void viewClicked(Object source) {
+	protected void viewClicked(Element source) {
 
 		// triage the event.
-		if (source instanceof AddButton) {
+		if (source == view.getAddButton().getContainingWidget().getElement()) {
 			addAndFireEvent();
-		} else if (source instanceof RemoveButton) {
-			fireRemoveEvent(removeRow((RemoveButton) source));
+		} else {
+			
+			// check all the remove buttons's elements.
+			for (RemoveButton removeButton : view.getRemoveButtons()) {
+				if (source == removeButton.getContainingWidget().getElement()) {
+					fireRemoveEvent(removeRow(removeButton));
+				}
+			}
 		}
 	}
 }

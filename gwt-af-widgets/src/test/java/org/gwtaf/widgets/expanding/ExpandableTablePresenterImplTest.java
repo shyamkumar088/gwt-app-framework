@@ -34,9 +34,13 @@ import org.gwtaf.widgets.expanding.event.PresenterRemovedEvent;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.google.gwt.junit.GWTMockUtilities;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Provider;
 
@@ -83,6 +87,16 @@ public class ExpandableTablePresenterImplTest {
 		public Widget getContainingWidget() {
 			return null;
 		}
+	}
+
+	@BeforeClass
+	public void disarmGwt() {
+		GWTMockUtilities.disarm();
+	}
+
+	@AfterClass
+	public void rearmGwt() {
+		GWTMockUtilities.restore();
 	}
 
 	@BeforeMethod
@@ -266,8 +280,17 @@ public class ExpandableTablePresenterImplTest {
 		// set up mocks.
 		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock = setupCreateMocks();
 
+		// add button mock setup.
+		AddButton addButtonMock = mock(AddButton.class);
+		Widget widgetMock = mock(Widget.class);
+		when(addButtonMock.getContainingWidget()).thenReturn(widgetMock);
+		Element elementMock = mock(Element.class);
+		when(addButtonMock.getContainingWidget().getElement()).thenReturn(
+				elementMock);
+		when(expandableTableMock.getAddButton()).thenReturn(addButtonMock);
+
 		// add button clicked.
-		presenter.viewClicked(mock(AddButton.class));
+		presenter.viewClicked(elementMock);
 
 		// verify that the new event was fired.
 		verify(eventBusMock).fireEvent(eventMock);
@@ -278,20 +301,40 @@ public class ExpandableTablePresenterImplTest {
 	 * {@link ExpandableTablePresenterImpl#removeRow(RemoveButton)} and
 	 * {@link ExpandableTablePresenterImpl#fireRemoveEvent(View)} to be called.
 	 */
+	@SuppressWarnings("unchecked")
 	@Test
 	public void clickedRemoveButton() {
 
 		// set up the mocks.
 		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock = mock(PresenterRemovedEvent.class);
 		when(removedEventProviderMock.get()).thenReturn(removeEventMock);
-		setupCreateMocks();
+		PresenterCreatedEvent<Presenter<ViewMock, String>> createdEventMock = setupCreateMocks();
 		when(expandableTableMock.remove(removeButtonMock)).thenReturn(viewMock);
+
+		// remove button mock setup.
+		Widget removeWidgetMock = mock(Widget.class);
+		when(removeButtonMock.getContainingWidget()).thenReturn(removeWidgetMock);
+		Element removeElementMock = mock(Element.class);
+		when(removeButtonMock.getContainingWidget().getElement()).thenReturn(
+				removeElementMock);
+		when(expandableTableMock.getRemoveButtons()).thenReturn(
+				Arrays.asList(removeButtonMock));
 		
+		// mock out the add button too.
+		AddButton addButtonMock = mock(AddButton.class);
+		Widget widgetMock = mock(Widget.class);
+		when(addButtonMock.getContainingWidget()).thenReturn(widgetMock);
+		Element elementMock = mock(Element.class);
+		when(addButtonMock.getContainingWidget().getElement()).thenReturn(
+				elementMock);
+		when(expandableTableMock.getAddButton()).thenReturn(addButtonMock);
+
 		// add and then remove pretend the remove button is pressed.
 		presenter.addAndFireEvent();
-		presenter.viewClicked(removeButtonMock);
+		presenter.viewClicked(removeElementMock);
 
-		// verify that the event was fired and the model was removed.
+		// verify that the add then remove events are fired.
+		verify(eventBusMock).fireEvent(createdEventMock);
 		verify(eventBusMock).fireEvent(removeEventMock);
 	}
 

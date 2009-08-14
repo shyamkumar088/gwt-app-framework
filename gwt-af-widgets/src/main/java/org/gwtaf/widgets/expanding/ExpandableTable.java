@@ -40,7 +40,7 @@ public interface ExpandableTable<T> extends View, HasClickHandlers {
 	/**
 	 * Adds a new row to the dynamic table.
 	 */
-	public void add(T widget);
+	void add(T widget);
 
 	/**
 	 * Removes the row with the given {@link RemoveButton} and returns the
@@ -50,12 +50,12 @@ public interface ExpandableTable<T> extends View, HasClickHandlers {
 	 *            the remove button.
 	 * @return the containing widget of type T removed.
 	 */
-	public T remove(RemoveButton removeButton);
+	T remove(RemoveButton removeButton);
 
 	/**
 	 * Clears the widgets in this <code>ExpandableTable</code>.
 	 */
-	public void clear();
+	void clear();
 
 	/**
 	 * Returns a list of the widget type T that this
@@ -64,5 +64,19 @@ public interface ExpandableTable<T> extends View, HasClickHandlers {
 	 * @return an array of an array of the widget type T that this
 	 *         <code>ExpandableTable</code> is replicating.
 	 */
-	public List<T> getWidgets();
+	List<T> getWidgets();
+
+	/**
+	 * Returns the {@link AddButton} used by this <code>ExpandableTable</code>.
+	 * 
+	 * @return the {@link AddButton} used by this <code>ExpandableTable</code>.
+	 */
+	AddButton getAddButton();
+
+	/**
+	 * Returns the list of {@link RemoveButton}s.
+	 * 
+	 * @return the list of {@link RemoveButton}s.
+	 */
+	List<RemoveButton> getRemoveButtons();
 }
