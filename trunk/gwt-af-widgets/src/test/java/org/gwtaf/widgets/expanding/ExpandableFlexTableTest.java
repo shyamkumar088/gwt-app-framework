@@ -59,7 +59,7 @@ public class ExpandableFlexTableTest {
 	 */
 	@Mock
 	private AddButton addButton;
-	
+
 	/**
 	 * Mock of the add button widget itself.
 	 */
@@ -73,7 +73,7 @@ public class ExpandableFlexTableTest {
 	private Provider<RemoveButton> removeButtonProviderMock;
 
 	/**
-	 * Mock 
+	 * Mock
 	 */
 	@Mock
 	private RemoveButton removeButtonMock;
@@ -110,8 +110,7 @@ public class ExpandableFlexTableTest {
 	@DataProvider(name = "constructorArgsProvider")
 	public Object[][] constructorArgsProvider() {
 		return new Object[][] { { null, null, null },
-				{ flexTableMock, null, null },
-				{ null, addButton, null } };
+				{ flexTableMock, null, null }, { null, addButton, null } };
 	}
 
 	/**
@@ -128,8 +127,8 @@ public class ExpandableFlexTableTest {
 	 *            a provider of {@link RemoveButton}s.
 	 */
 	@Test(expectedExceptions = IllegalArgumentException.class, dataProvider = "constructorArgsProvider")
-	public void invalidConstructorArgs(FlexTable flexTable, AddButton addButton,
-			Provider<RemoveButton> removeButtonProvider) {
+	public void invalidConstructorArgs(FlexTable flexTable,
+			AddButton addButton, Provider<RemoveButton> removeButtonProvider) {
 
 		// create a new object and expect an IllegalArgumentException.
 		new ExpandableFlexTable<Widget>(flexTable, addButton,
@@ -159,7 +158,7 @@ public class ExpandableFlexTableTest {
 		Widget removeButtonWidget = mock(Widget.class);
 		when(removeButtonMock.getContainingWidget()).thenReturn(
 				removeButtonWidget);
-		
+
 		// mock the widget we're adding.
 		Widget widgetToAdd = mock(Widget.class);
 
@@ -170,18 +169,6 @@ public class ExpandableFlexTableTest {
 		verify(flexTableMock).setWidget(0, 0, widgetToAdd);
 		verify(flexTableMock).setWidget(0, 1, removeButtonWidget);
 		verify(flexTableMock).setWidget(1, 0, addButtonWidget);
-	}
-
-	/**
-	 * Try remove a row. We expect the call to be passed to the
-	 * {@link FlexTable}.
-	 */
-	@Test
-	public void removeWidget() {
-
-		// remove a row.
-//		expandableFlexTable.remove(0);
-//		verify(flexTableMock).removeRow(0);
 	}
 
 	/**
@@ -277,5 +264,43 @@ public class ExpandableFlexTableTest {
 		List<Widget> result = expandableFlexTable.getWidgets();
 
 		Assert.assertEquals(result, Arrays.asList(widgetMock1, widgetMock2));
+	}
+
+	/**
+	 * Test to ensure the add button is saved.
+	 */
+	@Test
+	public void addButtonReturned() {
+		Assert.assertEquals(expandableFlexTable.getAddButton(), addButton);
+	}
+
+	/**
+	 * Test to ensure the {@link RemoveButton}s are saved when they're added to
+	 * the table.
+	 */
+	@Test
+	public void removeButtonsSaved() {
+		
+		// set up the mocks.
+		when(removeButtonProviderMock.get()).thenReturn(removeButtonMock);
+		when(flexTableMock.getRowCount()).thenReturn(1);
+		Widget removeButtonWidget = mock(Widget.class);
+		when(removeButtonMock.getContainingWidget()).thenReturn(
+				removeButtonWidget);
+		Widget widgetToAdd = mock(Widget.class);
+		when(flexTableMock.getWidget(0, 1)).thenReturn(removeButtonWidget);
+
+		// check that the size is empty at first.
+		Assert.assertEquals(expandableFlexTable.getRemoveButtons().size(), 0);
+		
+		// expand the table.
+		expandableFlexTable.add(widgetToAdd);
+		
+		// now check that there is a new remove button.
+		Assert.assertEquals(expandableFlexTable.getRemoveButtons().size(), 1);
+		
+		// now remove the RemoveButton and ensure it's removed from the list.
+		expandableFlexTable.remove(removeButtonMock);
+		Assert.assertEquals(expandableFlexTable.getRemoveButtons().size(), 0);
 	}
 }

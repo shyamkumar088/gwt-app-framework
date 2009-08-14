@@ -23,6 +23,7 @@ package org.gwtaf.widgets.expanding;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.Constants;
@@ -76,6 +77,11 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 	 * The add button to add new items to the expandable table.
 	 */
 	private AddButton addButton;
+	
+	/**
+	 * The list of remove buttons.
+	 */
+	private List<RemoveButton> removeButtons = new ArrayList<RemoveButton>();
 
 	/**
 	 * Creates a new <code>ExpandableFlexTable</code> with the given text to
@@ -126,7 +132,8 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 		rowNum++;
 		mainPanel.setWidget(rowNum, 0, addButton.getContainingWidget());
 
-		// finally add the new widget to our list of widgets.
+		// add the remove button for return later.
+		removeButtons.add(removeButton);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -143,9 +150,13 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 				// remove the button but save the item that was removed.
 				removed = (T) mainPanel.getWidget(row, 0);
 				mainPanel.removeRow(row);
+				
+				// remove the button from our list.
+				removeButtons.remove(removeButton);
 				break;
 			}
 		}
+		
 		return removed;
 	}
 
@@ -171,11 +182,19 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 		return result;
 	}
 
+	public AddButton getAddButton() {
+		return addButton;
+	}
+
+	public List<RemoveButton> getRemoveButtons() {
+		return removeButtons;
+	}
+
 	public Widget getContainingWidget() {
 		return this;
 	}
 
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
-		return addClickHandler(handler);
+		return addDomHandler(handler, ClickEvent.getType());
 	}
 }
