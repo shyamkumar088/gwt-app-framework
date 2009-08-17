@@ -135,10 +135,8 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	public void setModel(List<M> model) {
 
 		// check parameters.
-		if (model == null) {
-			throw new IllegalArgumentException(getClass().getName()
-					+ ": cannot set a null list of models.");
-		}
+		assert model != null : getClass().getName()
+				+ ": cannot set a null list of models.";
 
 		// clear everything.
 		view.clear();
@@ -161,10 +159,8 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	protected V removeRow(RemoveButton removeButton) {
 
 		// check parameter.
-		if (removeButton == null) {
-			throw new IllegalArgumentException(getClass().getName()
-					+ ": RemoveButton must be instantiated to be removed.");
-		}
+		assert removeButton != null : getClass().getName()
+					+ ": RemoveButton must be instantiated to be removed.";
 
 		return view.remove(removeButton);
 	}
@@ -240,7 +236,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		if (source == view.getAddButton().getContainingWidget().getElement()) {
 			addAndFireEvent();
 		} else {
-			
+
 			// check all the remove buttons's elements.
 			for (RemoveButton removeButton : view.getRemoveButtons()) {
 				if (source == removeButton.getContainingWidget().getElement()) {

@@ -40,7 +40,8 @@ public class LabelAddButton extends Label implements AddButton {
 	@Inject
 	public LabelAddButton(ExpandableTableConstants constants) {
 		this.setText(constants.addLabel());
-		this.setStylePrimaryName("gwtaf-DynamicFlexTable-Remove");
+		this.setStylePrimaryName("gwtaf-ExpandableTableButton");
+		this.addStyleDependentName("Add");
 	}
 
 	public Widget getContainingWidget() {

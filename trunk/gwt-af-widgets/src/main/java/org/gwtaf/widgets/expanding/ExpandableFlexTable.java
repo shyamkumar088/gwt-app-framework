@@ -23,6 +23,8 @@ package org.gwtaf.widgets.expanding;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gwtaf.widgets.View;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -46,7 +48,7 @@ import com.google.inject.Provider;
  *            the type of widget this <code>ExpandableFlexTable</code> will be
  *            replicating.
  */
-public class ExpandableFlexTable<T extends Widget> extends Composite implements
+public class ExpandableFlexTable<T> extends Composite implements
 		ExpandableTable<T> {
 
 	/**
@@ -77,7 +79,7 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 	 * The add button to add new items to the expandable table.
 	 */
 	private AddButton addButton;
-	
+
 	/**
 	 * The list of remove buttons.
 	 */
@@ -95,11 +97,9 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 			Provider<RemoveButton> removeButtonProvider) {
 
 		// check the parameters.
-		if (flexTable == null || addButton == null
-				|| removeButtonProvider == null) {
-			throw new IllegalArgumentException(getClass().getName()
-					+ ": null constructor arguments aren't accepted.");
-		}
+		assert flexTable != null && addButton != null
+				&& removeButtonProvider != null : getClass().getName()
+				+ ": null constructor arguments aren't accepted.";
 
 		// save the given variables.
 		mainPanel = flexTable;
@@ -120,8 +120,8 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 		int rowNum = mainPanel.getRowCount() - 1;
 		int colNum = 0;
 
-		// get the widget to add from its provider and add it.
-		mainPanel.setWidget(rowNum, colNum, widget);
+		// set the given widget.
+		mainPanel.setWidget(rowNum, colNum, (Widget) widget);
 		colNum++;
 
 		// add a remove button to the new row.
@@ -150,13 +150,13 @@ public class ExpandableFlexTable<T extends Widget> extends Composite implements
 				// remove the button but save the item that was removed.
 				removed = (T) mainPanel.getWidget(row, 0);
 				mainPanel.removeRow(row);
-				
+
 				// remove the button from our list.
 				removeButtons.remove(removeButton);
 				break;
 			}
 		}
-		
+
 		return removed;
 	}
 
