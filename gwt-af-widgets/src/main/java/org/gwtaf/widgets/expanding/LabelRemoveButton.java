@@ -40,7 +40,8 @@ public class LabelRemoveButton extends Label implements RemoveButton {
 	@Inject
 	public LabelRemoveButton(ExpandableTableConstants constants) {
 		this.setText(constants.removeLabel());
-		this.setStylePrimaryName("gwtaf-DynamicFlexTable-Remove");
+		this.setStylePrimaryName("gwtaf-ExpandableTableButton");
+		this.addStyleDependentName("Remove");
 	}
 
 	public Widget getContainingWidget() {

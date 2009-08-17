@@ -147,9 +147,9 @@ public class ExpandableTablePresenterImplTest {
 
 	/**
 	 * Try removing with a null {@link RemoveButton}. We're expecting an
-	 * {@link IllegalArgumentException} to be thrown.
+	 * {@link AssertionError} to be thrown.
 	 */
-	@Test(expectedExceptions = IllegalArgumentException.class)
+	@Test(expectedExceptions = AssertionError.class)
 	public void removeRowWithNullButton() {
 		presenter.removeRow(null);
 	}
@@ -222,10 +222,10 @@ public class ExpandableTablePresenterImplTest {
 
 	/**
 	 * Test setting a null model, we're expecting an
-	 * {@link IllegalArgumentException} to be thrown because clearing the table
+	 * {@link AssertionError} to be thrown because clearing the table
 	 * should be through setting an empty model, not a null one.
 	 */
-	@Test(expectedExceptions = IllegalArgumentException.class)
+	@Test(expectedExceptions = AssertionError.class)
 	public void setNullModel() {
 		presenter.setModel(null);
 	}

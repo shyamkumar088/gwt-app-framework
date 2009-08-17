@@ -73,7 +73,7 @@ public class ExpandableFlexTableTest {
 	private Provider<RemoveButton> removeButtonProviderMock;
 
 	/**
-	 * Mock
+	 * Mock of the remove button.
 	 */
 	@Mock
 	private RemoveButton removeButtonMock;
@@ -114,7 +114,7 @@ public class ExpandableFlexTableTest {
 	}
 
 	/**
-	 * Test to ensure an {@link IllegalArgumentException} is thrown when invalid
+	 * Test to ensure an {@link AssertionError} is thrown when invalid
 	 * arguments are given in the constructor.
 	 * 
 	 * @param flexTable
@@ -126,7 +126,7 @@ public class ExpandableFlexTableTest {
 	 * @param removeButtonProvider
 	 *            a provider of {@link RemoveButton}s.
 	 */
-	@Test(expectedExceptions = IllegalArgumentException.class, dataProvider = "constructorArgsProvider")
+	@Test(expectedExceptions = AssertionError.class, dataProvider = "constructorArgsProvider")
 	public void invalidConstructorArgs(FlexTable flexTable,
 			AddButton addButton, Provider<RemoveButton> removeButtonProvider) {
 
