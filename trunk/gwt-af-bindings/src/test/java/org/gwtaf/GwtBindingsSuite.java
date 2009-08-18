@@ -25,6 +25,7 @@ import org.gwtaf.bindings.adapters.DateBoxAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.LabelAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.ListBoxAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.RadioButtonGroupAdapterProviderGwtTest;
+import org.gwtaf.bindings.adapters.RichTextAreaAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.TextAreaAdapterProviderGwtTest;
 import org.gwtaf.bindings.adapters.TextBoxAdapterProviderGwtTest;
 
@@ -50,6 +51,7 @@ public class GwtBindingsSuite extends TestCase {
 		suite.addTestSuite(LabelAdapterProviderGwtTest.class);
 		suite.addTestSuite(ListBoxAdapterProviderGwtTest.class);
 		suite.addTestSuite(AnchorAdapterProviderGwtTest.class);
+		suite.addTestSuite(RichTextAreaAdapterProviderGwtTest.class);
 		return suite;
 	}
 }
