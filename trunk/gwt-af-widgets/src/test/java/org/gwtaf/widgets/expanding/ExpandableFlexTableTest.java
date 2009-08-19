@@ -140,6 +140,9 @@ public class ExpandableFlexTableTest {
 	 */
 	@Test
 	public void widgetSetup() {
+		
+		// render the widget.
+		expandableFlexTable.render();
 		verify(flexTableMock).setWidget(0, 0, addButton.getContainingWidget());
 	}
 
