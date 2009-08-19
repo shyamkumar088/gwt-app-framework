@@ -23,8 +23,6 @@ package org.gwtaf.widgets.expanding;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gwtaf.widgets.View;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -106,12 +104,14 @@ public class ExpandableFlexTable<T> extends Composite implements
 		this.addButton = addButton;
 		this.removeButtonProvider = removeButtonProvider;
 
-		// set up the add button.
-		mainPanel.setWidget(0, 0, addButton.getContainingWidget());
-		this.addButton = addButton;
-
 		// init the widget.
 		initWidget(mainPanel);
+	}
+
+	public void render() {
+
+		// set up the add button.
+		mainPanel.setWidget(0, 0, addButton.getContainingWidget());
 	}
 
 	public void add(T widget) {

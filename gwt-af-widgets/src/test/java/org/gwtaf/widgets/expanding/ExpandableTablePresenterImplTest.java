@@ -87,6 +87,8 @@ public class ExpandableTablePresenterImplTest {
 		public Widget getContainingWidget() {
 			return null;
 		}
+		public void render() {
+		}
 	}
 
 	@BeforeClass
@@ -123,7 +125,6 @@ public class ExpandableTablePresenterImplTest {
 	 * model that was created to be stored and available in
 	 * {@link ExpandableTablePresenterImpl#getModel()}.
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void addAndCheckEvent() {
 

@@ -27,4 +27,5 @@ package org.gwtaf.widgets;
  */
 public interface View extends IsWidget {
 
+	public void render();
 }
