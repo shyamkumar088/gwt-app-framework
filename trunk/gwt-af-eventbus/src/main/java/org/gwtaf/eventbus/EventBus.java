@@ -36,7 +36,7 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 public interface EventBus {
 
 	/**
-	 * Adds a handle.
+	 * Adds a handler.
 	 * 
 	 * @param <H>
 	 *            The type of handler
