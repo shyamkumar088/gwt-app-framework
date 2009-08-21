@@ -18,25 +18,45 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.eventbus;
+package org.gwtaf.eventbus.event;
 
-import org.testng.annotations.Test;
-
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.inject.Inject;
 
 /**
- * Unit test the {@link HandlerManagerBus}. There's not much to test yet since
- * most of the code is already in {@link HandlerManager}.
+ * An event representing the start of an application. Usually fired to the event
+ * bus in the entry point.
  * 
  * @author Arthur Kalmenson
  */
-public class HandlerManagerBusTest {
+public class ApplicationStartedEvent extends
+		GwtEvent<ApplicationStartedHandler> {
 
 	/**
-	 * Instantiate and ensure no errors occur. Nothing really to test.
+	 * The handler type that's injected. This is used to register with the event
+	 * bus.
 	 */
-	@Test
-	public void instantiate() {
-		new HandlerManagerBus();
+	private Type<ApplicationStartedHandler> type;
+
+	/**
+	 * Creates a new <code>ApplicationStartedEvent</code> with the give
+	 * {@link Type}.
+	 * 
+	 * @param type
+	 *            the type of handler that handles this event.
+	 */
+	@Inject
+	public ApplicationStartedEvent(Type<ApplicationStartedHandler> type) {
+		this.type = type;
+	}
+
+	@Override
+	protected void dispatch(ApplicationStartedHandler handler) {
+		handler.onApplicationStarted(this);
+	}
+
+	@Override
+	public Type<ApplicationStartedHandler> getAssociatedType() {
+		return type;
 	}
 }
