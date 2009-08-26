@@ -23,6 +23,8 @@ package org.gwtaf.widgets.expanding;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gwtaf.widgets.expanding.gin.ExpandableTableDep;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -84,15 +86,20 @@ public class ExpandableFlexTable<T> extends Composite implements
 	private List<RemoveButton> removeButtons = new ArrayList<RemoveButton>();
 
 	/**
-	 * Creates a new <code>ExpandableFlexTable</code> with the given text to
-	 * display for its label.
+	 * Create a new <code>ExpandableFlexTable</code> with the given flex table,
+	 * add button and remove button provider.
 	 * 
-	 * @param label
-	 *            the label that describes this table.
+	 * @param flexTable
+	 *            the flex table to use.
+	 * @param addButton
+	 *            the add button to be clicked to add rows.
+	 * @param removeButtonProvider
+	 *            the remove button used to remove rows.
 	 */
 	@Inject
-	public ExpandableFlexTable(FlexTable flexTable, AddButton addButton,
-			Provider<RemoveButton> removeButtonProvider) {
+	public ExpandableFlexTable(@ExpandableTableDep FlexTable flexTable,
+			@ExpandableTableDep AddButton addButton,
+			@ExpandableTableDep Provider<RemoveButton> removeButtonProvider) {
 
 		// check the parameters.
 		assert flexTable != null && addButton != null
