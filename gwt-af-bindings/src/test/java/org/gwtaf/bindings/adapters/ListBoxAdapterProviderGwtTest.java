@@ -41,51 +41,80 @@ import com.google.gwt.user.client.ui.ListBox;
 public class ListBoxAdapterProviderGwtTest extends GWTTestCase {
 
 	/**
-	 * Tests the data binding to verify that the ListBox Adaptor works properly
+	 * A {@link ListBox} we've created.
 	 */
-	public void testBindings() {
-		GWTBeansBinding.init();
+	private ListBox listBox;
 
+	/**
+	 * A {@link Person} we're syncing to.
+	 */
+	private Person person;
+
+	/**
+	 * The binding.
+	 */
+	private Binding<Person, String, ListBox, String> binding;
+
+	public void gwtSetUp() {
+
+		// initialize the binding.
+		GWTBeansBinding.init();
+		
 		// build the objects
-		ListBox listBox = new ListBox();
-		Person person = new Person();
+		listBox = new ListBox();
+		person = new Person();
 
 		// set up some things
-
 		listBox.addItem("Jason Kong");
 		listBox.addItem("Serge Vesselov");
 		listBox.addItem("Arthur Kalmenson");
 
-		person.setFullname("Jason Kong");
-
-		// set up the binding adapters for these objects
-
 		BindingBuilder builder = new BindingBuilder();
 
-		Binding<ListBox, String, Person, String> binding = builder
-				.createBinding(listBox, "selectedElement", String.class,
-						person, "fullname", String.class,
+		binding =
+				builder.createBinding(person, "fullname", String.class,
+						listBox, "selectedElement", String.class,
 						new ListBoxAdapterProvider());
+	}
 
+	/**
+	 * Test changing the UI and checking whether the model has been modified.
+	 */
+	public void testUiToModel() {
+
+		// set up the binding adapters for these objects
 		Assert.assertTrue(binding.isBound());
-
-		// before:
-		Assert.assertEquals(listBox.getValue(listBox.getSelectedIndex()),
-				person.getFullname());
 
 		// select another element
 		listBox.setSelectedIndex(1); // should select serge
 		ChangeEvent
 				.fireNativeEvent(Document.get().createChangeEvent(), listBox);
+		Assert.assertEquals("Serge Vesselov", person.getFullname());
+	}
 
-		Assert.assertEquals(listBox.getValue(listBox.getSelectedIndex()),
-				"Serge Vesselov");
+	/**
+	 * Test changing the model and checking whether the UI has been modified.
+	 */
+	public void testModelToUi() {
 
 		// check the other direction (model to view)
 		person.setFullname("Arthur Kalmenson");
 
-		Assert.assertEquals(listBox.getValue(listBox.getSelectedIndex()),
-				person.getFullname());
+		Assert.assertEquals("Arthur Kalmenson", listBox.getValue(listBox
+				.getSelectedIndex()));
+	}
+
+	/**
+	 * Test setting the model to a value that's not in the list box.
+	 */
+	public void testModelSetNotInListBox() {
+
+		// set to something not there.
+		person.setFullname("blah blah");
+		
+		// assert that it stays the first option.
+		Assert.assertEquals("Jason Kong", listBox.getValue(listBox
+				.getSelectedIndex()));
 	}
 
 	@Override
