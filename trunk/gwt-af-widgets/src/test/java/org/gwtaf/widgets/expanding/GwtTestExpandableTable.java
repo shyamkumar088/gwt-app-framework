@@ -21,7 +21,7 @@
 package org.gwtaf.widgets.expanding;
 
 import org.gwtaf.widgets.expanding.gin.ExpandableTableDep;
-import org.gwtaf.widgets.expanding.gin.ExpandableTableGinModule;
+import org.gwtaf.widgets.expanding.gin.ExpandableTableDepGinModule;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.inject.client.GinModules;
@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.inject.Provider;
 
 /**
- * Test whether the {@link ExpandableTableGinModule} can return the components
+ * Test whether the {@link ExpandableTableDepGinModule} can return the components
  * required to make an {@link ExpandableTable}.
  * 
  * @author Arthur Kalmenson
@@ -45,7 +45,7 @@ public class GwtTestExpandableTable extends GWTTestCase {
 	 * 
 	 * @author Arthur Kalmenson
 	 */
-	@GinModules(ExpandableTableGinModule.class)
+	@GinModules(ExpandableTableDepGinModule.class)
 	public static interface ExpandableTableGwtTestGinjector extends Ginjector {
 		
 		@ExpandableTableDep

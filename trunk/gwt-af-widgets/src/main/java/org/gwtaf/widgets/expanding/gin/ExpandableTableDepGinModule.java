@@ -37,7 +37,7 @@ import com.google.inject.Provides;
  * 
  * @author Arthur Kalmenson
  */
-public class ExpandableTableGinModule extends AbstractGinModule {
+public class ExpandableTableDepGinModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {

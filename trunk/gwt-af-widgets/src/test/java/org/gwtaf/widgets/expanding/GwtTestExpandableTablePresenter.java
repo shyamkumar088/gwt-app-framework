@@ -20,7 +20,7 @@
  */
 package org.gwtaf.widgets.expanding;
 
-import org.gwtaf.widgets.expanding.gin.ExpandableTableGinModule;
+import org.gwtaf.widgets.expanding.gin.ExpandableTableDepGinModule;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
@@ -40,7 +40,7 @@ public class GwtTestExpandableTablePresenter extends GWTTestCase {
 	 * 
 	 * @author Arthur Kalmenson
 	 */
-	@GinModules(ExpandableTableGinModule.class)
+	@GinModules(ExpandableTableDepGinModule.class)
 	public static interface ExpandableTableGwtTestGinjector extends Ginjector {
 		
 	}
