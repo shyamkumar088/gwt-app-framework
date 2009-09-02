@@ -140,6 +140,7 @@ public class ExpandableTablePresenterImplTest {
 		verify(eventMock).setPresenter(presenterMock);
 		verify(eventBusMock).fireEvent(eventMock);
 		verify(expandableTableMock).add(viewMock);
+		verify(viewMock).render();
 
 		// check that the model was added to the Presenters list of models.
 		Assert.assertEquals(presenter.getModel().size(), 1);

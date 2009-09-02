@@ -187,7 +187,9 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 
 		// create the presenter and add it's view to the expandable table.
 		P presenter = presenterProvider.get();
-		view.add(presenter.getView());
+		V viewToAdd = presenter.getView();
+		viewToAdd.render();
+		view.add(viewToAdd);
 
 		// if the given model isn't null, set it in the presenter.
 		if (model != null) {
