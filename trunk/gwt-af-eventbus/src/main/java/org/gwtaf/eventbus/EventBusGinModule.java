@@ -21,6 +21,7 @@
 package org.gwtaf.eventbus;
 
 import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.inject.Singleton;
 
 /**
  * An {@link AbstractGinModule} that binds the {@link EventBus} to a concrete
@@ -32,6 +33,6 @@ public class EventBusGinModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {
-		bind(EventBus.class).to(HandlerManagerBus.class);
+		bind(EventBus.class).to(HandlerManagerBus.class).in(Singleton.class);
 	}
 }
