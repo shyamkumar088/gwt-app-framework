@@ -22,6 +22,7 @@ package org.gwtaf.widgets.expanding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -240,8 +241,11 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		} else {
 
 			// check all the remove buttons's elements.
-			for (RemoveButton removeButton : view.getRemoveButtons()) {
+			Iterator<RemoveButton> iter = view.getRemoveButtons().iterator();
+			while (iter.hasNext()) {
+				RemoveButton removeButton = iter.next();
 				if (source == removeButton.getContainingWidget().getElement()) {
+					iter.remove();
 					fireRemoveEvent(removeRow(removeButton));
 				}
 			}
