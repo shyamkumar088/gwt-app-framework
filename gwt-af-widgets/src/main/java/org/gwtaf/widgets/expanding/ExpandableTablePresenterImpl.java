@@ -20,6 +20,8 @@
  */
 package org.gwtaf.widgets.expanding;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,6 +37,10 @@ import org.gwtaf.widgets.expanding.event.PresenterRemovedEvent;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -53,6 +59,8 @@ import com.google.inject.Provider;
  */
 public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends View, M>
 		implements ExpandableTablePresenter<P, V, M> {
+
+	PropertyChangeSupport props = new PropertyChangeSupport(this);
 
 	/**
 	 * The {@link EventBus} to fire events on.
@@ -147,6 +155,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		for (M modelToAdd : model) {
 			addAndFireEvent(modelToAdd);
 		}
+
 	}
 
 	/**
@@ -161,7 +170,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 
 		// check parameter.
 		assert removeButton != null : getClass().getName()
-					+ ": RemoveButton must be instantiated to be removed.";
+				+ ": RemoveButton must be instantiated to be removed.";
 
 		return view.remove(removeButton);
 	}
@@ -208,6 +217,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 				.get();
 		presenterCreated.setPresenter(presenter);
 		eventBus.fireEvent(presenterCreated);
+		System.out.println("Fired event " + presenterCreated);
 	}
 
 	/**
@@ -250,5 +260,13 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 				}
 			}
 		}
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		props.addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		props.removePropertyChangeListener(listener);
 	}
 }
