@@ -41,8 +41,10 @@ public class ExpandableTableDepGinModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {
-		bind(RemoveButton.class).annotatedWith(ExpandableTableDep.class).to(LabelRemoveButton.class);
-		bind(AddButton.class).annotatedWith(ExpandableTableDep.class).to(LabelAddButton.class);
+		bind(RemoveButton.class).annotatedWith(ExpandableTableDep.class).to(
+				LabelRemoveButton.class);
+		bind(AddButton.class).annotatedWith(ExpandableTableDep.class).to(
+				LabelAddButton.class);
 	}
 
 	/**
@@ -56,8 +58,10 @@ public class ExpandableTableDepGinModule extends AbstractGinModule {
 	@ExpandableTableDep
 	public FlexTable mainPanelProvider() {
 		FlexTable mainPanel = new FlexTable();
+		// TODO: removing this line breaks tests. Instantiates 0'th row? NEEDS
+		// FIX
 		mainPanel.getRowFormatter().setVerticalAlign(0,
-				HasVerticalAlignment.ALIGN_TOP);
+				HasVerticalAlignment.ALIGN_MIDDLE);
 		return mainPanel;
 	}
 }
