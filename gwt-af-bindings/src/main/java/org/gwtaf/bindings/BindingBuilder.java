@@ -22,9 +22,12 @@ package org.gwtaf.bindings;
 
 import org.gwt.beansbinding.core.client.BeanProperty;
 import org.gwt.beansbinding.core.client.Binding;
+import org.gwt.beansbinding.core.client.BindingListener;
 import org.gwt.beansbinding.core.client.Bindings;
 import org.gwt.beansbinding.core.client.Converter;
+import org.gwt.beansbinding.core.client.PropertyStateEvent;
 import org.gwt.beansbinding.core.client.AutoBinding.UpdateStrategy;
+import org.gwt.beansbinding.core.client.Binding.SyncFailure;
 import org.gwt.beansbinding.core.client.ext.BeanAdapterFactory;
 import org.gwt.beansbinding.core.client.ext.BeanAdapterProvider;
 
@@ -70,7 +73,30 @@ public class BindingBuilder {
 			String targetPropertyName, Class<TV> tvClass,
 			Converter<SV, TV> converter,
 			BeanAdapterProvider... adapterProviders) {
+		return createFullBinding(source, sourcePropertyName, svClass, target,
+				targetPropertyName, tvClass, converter, null, adapterProviders);
+	}
 
+	/**
+	 * Creates a binding provided a listener. The listener is attached before
+	 * bind() is called, giving the listener a chance to react at initial
+	 * binding.
+	 * 
+	 * @return a binding with a listener.
+	 */
+	public <SS, SV, TS, TV> Binding<SS, SV, TS, TV> createBindingWithListener(
+			SS source, String sourcePropertyName, Class<SV> svClass, TS target,
+			String targetPropertyName, Class<TV> tvClass,
+			BindingListener listener, BeanAdapterProvider... adapterProviders) {
+		return createFullBinding(source, sourcePropertyName, svClass, target,
+				targetPropertyName, tvClass, null, listener, adapterProviders);
+	}
+
+	public <SS, SV, TS, TV> Binding<SS, SV, TS, TV> createFullBinding(
+			SS source, String sourcePropertyName, Class<SV> svClass, TS target,
+			String targetPropertyName, Class<TV> tvClass,
+			Converter<SV, TV> converter, BindingListener listener,
+			BeanAdapterProvider... adapterProviders) {
 		// loop through the providers
 
 		for (BeanAdapterProvider provider : adapterProviders) {
@@ -110,6 +136,11 @@ public class BindingBuilder {
 		// assign the converter if not null
 		if (converter != null) {
 			binding.setConverter(converter);
+		}
+
+		// add the listener if not null
+		if (listener != null) {
+			binding.addBindingListener(listener);
 		}
 
 		binding.bind();
