@@ -56,7 +56,7 @@ import com.google.inject.Provider;
 public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends View, M>
 		implements ExpandableTablePresenter<P, V, M> {
 
-	PropertyChangeSupport props = new PropertyChangeSupport(this);
+	private PropertyChangeSupport props = new PropertyChangeSupport(this);
 
 	/**
 	 * The {@link EventBus} to fire events on.
@@ -137,21 +137,22 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		return models;
 	}
 
-	public void setModel(List<M> model) {
+	public void setModel(List<M> dataFromModel) {
 
 		// check parameters.
-		assert model != null : getClass().getName()
+		assert dataFromModel != null : getClass().getName()
 				+ ": cannot set a null list of models.";
 
 		// clear everything.
 		view.clear();
 		viewToPresenter.clear();
+		List<M> oldData = models;
+
 		models.clear();
 
-		for (M modelToAdd : model) {
+		for (M modelToAdd : dataFromModel) {
 			addAndFireEvent(modelToAdd);
 		}
-
 	}
 
 	/**
@@ -213,6 +214,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 				.get();
 		presenterCreated.setPresenter(presenter);
 		eventBus.fireEvent(presenterCreated);
+		props.firePropertyChange("model", false, true);
 	}
 
 	/**
@@ -235,6 +237,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 					.get();
 			presenterRemovedEvent.setPresenter(presenter);
 			eventBus.fireEvent(presenterRemovedEvent);
+			props.firePropertyChange("model", false, true);
 		}
 	}
 
