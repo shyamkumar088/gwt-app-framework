@@ -150,8 +150,10 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 
 		models.clear();
 
+		// do not fire property change event when adding models. We don't want
+		// the source (model) to sync with the incomplete models of the ExFT.
 		for (M modelToAdd : dataFromModel) {
-			addAndFireEvent(modelToAdd);
+			addAndFireEvent(modelToAdd, false);
 		}
 	}
 
@@ -178,7 +180,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	 * the {@link EventBus}.
 	 */
 	protected void addAndFireEvent() {
-		addAndFireEvent(null);
+		addAndFireEvent(null, true);
 	}
 
 	/**
@@ -189,8 +191,10 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	 * 
 	 * @param model
 	 *            the model to set.
+	 * @param fireProps
+	 *            flag to fire property changed event or not.
 	 */
-	protected void addAndFireEvent(M model) {
+	protected void addAndFireEvent(M model, boolean fireProps) {
 
 		// create the presenter and add it's view to the expandable table.
 		P presenter = presenterProvider.get();
@@ -214,7 +218,11 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 				.get();
 		presenterCreated.setPresenter(presenter);
 		eventBus.fireEvent(presenterCreated);
-		props.firePropertyChange("model", false, true);
+
+		// fire props change if needed
+		if (fireProps) {
+			props.firePropertyChange("model", false, true);
+		}
 	}
 
 	/**
