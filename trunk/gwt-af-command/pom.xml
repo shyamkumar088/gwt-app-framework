@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>gwt-af-parent</artifactId>
+		<groupId>org.gwtaf</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gwtaf</groupId>
+	<artifactId>gwt-af-command</artifactId>
+	<name>GWT App Framework - Command</name>
+	<description>The Command pattern module of the GWT App Framework project.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
+	</dependencies>
+</project>
