@@ -36,23 +36,30 @@ public class ActionHandlerRegistryImplTest {
 	/**
 	 * Mock of the {@link Action} class.
 	 */
+	private Class<ActionImpl> actionClass;
+
+	/**
+	 * Mock of {@link Action}.
+	 */
 	@Mock
-	private Action<Response> actionMock;
+	private ActionImpl actionMock;
 
 	/**
 	 * Mock of the {@link ActionHandler} class.
 	 */
 	@Mock
-	private ActionHandler<Action<Response>, Response> handlerMock;
+	private ActionImplHandler handlerMock;
 
 	/**
 	 * The {@link ActionHandlerRegistry} we're testing.
 	 */
 	private ActionHandlerRegistryImpl actionHandlerRegistry;
 
+	@SuppressWarnings("unchecked")
 	@BeforeMethod
 	public void initBefore() {
 		MockitoAnnotations.initMocks(this);
+		actionClass = (Class<ActionImpl>) actionMock.getClass();
 
 		actionHandlerRegistry = new ActionHandlerRegistryImpl();
 	}
@@ -64,7 +71,7 @@ public class ActionHandlerRegistryImplTest {
 	public void addAndFindHandler() {
 
 		// add the handler.
-		actionHandlerRegistry.addHandler(actionMock, handlerMock);
+		actionHandlerRegistry.addHandler(actionClass, handlerMock);
 
 		// now find it and verify it's correct.
 		Assert.assertEquals(handlerMock, actionHandlerRegistry
@@ -79,10 +86,10 @@ public class ActionHandlerRegistryImplTest {
 	public void addAndRemoveHandler() {
 
 		// add the handler.
-		actionHandlerRegistry.addHandler(actionMock, handlerMock);
+		actionHandlerRegistry.addHandler(actionClass, handlerMock);
 
 		// now remove the handler.
-		actionHandlerRegistry.removeHandler(actionMock);
+		actionHandlerRegistry.removeHandler(actionClass);
 
 		// now find it and verify it's correct.
 		Assert.assertNull(actionHandlerRegistry.findHandler(actionMock));
@@ -95,12 +102,41 @@ public class ActionHandlerRegistryImplTest {
 	public void clearHandler() {
 
 		// add the handler.
-		actionHandlerRegistry.addHandler(actionMock, handlerMock);
+		actionHandlerRegistry.addHandler(actionClass, handlerMock);
 
 		// now remove the handler.
 		actionHandlerRegistry.clearHandlers();
 
 		// now find it and verify it's correct.
 		Assert.assertNull(actionHandlerRegistry.findHandler(actionMock));
+	}
+
+	/**
+	 * Simple implementation of {@link Action}.
+	 * 
+	 * @author Arthur Kalmenson
+	 */
+	private class ActionImpl implements Action<ResponseImpl> {
+	}
+
+	/**
+	 * Simple implementation of {@link Response}.
+	 * 
+	 * @author Arthur Kalmenson
+	 */
+	private class ResponseImpl implements Response {
+
+	}
+
+	/**
+	 * Simple implementation of {@link ActionHandler}.
+	 * 
+	 * @author Arthur Kalmenson
+	 */
+	private class ActionImplHandler implements
+			ActionHandler<ActionImpl, ResponseImpl> {
+		public ResponseImpl execute(ActionImpl action) {
+			return null;
+		}
 	}
 }
