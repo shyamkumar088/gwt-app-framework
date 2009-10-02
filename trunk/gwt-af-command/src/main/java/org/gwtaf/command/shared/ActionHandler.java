@@ -13,31 +13,28 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.command.rpc;
-
-import org.gwtaf.command.shared.Action;
-import org.gwtaf.command.shared.Response;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package org.gwtaf.command.shared;
 
 /**
- * The async mirror of {@link CommandService}.
+ * A class that executes specific {@link Action}s and returns the
+ * {@link Response} to that action.
  * 
  * @author Arthur Kalmenson
+ * 
+ * @param <A>
+ *            the {@link Action} being handled.
+ * @param <R>
+ *            the {@link Response} to that Action.
  */
-public interface CommandServiceAsync {
+public interface ActionHandler<A extends Action<R>, R extends Response> {
 
 	/**
-	 * Execute the given {@link Action} and return a corresponding
-	 * {@link Response}.
+	 * Executes the {@link Action} and returns a {@link Response} to that
+	 * action.
 	 * 
-	 * @param <R>
-	 *            the type of {@link Response}.
 	 * @param action
 	 *            the {@link Action} to execute.
-	 * @param callback
-	 *            the {@link AsyncCallback} called with the result.
+	 * @return the {@link Response} returned.
 	 */
-	<R extends Response> void execute(Action<R> action,
-			AsyncCallback<R> callback);
+	R execute(A action);
 }

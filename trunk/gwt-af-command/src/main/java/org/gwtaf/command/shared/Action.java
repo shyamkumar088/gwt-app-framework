@@ -1,5 +1,10 @@
 /*
- * Copyright 2009. Mount Sinai Hospital, Toronto, Canada.
+ * Copyright 2008. Mount Sinai Hospital, Toronto, Canada.
+ * 
+ * Licensed under the Apache License, Version 2.0. You
+ * can find a copy of the license at:
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR DIRECT, 
  * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST 
@@ -13,31 +18,17 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.command.rpc;
-
-import org.gwtaf.command.shared.Action;
-import org.gwtaf.command.shared.Response;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package org.gwtaf.command.shared;
 
 /**
- * The async mirror of {@link CommandService}.
+ * The generic interface for Commands. We're using Action since the core GWT
+ * library already has a class called Command.
  * 
  * @author Arthur Kalmenson
+ * 
+ * @param <T>
+ *            the type of response to this Action.
  */
-public interface CommandServiceAsync {
+public interface Action<T extends Response> {
 
-	/**
-	 * Execute the given {@link Action} and return a corresponding
-	 * {@link Response}.
-	 * 
-	 * @param <R>
-	 *            the type of {@link Response}.
-	 * @param action
-	 *            the {@link Action} to execute.
-	 * @param callback
-	 *            the {@link AsyncCallback} called with the result.
-	 */
-	<R extends Response> void execute(Action<R> action,
-			AsyncCallback<R> callback);
 }
