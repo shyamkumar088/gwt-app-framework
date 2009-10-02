@@ -20,6 +20,8 @@
  */
 package org.gwtaf.command.shared;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * The generic interface for Commands. We're using Action since the core GWT
  * library already has a class called Command.
@@ -29,6 +31,6 @@ package org.gwtaf.command.shared;
  * @param <T>
  *            the type of response to this Action.
  */
-public interface Action<T extends Response> {
+public interface Action<T extends Response> extends IsSerializable {
 
 }
