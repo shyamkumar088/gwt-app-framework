@@ -20,11 +20,13 @@
  */
 package org.gwtaf.command.shared;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * The response to a specific {@link Action}.
  * 
  * @author Arthur Kalmenson
  */
-public interface Response {
+public interface Response extends IsSerializable {
 
 }
