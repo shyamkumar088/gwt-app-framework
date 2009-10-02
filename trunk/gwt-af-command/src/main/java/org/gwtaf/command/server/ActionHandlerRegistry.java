@@ -43,7 +43,7 @@ public interface ActionHandlerRegistry {
 	 * @param handler
 	 *            The handler.
 	 */
-	public <A extends Action<R>, R extends Response> void addHandler(A action,
+	public <A extends Action<R>, R extends Response> void addHandler(Class<A> action,
 			ActionHandler<A, R> handler);
 
 	/**
@@ -57,7 +57,7 @@ public interface ActionHandlerRegistry {
 	 *            The action the handler handles.
 	 */
 	public <A extends Action<R>, R extends Response> void removeHandler(
-			A action);
+			Class<A> action);
 
 	/**
 	 * Searches the registry and returns the first handler which supports the
