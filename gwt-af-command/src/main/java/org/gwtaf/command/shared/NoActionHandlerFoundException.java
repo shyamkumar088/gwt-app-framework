@@ -13,31 +13,30 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.command.rpc;
-
-import org.gwtaf.command.shared.Action;
-import org.gwtaf.command.shared.Response;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package org.gwtaf.command.shared;
 
 /**
- * The async mirror of {@link CommandService}.
+ * An exception signifying
  * 
  * @author Arthur Kalmenson
  */
-public interface CommandServiceAsync {
+public class NoActionHandlerFoundException extends RuntimeException {
 
 	/**
-	 * Execute the given {@link Action} and return a corresponding
-	 * {@link Response}.
-	 * 
-	 * @param <R>
-	 *            the type of {@link Response}.
-	 * @param action
-	 *            the {@link Action} to execute.
-	 * @param callback
-	 *            the {@link AsyncCallback} called with the result.
+	 * Create an empty <code>NoActionHandlerFoundException</code>.
 	 */
-	<R extends Response> void execute(Action<R> action,
-			AsyncCallback<R> callback);
+	public NoActionHandlerFoundException() {
+		super();
+	}
+
+	/**
+	 * Create a <code>NoActionHandlerFoundException</code> with the given error
+	 * message.
+	 * 
+	 * @param message
+	 *            the message.
+	 */
+	public NoActionHandlerFoundException(String message) {
+		super(message);
+	}
 }

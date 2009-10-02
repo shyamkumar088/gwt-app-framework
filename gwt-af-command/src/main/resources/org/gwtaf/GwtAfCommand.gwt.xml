@@ -26,5 +26,6 @@
 	<inherits name='com.google.gwt.user.User' />
 
 	<!-- Add the source path. -->
-	<source path="command" />
+	<source path="command/shared" />
+	<source path="command/rpc" />
 </module>

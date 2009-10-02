@@ -15,8 +15,8 @@
  */
 package org.gwtaf.command.rpc;
 
-import org.gwtaf.command.Action;
-import org.gwtaf.command.Response;
+import org.gwtaf.command.shared.Action;
+import org.gwtaf.command.shared.Response;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 
