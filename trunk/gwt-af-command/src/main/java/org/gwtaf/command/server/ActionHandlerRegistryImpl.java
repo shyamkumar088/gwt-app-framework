@@ -35,13 +35,12 @@ public class ActionHandlerRegistryImpl implements ActionHandlerRegistry {
 	 * The map of the {@link Action} class to the {@link ActionHandler} that
 	 * will handle that action.
 	 */
-	private Map<Class<Action<?>>, ActionHandler<?, ?>> actionToHandlerMap =
-			new HashMap<Class<Action<?>>, ActionHandler<?, ?>>();
+	private Map<Class<? extends Action<?>>, ActionHandler<?, ?>> actionToHandlerMap =
+			new HashMap<Class<? extends Action<?>>, ActionHandler<?, ?>>();
 
-	@SuppressWarnings("unchecked")
 	public <A extends Action<R>, R extends Response> void addHandler(Class<A> action,
 			ActionHandler<A, R> handler) {
-		actionToHandlerMap.put((Class<Action<?>>) action, handler);
+		actionToHandlerMap.put(action, handler);
 	}
 
 	public <A extends Action<R>, R extends Response> void removeHandler(Class<A> action) {
