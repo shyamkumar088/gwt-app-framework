@@ -97,5 +97,11 @@
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-incubator</artifactId>
+			<version>1.6.drop</version>
+		</dependency>
+
 	</dependencies>
 </project>

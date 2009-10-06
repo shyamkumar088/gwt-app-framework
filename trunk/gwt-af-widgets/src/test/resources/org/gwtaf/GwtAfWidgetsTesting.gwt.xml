@@ -25,8 +25,12 @@
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.inject.Inject" />
+	<inherits name='com.google.gwt.widgetideas.WidgetIdeas' />
+	<inherits name="com.google.gwt.gen2.table.ScrollTable" />
 
-	<!-- Inherit gwt-af modules. -->
+	<stylesheet src='ScrollTableDemo.css' />
+
+	<!-- Inherit gwt-af projects. -->
 	<inherits name="org.gwtaf.GwtAfEventbus" />
 
 	<!-- Add the source path. -->

@@ -23,6 +23,7 @@ package org.gwtaf;
 import org.gwtaf.widgets.expanding.GwtTestExpandableTable;
 import org.gwtaf.widgets.expanding.GwtTestExpandableTablePresenter;
 import org.gwtaf.widgets.generic.GwtTestUiBundleWidget;
+import org.gwtaf.widgets.search.GwtTestSearchResultScrollTable;
 
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.junit.tools.GWTTestSuite;
@@ -44,7 +45,7 @@ public class GwtWidgetsSuite extends TestCase {
 		suite.addTestSuite(GwtTestExpandableTable.class);
 		suite.addTestSuite(GwtTestUiBundleWidget.class);
 		suite.addTestSuite(GwtTestExpandableTablePresenter.class);
-		
+		suite.addTestSuite(GwtTestSearchResultScrollTable.class);
 		return suite;
 	}
 }
