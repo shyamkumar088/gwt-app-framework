@@ -30,7 +30,6 @@
 	<groupId>org.gwtaf</groupId>
 	<artifactId>gwt-af-eventbus</artifactId>
 	<name>GWT App Framework - Event Bus</name>
-	<version>0.0.1-SNAPSHOT</version>
 	<description>The EventBus module of the GWT App Framework project.</description>
 
 	<build>
@@ -84,5 +83,13 @@
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
 		</dependency>
+
+		<!-- gwt-af depedencies. -->
+		<dependency>
+			<groupId>org.gwtaf</groupId>
+			<artifactId>gwt-af-command</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 </project>
