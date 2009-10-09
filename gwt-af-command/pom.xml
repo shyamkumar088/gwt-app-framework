@@ -11,6 +11,25 @@
 	<name>GWT App Framework - Command</name>
 	<description>The Command pattern module of the GWT App Framework project.</description>
 
+	<build>
+		<plugins>
+			<!-- The GWT Maven plugin configuration. -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+
+				<!-- Include resources since this is a library. -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
