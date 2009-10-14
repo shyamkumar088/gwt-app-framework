@@ -19,12 +19,14 @@ import org.gwtaf.command.shared.Action;
 import org.gwtaf.command.shared.Response;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
  * The GWT {@link RemoteService} that executes {@link Action} items.
  * 
  * @author Arthur Kalmenson
  */
+@RemoteServiceRelativePath("../gwt-rpc/org.gwtaf.command.rpc.CommandService")
 public interface CommandService extends RemoteService {
 
 	/**

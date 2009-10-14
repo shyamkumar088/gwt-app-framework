@@ -16,11 +16,13 @@
 package org.gwtaf.command.server;
 
 import org.gwtaf.command.rpc.CommandService;
+import org.gwtaf.command.server.gwt.GwtRpcEndPoint;
 import org.gwtaf.command.shared.Action;
 import org.gwtaf.command.shared.ActionHandler;
 import org.gwtaf.command.shared.NoActionHandlerFoundException;
 import org.gwtaf.command.shared.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -31,6 +33,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * @author Arthur Kalmenson
  */
 @SuppressWarnings("serial")
+@GwtRpcEndPoint
+@Controller
 public class CommandDispatcherServlet extends RemoteServiceServlet implements
 		CommandService {
 
@@ -47,8 +51,8 @@ public class CommandDispatcherServlet extends RemoteServiceServlet implements
 		assert actionHandlerRegistry != null;
 
 		// get the required handler.
-		ActionHandler<Action<R>, R> handler =
-				actionHandlerRegistry.findHandler(action);
+		ActionHandler<Action<R>, R> handler = actionHandlerRegistry
+				.findHandler(action);
 		R response = null;
 
 		// if it's not null, execute and save the Response to return, otherwise
