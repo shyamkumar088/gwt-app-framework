@@ -37,6 +37,7 @@
 		<module>../gwt-af-sample</module>
 		<module>../gwt-af-bindings</module>
 		<module>../gwt-af-eventbus</module>
+		<module>../gwt-af-command</module>
 	</modules>
 
 	<!-- Properties declared to not copy version numbers around. -->
