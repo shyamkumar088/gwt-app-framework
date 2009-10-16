@@ -24,10 +24,13 @@ import org.gwtaf.command.rpc.CommandService;
 import org.gwtaf.command.rpc.CommandServiceAsync;
 import org.gwtaf.command.shared.Action;
 import org.gwtaf.command.shared.Response;
+import org.gwtaf.eventbus.EventBus;
 import org.gwtaf.eventbus.event.RpcEvent;
 import org.gwtaf.eventbus.event.RpcEventHandler;
 
+import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
 /**
  * The service responsible for dispatching RPCs from {@link RpcEvent}s
@@ -46,8 +49,23 @@ public class RpcEventDispatcherService<C extends CommandServiceAsync>
 	 */
 	private C commandService;
 
-	public RpcEventDispatcherService(C commandService) {
+	/**
+	 * Creates a {@link RpcEventDispatcherService}
+	 * 
+	 * @param commandService
+	 *            the {@CommandServiceAsync} used to make
+	 *            RPCs
+	 * @param eventbus
+	 *            the {@link EventBus} to communicate events with
+	 * @param rpcEventHandlerType
+	 *            the {@link Type}s of events that this {@code
+	 *            RpcEventDispatcherService} handles
+	 */
+	@Inject
+	public RpcEventDispatcherService(C commandService, EventBus eventbus,
+			Type<RpcEventHandler> rpcEventHandlerType) {
 		this.commandService = commandService;
+		eventbus.addHandler(rpcEventHandlerType, this);
 	}
 
 	/**
@@ -67,6 +85,7 @@ public class RpcEventDispatcherService<C extends CommandServiceAsync>
 
 	public <A extends Action<R>, S extends AsyncCallback<R>, R extends Response> void onRpcEventThrown(
 			RpcEvent<A, S, R> rpcEvent) {
+
 		commandService.execute(rpcEvent.getAction(), rpcEvent
 				.getAsyncCallback());
 	}
