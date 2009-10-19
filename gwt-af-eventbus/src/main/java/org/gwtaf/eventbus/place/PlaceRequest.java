@@ -33,7 +33,7 @@ public class PlaceRequest {
 
 	public PlaceRequest(Place id) {
 		this.place = id;
-		this.params = null;
+		this.params = new java.util.HashMap<String, String>();
 	}
 
 	private PlaceRequest(PlaceRequest req, String name, String value) {
@@ -54,6 +54,10 @@ public class PlaceRequest {
 		} else {
 			return Collections.EMPTY_SET;
 		}
+	}
+
+	public void addParameter(String key, String value) {
+		params.put(key, value);
 	}
 
 	public String getParameter(String key, String defaultValue) {
