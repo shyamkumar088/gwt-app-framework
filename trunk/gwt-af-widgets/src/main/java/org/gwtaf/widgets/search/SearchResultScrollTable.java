@@ -29,8 +29,12 @@ import org.gwtaf.widgets.search.model.SearchResultHeadings;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.SortPolicy;
 import com.google.gwt.gen2.table.client.SelectionGrid.SelectionPolicy;
+import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
+import com.google.gwt.gen2.table.event.client.TableEvent.Row;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
@@ -46,7 +50,7 @@ public class SearchResultScrollTable extends Composite implements
 	/**
 	 * The main {@link ScrollTable} for this widget
 	 */
-	private ScrollTable mainTable;
+	private ScrollTable scrollTable;
 
 	/**
 	 * The {@link FixedWidthGrid} that holds the data
@@ -61,9 +65,19 @@ public class SearchResultScrollTable extends Composite implements
 	private SearchResultHeadings headings;
 
 	/**
+	 * Main panel to hold the scrolltable.
+	 */
+	private FlexTable mainPanel;
+
+	/**
+	 * The handler listening for row selection events.
+	 */
+	private RowSelectionHandler rowSelectionHandler;
+
+	/**
 	 * Constructs a new {@Code SearchResultsTable}
 	 * 
-	 * @param mainTable
+	 * @param scrollTable
 	 *            the injected {@link ScrollTable}
 	 * @param dataGrid
 	 *            the injected {@link FixedWidthGrid}
@@ -73,14 +87,15 @@ public class SearchResultScrollTable extends Composite implements
 	 *            the injected {@link SearchResultHeadings}
 	 */
 	@Inject
-	public SearchResultScrollTable(ScrollTable mainTable,
-			FixedWidthGrid dataGrid, FixedWidthFlexTable headerTable,
-			SearchResultHeadings headings) {
+	public SearchResultScrollTable(FlexTable mainPanel,
+			ScrollTable scrollTable, FixedWidthGrid dataGrid,
+			FixedWidthFlexTable headerTable, SearchResultHeadings headings) {
 
-		assert mainTable != null && dataGrid != null && headerTable != null
+		assert scrollTable != null && dataGrid != null && headerTable != null
 				&& headings != null;
 
-		this.mainTable = mainTable;
+		this.mainPanel = mainPanel;
+		this.scrollTable = scrollTable;
 
 		// the dataGrid and headerTable are passed in but mainTable will already
 		// be constructed using them in the Provider. We need these references
@@ -90,12 +105,18 @@ public class SearchResultScrollTable extends Composite implements
 		this.headerTable = headerTable;
 		this.headings = headings;
 
-		initWidget(this.mainTable);
+		initWidget(this.mainPanel);
 	}
 
 	public void setValue(List<SearchResult> results) {
+
+		// make a new data grid
 		this.dataGrid = createDataGrid(results.size(), headerTable
 				.getColumnCount());
+		dataGrid.setCellSpacing(0);
+
+		// pass on the handler
+		dataGrid.addRowSelectionHandler(rowSelectionHandler);
 
 		int dataGridIndex = 0;
 
@@ -109,6 +130,22 @@ public class SearchResultScrollTable extends Composite implements
 			}
 		}
 
+		/**
+		 * Creating a new header table. Cannot re-use the old one due to
+		 * scrolltable not supporting remove. (one parent widget constraint)
+		 */
+		FixedWidthFlexTable newHeaderTable = new FixedWidthFlexTable();
+		for (int i = 0; i < headings.getHeadings().length; i++) {
+			newHeaderTable.setHTML(0, i, headings.getHeadings()[i]);
+		}
+
+		// replace the scrolltable
+		ScrollTable newTable = new ScrollTable(dataGrid, newHeaderTable);
+		newTable.setSortPolicy(SortPolicy.SINGLE_CELL);
+		newTable.setResizePolicy(ScrollTable.ResizePolicy.FILL_WIDTH);
+
+		mainPanel.clear();
+		mainPanel.setWidget(0, 0, newTable);
 	}
 
 	/**
@@ -151,9 +188,6 @@ public class SearchResultScrollTable extends Composite implements
 		// Create a new table
 		FixedWidthGrid dataTable = new FixedWidthGrid(rowCount, colCount);
 
-		// Set some options in the data table
-		dataTable.setSelectionPolicy(SelectionPolicy.MULTI_ROW);
-
 		// Return the data table
 		return dataTable;
 	}
@@ -183,7 +217,36 @@ public class SearchResultScrollTable extends Composite implements
 	}
 
 	public void render() {
-		// TODO Auto-generated method stub
+		mainPanel.setWidget(0, 0, scrollTable);
 	}
 
+	public SearchResultHeadings getHeadings() {
+		return headings;
+	}
+
+	public FixedWidthGrid getDataTable() {
+		return dataGrid;
+	}
+
+	/**
+	 * Sets the row selection handler to be passed to the grid.
+	 * 
+	 * @param handler
+	 *            row selection handler to use.
+	 */
+	public void setRowSelectionHandler(RowSelectionHandler handler) {
+		this.rowSelectionHandler = handler;
+	}
+
+	/**
+	 * Returns the value of the identifier cell of the given row.
+	 * 
+	 * @param row
+	 *            the row who's identifier cell to check
+	 * @return the value of the identifier cell of the given row.
+	 */
+	public String valueAtIdentifierOfRow(Row row) {
+		return dataGrid.getHTML(row.getRowIndex(), headings
+				.getUniqueIdentifierIndex());
+	}
 }
