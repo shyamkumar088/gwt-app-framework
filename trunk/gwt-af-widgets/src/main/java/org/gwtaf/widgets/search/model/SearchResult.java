@@ -21,7 +21,6 @@
 package org.gwtaf.widgets.search.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * The object representation of a single search result
@@ -34,10 +33,10 @@ public class SearchResult {
 	/**
 	 * Each {@code SearchResult} must have a set of headings
 	 */
-	private SearchResultHeadings headings;
+	private Integer numberOfHeadings;
 
 	/**
-	 * A {@link HashMap} of the data stored in this search result. Each data
+	 * A String array of the data stored in this search result. Each data
 	 * element is mapped to a particular heading, for easier access
 	 */
 	private String[] dataValues;
@@ -45,12 +44,12 @@ public class SearchResult {
 	/**
 	 * Creates a new {@code SearchResult} with the specified headings
 	 * 
-	 * @param headings
+	 * @param numHeadings
 	 *            the Headings of this search result
 	 */
-	public SearchResult(SearchResultHeadings headings) {
-		this.headings = headings;
-		dataValues = new String[headings.getHeadings().length];
+	public SearchResult(Integer numHeadings) {
+		this.numberOfHeadings = numHeadings;
+		dataValues = new String[numHeadings];
 	}
 
 	/**
@@ -61,30 +60,27 @@ public class SearchResult {
 	 * @param dataValues
 	 *            the array of Strings containing the data values
 	 */
-	public SearchResult(SearchResultHeadings headings, String[] dataValues) {
+	public SearchResult(Integer headings, String[] dataValues) {
 		// assert that they are of the same length
-		assert headings.getHeadings().length == dataValues.length;
+		assert headings == dataValues.length : "Number"
+				+ " of Data Values does not match the number of "
+				+ "search result headings";
 
 		// set the values
-		this.headings = headings;
+		this.numberOfHeadings = headings;
 		this.dataValues = dataValues;
-	}
-
-	/**
-	 * Retrieves the value of the unique identifier of this search result
-	 * 
-	 * @return the value of the unique identifier
-	 */
-	public String getUniqueIdentifierValue() {
-		return dataValues[headings.getUniqueIdentifierIndex()];
 	}
 
 	public String[] getDataValues() {
 		return dataValues;
 	}
 
-	public SearchResultHeadings getHeadings() {
-		return headings;
+	public Integer getNumberOfHeadings() {
+		return numberOfHeadings;
+	}
+
+	public void setData(Integer index, String dataValue) {
+		dataValues[index] = dataValue;
 	}
 
 	@Override
@@ -93,20 +89,9 @@ public class SearchResult {
 		builder.append("<SearchResult: dataValues=");
 		builder.append(Arrays.toString(dataValues));
 		builder.append(" / headings=");
-		builder.append(headings);
+		builder.append(numberOfHeadings);
 		builder.append(">");
 		return builder.toString();
-	}
-
-	public void setData(String heading, String dataValue) {
-		// assert that the heading exists
-		int index = Arrays.binarySearch(headings.getHeadings(), heading);
-		if (index != -1) {
-			dataValues[index] = dataValue;
-		} else {
-			throw new IllegalArgumentException("Heading <" + heading
-					+ "> does not exist in this Search Result");
-		}
 	}
 
 	@Override
@@ -114,8 +99,9 @@ public class SearchResult {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Arrays.hashCode(dataValues);
-		result = prime * result
-				+ ((headings == null) ? 0 : headings.hashCode());
+		result = prime
+				* result
+				+ ((numberOfHeadings == null) ? 0 : numberOfHeadings.hashCode());
 		return result;
 	}
 
@@ -130,10 +116,10 @@ public class SearchResult {
 		SearchResult other = (SearchResult) obj;
 		if (!Arrays.equals(dataValues, other.dataValues))
 			return false;
-		if (headings == null) {
-			if (other.headings != null)
+		if (numberOfHeadings == null) {
+			if (other.numberOfHeadings != null)
 				return false;
-		} else if (!headings.equals(other.headings))
+		} else if (!numberOfHeadings.equals(other.numberOfHeadings))
 			return false;
 		return true;
 	}

@@ -33,20 +33,34 @@ public class SearchResultTest {
 	 */
 	private SearchResult searchResult;
 
-	/**
-	 * The headings for the search result
-	 */
-	private SearchResultHeadings headings;
-
 	@BeforeMethod
 	public void initBefore() {
 
-		headings = new SearchResultHeadings("Test1", "Test2", "Test3");
-		searchResult = new SearchResult(headings);
+		searchResult = new SearchResult(3);
 
-		searchResult.setData("Test1", "A");
-		searchResult.setData("Test2", "B");
-		searchResult.setData("Test3", "C");
+		searchResult.setData(0, "A");
+		searchResult.setData(1, "B");
+		searchResult.setData(2, "C");
+	}
+
+	/**
+	 * Tries to construct a {@code SearchResult} using a incorrect amount of
+	 * data values (Too few)
+	 */
+	@Test(expectedExceptions = AssertionError.class)
+	public void testIncorrectNumDataValuesTooFew() {
+		// too few
+		new SearchResult(4, new String[] { "a" });
+	}
+
+	/**
+	 * Tries to construct a {@code SearchResult} using a incorrect amount of
+	 * data values (Too many)
+	 */
+	@Test(expectedExceptions = AssertionError.class)
+	public void testIncorrectNumDataValuesTooMany() {
+		// too little
+		new SearchResult(1, new String[] { "b", "f", "e", "d" });
 	}
 
 	/**
@@ -61,50 +75,27 @@ public class SearchResultTest {
 	public Object[][] dataProviderTestEquals() {
 		initBefore();
 
-		SearchResult differentData = new SearchResult(headings);
+		SearchResult differentData = new SearchResult(3);
 
-		differentData.setData("Test1", "Alpha");
-		differentData.setData("Test2", "Beta");
-		differentData.setData("Test3", "Gamma");
+		differentData.setData(0, "Alpha");
+		differentData.setData(1, "Beta");
+		differentData.setData(2, "Gamma");
 
-		SearchResultHeadings otherHeadings = new SearchResultHeadings(
-				"Something1", "Something2", "Something3");
+		SearchResult differentHeadings = new SearchResult(3);
+		differentHeadings.setData(0, "Uno");
+		differentHeadings.setData(1, "Dos");
+		differentHeadings.setData(2, "Tres");
 
-		SearchResult differentHeadings = new SearchResult(otherHeadings);
-		differentHeadings.setData("Something1", "Uno");
-		differentHeadings.setData("Something2", "Dos");
-		differentHeadings.setData("Something3", "Tres");
-
-		SearchResult sameData = new SearchResult(headings);
-		sameData.setData("Test1", "Alpha");
-		sameData.setData("Test2", "Beta");
-		sameData.setData("Test3", "Gamma");
+		SearchResult sameData = new SearchResult(3);
+		sameData.setData(0, "Alpha");
+		sameData.setData(1, "Beta");
+		sameData.setData(2, "Gamma");
 
 		return new Object[][] { { searchResult, differentData, false },
 				{ searchResult, differentHeadings, false },
 				{ searchResult, sameData, false },
 				{ searchResult, searchResult, true },
 				{ differentData, null, false } };
-	}
-
-	/**
-	 * Tries to construct a {@code SearchResult} using a incorrect amount of
-	 * data values (Too few)
-	 */
-	@Test(expectedExceptions = AssertionError.class)
-	public void testIncorrectNumDataValuesTooFew() {
-		// too few
-		new SearchResult(headings, new String[] { "a" });
-	}
-
-	/**
-	 * Tries to construct a {@code SearchResult} using a incorrect amount of
-	 * data values (Too many)
-	 */
-	@Test(expectedExceptions = AssertionError.class)
-	public void testIncorrectNumDataValuesTooMany() {
-		// too little
-		new SearchResult(headings, new String[] { "b", "f", "e", "d" });
 	}
 
 	/**

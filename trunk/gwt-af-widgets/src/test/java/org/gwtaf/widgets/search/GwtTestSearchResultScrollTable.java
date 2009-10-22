@@ -21,12 +21,12 @@
 package org.gwtaf.widgets.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
 
 import org.gwtaf.widgets.search.model.SearchResult;
-import org.gwtaf.widgets.search.model.SearchResultHeadings;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
@@ -36,9 +36,11 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.junit.client.GWTTestCase;
+import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
+import com.google.inject.name.Named;
 
 /**
  * A set of GWT test cases for the {@link SearchResultScrollTable}
@@ -97,12 +99,6 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 		 */
 		public FixedWidthFlexTable getHeaderTable();
 
-		/**
-		 * Returns the search result headings
-		 * 
-		 * @return the search result headings
-		 */
-		public SearchResultHeadings getHeadings();
 	}
 
 	/**
@@ -148,10 +144,10 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 		 */
 		@Provides
 		public FixedWidthFlexTable headerTableProvider(
-				SearchResultHeadings headings) {
+				@Named("Headings") Provider<List<String>> headings) {
 			FixedWidthFlexTable table = new FixedWidthFlexTable();
-			for (int i = 0; i < headings.getHeadings().length; i++) {
-				table.setHTML(0, i, headings.getHeadings()[i]);
+			for (int i = 0; i < headings.get().size(); i++) {
+				table.setHTML(0, i, headings.get().get(i));
 			}
 			return table;
 		}
@@ -165,23 +161,25 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 		 * @return the wired up {@link FixedWidthGrid}
 		 */
 		@Provides
-		public FixedWidthGrid dataGridProvider(SearchResultHeadings headings) {
+		public FixedWidthGrid dataGridProvider(
+				@Named("Headings") Provider<List<String>> headings) {
 			// return 1 row by default. When SetValue is called on the
 			// ScrollTable, it will resize the data grid as needed
 
-			return new FixedWidthGrid(1, headings.getHeadings().length);
+			return new FixedWidthGrid(1, headings.get().size());
 		}
 
 		/**
-		 * Provides the {@link SearchResultHeadings}
+		 * Provides the headings for the search result table
 		 * 
-		 * @return the {@link SearchResultHeadings}
+		 * @return the headings for the search result table
 		 */
 		@Provides
 		@Singleton
-		public SearchResultHeadings headingsProvider() {
-			return new SearchResultHeadings("Heading 1", "Heading 2",
-					"Heading 3");
+		@Named("Headings")
+		public List<String> headingsProvider() {
+			return new ArrayList<String>(Arrays.asList("Heading 1",
+					"Heading 2", "Heading 3"));
 		}
 
 	}
@@ -211,15 +209,13 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 	 */
 	public void testSetValueAndGetResults() {
 
-		SearchResultHeadings searchResultHeadings = injector.getHeadings();
-
 		// set the headings of the table
 
-		SearchResult result1 = new SearchResult(searchResultHeadings,
+		SearchResult result1 = new SearchResult(3,
 				new String[] { "A", "B", "C" });
-		SearchResult result2 = new SearchResult(searchResultHeadings,
+		SearchResult result2 = new SearchResult(3,
 				new String[] { "D", "E", "F" });
-		SearchResult result3 = new SearchResult(searchResultHeadings,
+		SearchResult result3 = new SearchResult(3,
 				new String[] { "G", "H", "I" });
 
 		List<SearchResult> results = new ArrayList<SearchResult>();
@@ -253,10 +249,10 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 	public void testSetListWithNullValue() {
 		// create the list
 		List<SearchResult> resultWithNull = new ArrayList<SearchResult>();
-		SearchResult result1 = new SearchResult(injector.getHeadings(),
+		SearchResult result1 = new SearchResult(3,
 				new String[] { "A", "B", "C" });
 
-		SearchResult result2 = new SearchResult(injector.getHeadings(),
+		SearchResult result2 = new SearchResult(3,
 				new String[] { "D", "D", "D" });
 
 		// add the items, including a null
