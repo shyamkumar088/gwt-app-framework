@@ -26,23 +26,27 @@ import org.gwtaf.widgets.View;
 import org.gwtaf.widgets.search.model.SearchResult;
 
 /**
+ * An interface for building a table of {@link SearchResult}s
  * 
  * @author Jason Kong
  * 
  * @param <T>
+ *            the {@link SearchResult} type that this table holds
  */
 public interface SearchResultTable<T extends SearchResult> extends View {
 
 	/**
 	 * Returns a list of the search results
 	 * 
-	 * @return
+	 * @return a list of the search results
 	 */
 	public List<T> getResults();
 
 	/**
+	 * Populates the table with the given list of {@link SearchResult}s
 	 * 
 	 * @param searchResult
+	 *            a list of the search results to set
 	 */
 	public void setValue(List<T> searchResult);
 

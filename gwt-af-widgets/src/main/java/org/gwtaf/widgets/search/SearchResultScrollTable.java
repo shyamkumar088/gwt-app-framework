@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gwtaf.widgets.search.model.SearchResult;
-import org.gwtaf.widgets.search.model.SearchResultHeadings;
 
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
@@ -62,22 +61,21 @@ public class SearchResultScrollTable extends Composite implements
 	 */
 	private FixedWidthFlexTable headerTable;
 
-	private SearchResultHeadings headings;
-
 	/**
 	 * Main panel to hold the scrolltable.
 	 */
 	private FlexTable mainPanel;
-
 	/**
 	 * The handler listening for row selection events.
 	 */
 	private RowSelectionHandler rowSelectionHandler;
 
+	private Integer uniqueIdentifierIndex;
+
 	/**
 	 * Constructs a new {@Code SearchResultsTable}
 	 * 
-	 * @param scrollTable
+	 * @param scrolltable
 	 *            the injected {@link ScrollTable}
 	 * @param dataGrid
 	 *            the injected {@link FixedWidthGrid}
@@ -87,15 +85,13 @@ public class SearchResultScrollTable extends Composite implements
 	 *            the injected {@link SearchResultHeadings}
 	 */
 	@Inject
-	public SearchResultScrollTable(FlexTable mainPanel,
-			ScrollTable scrollTable, FixedWidthGrid dataGrid,
-			FixedWidthFlexTable headerTable, SearchResultHeadings headings) {
+	public SearchResultScrollTable(FlexTable flexTable,
+			ScrollTable scrolltable, FixedWidthGrid dataGrid,
+			FixedWidthFlexTable headerTable) {
 
-		assert scrollTable != null && dataGrid != null && headerTable != null
-				&& headings != null;
+		assert scrolltable != null && dataGrid != null && headerTable != null;
 
-		this.mainPanel = mainPanel;
-		this.scrollTable = scrollTable;
+		this.mainPanel = flexTable;
 
 		// the dataGrid and headerTable are passed in but mainTable will already
 		// be constructed using them in the Provider. We need these references
@@ -103,7 +99,7 @@ public class SearchResultScrollTable extends Composite implements
 
 		this.dataGrid = dataGrid;
 		this.headerTable = headerTable;
-		this.headings = headings;
+		this.scrollTable = scrolltable;
 
 		initWidget(this.mainPanel);
 	}
@@ -135,8 +131,8 @@ public class SearchResultScrollTable extends Composite implements
 		 * scrolltable not supporting remove. (one parent widget constraint)
 		 */
 		FixedWidthFlexTable newHeaderTable = new FixedWidthFlexTable();
-		for (int i = 0; i < headings.getHeadings().length; i++) {
-			newHeaderTable.setHTML(0, i, headings.getHeadings()[i]);
+		for (int i = 0; i < headerTable.getColumnCount(); i++) {
+			newHeaderTable.setHTML(0, i, headerTable.getHTML(0, i));
 		}
 
 		// replace the scrolltable
@@ -146,6 +142,7 @@ public class SearchResultScrollTable extends Composite implements
 
 		mainPanel.clear();
 		mainPanel.setWidget(0, 0, newTable);
+
 	}
 
 	/**
@@ -158,7 +155,7 @@ public class SearchResultScrollTable extends Composite implements
 	 */
 	private void setSingleResult(SearchResult result, int row) {
 
-		assert result.getHeadings() == headings;
+		assert result.getNumberOfHeadings() == headerTable.getColumnCount();
 
 		for (int i = 0; i < headerTable.getColumnCount(); i++) {
 			dataGrid.setHTML(row, i, result.getDataValues()[i]);
@@ -208,20 +205,15 @@ public class SearchResultScrollTable extends Composite implements
 	 * @return the {@link SearchResult} created from the given row
 	 */
 	private SearchResult createSingleResultFromRow(int row) {
-		SearchResult result = new SearchResult(headings);
-		String[] headingStrings = headings.getHeadings();
-		for (int i = 0; i < headingStrings.length; i++) {
-			result.setData(headingStrings[i], dataGrid.getHTML(row, i));
+		SearchResult result = new SearchResult(headerTable.getColumnCount());
+		for (int i = 0; i < dataGrid.getColumnCount(); i++) {
+			result.setData(i, dataGrid.getHTML(row, i));
 		}
 		return result;
 	}
 
 	public void render() {
 		mainPanel.setWidget(0, 0, scrollTable);
-	}
-
-	public SearchResultHeadings getHeadings() {
-		return headings;
 	}
 
 	public FixedWidthGrid getDataTable() {
@@ -246,7 +238,15 @@ public class SearchResultScrollTable extends Composite implements
 	 * @return the value of the identifier cell of the given row.
 	 */
 	public String valueAtIdentifierOfRow(Row row) {
-		return dataGrid.getHTML(row.getRowIndex(), headings
-				.getUniqueIdentifierIndex());
+		return dataGrid.getHTML(row.getRowIndex(), uniqueIdentifierIndex);
 	}
+
+	public Integer getUniqueIdentifierIndex() {
+		return uniqueIdentifierIndex;
+	}
+
+	public void setUniqueIdentifierIndex(Integer uniqueIdentifierIndex) {
+		this.uniqueIdentifierIndex = uniqueIdentifierIndex;
+	}
+
 }
