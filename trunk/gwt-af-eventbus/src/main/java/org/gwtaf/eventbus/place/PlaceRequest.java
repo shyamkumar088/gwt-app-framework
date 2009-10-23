@@ -1,6 +1,7 @@
 package org.gwtaf.eventbus.place;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class PlaceRequest {
 
 	public PlaceRequest(Place id) {
 		this.place = id;
-		this.params = new java.util.HashMap<String, String>();
+		this.params = new HashMap<String, String>();
 	}
 
 	private PlaceRequest(PlaceRequest req, String name, String value) {
@@ -167,5 +168,4 @@ public class PlaceRequest {
 		return value.replaceAll(PARAM_ESCAPE, PARAM_SEPARATOR).replaceAll(
 				VALUE_ESCAPE, VALUE_SEPARATOR);
 	}
-
 }
