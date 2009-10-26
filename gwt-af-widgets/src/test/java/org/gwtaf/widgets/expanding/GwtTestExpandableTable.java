@@ -32,8 +32,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.inject.Provider;
 
 /**
- * Test whether the {@link ExpandableTableDepGinModule} can return the components
- * required to make an {@link ExpandableTable}.
+ * Test whether the {@link ExpandableTableDepGinModule} can return the
+ * components required to make an {@link ExpandableTable}.
  * 
  * @author Arthur Kalmenson
  */
@@ -47,7 +47,7 @@ public class GwtTestExpandableTable extends GWTTestCase {
 	 */
 	@GinModules(ExpandableTableDepGinModule.class)
 	public static interface ExpandableTableGwtTestGinjector extends Ginjector {
-		
+
 		@ExpandableTableDep
 		FlexTable mainPanel();
 
@@ -87,8 +87,8 @@ public class GwtTestExpandableTable extends GWTTestCase {
 
 		// create the expandable table.
 		ExpandableTable<TextBox> expandable = new ExpandableFlexTable<TextBox>(
-				injector.mainPanel(), injector.addButton(),
-				injector.removeButtonProvider());
+				injector.mainPanel(), injector.addButton(), injector
+						.removeButtonProvider());
 
 		// add two items to it.
 		expandable.add(new TextBox());
@@ -98,10 +98,28 @@ public class GwtTestExpandableTable extends GWTTestCase {
 		assertEquals(2, expandable.getWidgets().size());
 
 		// remove and check we have no widgets.
-//		expandable.remove(0);
-//		expandable.remove(0);
-//		assertEquals(0, expandable.getWidgets().size());
+		// expandable.remove(0);
+		// expandable.remove(0);
+		// assertEquals(0, expandable.getWidgets().size());
 
+	}
+
+	/**
+	 * Want to make sure rows are cleaned up after test.
+	 */
+	public void testClearning() {
+		// create the expandable table.
+		ExpandableFlexTable<TextBox> expandable = new ExpandableFlexTable<TextBox>(
+				injector.mainPanel(), injector.addButton(), injector
+						.removeButtonProvider());
+
+		// add two items to it.
+		for (int i = 0; i < 15; i++) {
+			expandable.add(new TextBox());
+		}
+
+		expandable.clear();
+		assertEquals(1, expandable.getMainPanel().getRowCount());
 	}
 
 	@Override
