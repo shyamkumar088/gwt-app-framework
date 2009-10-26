@@ -168,6 +168,13 @@ public class ExpandableFlexTable<T> extends Composite implements
 	}
 
 	public void clear() {
+
+		// remove all the rows to avoid display problems
+		int rows = mainPanel.getRowCount();
+		for (int i = 1; i < rows; i++) {
+			mainPanel.removeRow(1);
+		}
+
 		mainPanel.clear();
 		mainPanel.setWidget(0, 0, addButton.getContainingWidget());
 	}
@@ -203,5 +210,9 @@ public class ExpandableFlexTable<T> extends Composite implements
 
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
 		return addDomHandler(handler, ClickEvent.getType());
+	}
+
+	public FlexTable getMainPanel() {
+		return mainPanel;
 	}
 }
