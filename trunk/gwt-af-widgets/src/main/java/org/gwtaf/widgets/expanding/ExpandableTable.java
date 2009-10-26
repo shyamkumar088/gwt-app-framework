@@ -79,4 +79,5 @@ public interface ExpandableTable<T> extends View, HasClickHandlers {
 	 * @return the list of {@link RemoveButton}s.
 	 */
 	List<RemoveButton> getRemoveButtons();
+	
 }
