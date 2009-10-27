@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>gwt-beans-binding</groupId>
 			<artifactId>gwt-beans-binding</artifactId>
-			<version>0.2.4</version>
+			<version>0.2.4.hack</version>
 		</dependency>
 
 		<!-- GWT dependencies. -->
