@@ -22,13 +22,15 @@ package org.gwtaf.widgets.search.model;
 
 import java.util.Arrays;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * The object representation of a single search result
  * 
  * @author Jason Kong
  * 
  */
-public class SearchResult {
+public class SearchResult implements IsSerializable {
 
 	/**
 	 * Each {@code SearchResult} must have a set of headings
@@ -50,6 +52,13 @@ public class SearchResult {
 	public SearchResult(Integer numHeadings) {
 		this.numberOfHeadings = numHeadings;
 		dataValues = new String[numHeadings];
+	}
+
+	/**
+	 * Default empty constructor
+	 */
+	public SearchResult() {
+
 	}
 
 	/**
