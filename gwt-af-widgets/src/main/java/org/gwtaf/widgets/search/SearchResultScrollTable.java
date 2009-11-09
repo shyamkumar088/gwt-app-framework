@@ -29,7 +29,6 @@ import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.SortPolicy;
-import com.google.gwt.gen2.table.client.SelectionGrid.SelectionPolicy;
 import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import com.google.gwt.gen2.table.event.client.TableEvent.Row;
 import com.google.gwt.user.client.ui.Composite;
@@ -139,6 +138,7 @@ public class SearchResultScrollTable extends Composite implements
 		ScrollTable newTable = new ScrollTable(dataGrid, newHeaderTable);
 		newTable.setSortPolicy(SortPolicy.SINGLE_CELL);
 		newTable.setResizePolicy(ScrollTable.ResizePolicy.FILL_WIDTH);
+		this.scrollTable = newTable;
 
 		mainPanel.clear();
 		mainPanel.setWidget(0, 0, newTable);
@@ -249,4 +249,7 @@ public class SearchResultScrollTable extends Composite implements
 		this.uniqueIdentifierIndex = uniqueIdentifierIndex;
 	}
 
+	public ScrollTable getScrollTable() {
+		return scrollTable;
+	}
 }
