@@ -86,9 +86,9 @@
 
 		<!-- gwt-af depedencies. -->
 		<dependency>
-			<groupId>org.gwtaf</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>gwt-af-command</artifactId>
-			<version>0.0.1</version>
+			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>
