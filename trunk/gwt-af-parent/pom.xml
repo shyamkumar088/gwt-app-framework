@@ -119,7 +119,6 @@
 				<groupId>com.google.gwt</groupId>
 				<artifactId>gwt-dev</artifactId>
 				<version>${gwt.version}</version>
-				<classifier>${platform}</classifier>
 				<scope>provided</scope>
 			</dependency>
 
