@@ -26,7 +26,7 @@
 	<artifactId>gwt-af-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>GWT App Framework - Parent</name>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<description>The parent module of the GWT App Framework project.</description>
 
 	<!-- Sub modules of the whole project. -->
