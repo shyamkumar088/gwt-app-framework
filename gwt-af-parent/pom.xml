@@ -47,7 +47,7 @@
 		<maven.compiler.target>1.5</maven.compiler.target>
 
 		<!-- convenience to define GWT version in one place -->
-		<gwt.version>1.6.4</gwt.version>
+		<gwt.version>2.0.0.RC2</gwt.version>
 	</properties>
 
 	<!-- Configure the build options. -->
@@ -58,7 +58,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>gwt-maven-plugin</artifactId>
-					<version>1.1</version>
+					<version>1.2-SNAPSHOT</version>
 
 					<!--
 						Exclude regular tests so the GWT compiler doesn't try to compile
@@ -182,42 +182,4 @@
 			<url>http://mshmaven/artifactory/repo</url>
 		</repository>
 	</repositories>
-
-	<!--  profiles (with activation per platform) for gwt-dev -->
-	<profiles>
-		<profile>
-			<id>gwt-dev-windows</id>
-			<properties>
-				<platform>windows</platform>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-				<os>
-					<family>Windows</family>
-				</os>
-			</activation>
-		</profile>
-		<profile>
-			<id>gwt-dev-mac</id>
-			<properties>
-				<platform>mac</platform>
-			</properties>
-			<activation>
-				<os>
-					<family>mac</family>
-				</os>
-			</activation>
-		</profile>
-		<profile>
-			<id>gwt-dev-linux</id>
-			<properties>
-				<platform>linux</platform>
-			</properties>
-			<activation>
-				<os>
-					<name>Linux</name>
-				</os>
-			</activation>
-		</profile>
-	</profiles>
 </project>
