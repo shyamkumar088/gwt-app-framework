@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-incubator</artifactId>
-			<version>1.6.drop</version>
+			<version>svn.r1739</version>
 		</dependency>
 
 	</dependencies>
