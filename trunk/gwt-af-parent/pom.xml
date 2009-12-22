@@ -47,7 +47,7 @@
 		<maven.compiler.target>1.5</maven.compiler.target>
 
 		<!-- convenience to define GWT version in one place -->
-		<gwt.version>2.0.0.RC2</gwt.version>
+		<gwt.version>2.0.0</gwt.version>
 	</properties>
 
 	<!-- Configure the build options. -->
@@ -58,7 +58,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>gwt-maven-plugin</artifactId>
-					<version>1.2-SNAPSHOT</version>
+					<version>1.2</version>
 
 					<!--
 						Exclude regular tests so the GWT compiler doesn't try to compile
@@ -126,7 +126,7 @@
 			<dependency>
 				<groupId>com.google.code.gin</groupId>
 				<artifactId>google-gin</artifactId>
-				<version>0.107.svn</version>
+				<version>0.124.svn</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.code.guice</groupId>
