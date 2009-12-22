@@ -87,9 +87,6 @@ public class ExpandableTablePresenterImplTest {
 		public Widget getContainingWidget() {
 			return null;
 		}
-
-		public void render() {
-		}
 	}
 
 	@BeforeClass
@@ -105,11 +102,9 @@ public class ExpandableTablePresenterImplTest {
 	@BeforeMethod
 	public void initBefore() {
 		MockitoAnnotations.initMocks(this);
-		presenter =
-				new ExpandableTablePresenterImpl<Presenter<ViewMock, String>, ViewMock, String>(
-						eventBusMock, expandableTableMock,
-						presenterProviderMock, createdEventProviderMock,
-						removedEventProviderMock);
+		presenter = new ExpandableTablePresenterImpl<Presenter<ViewMock, String>, ViewMock, String>(
+				eventBusMock, expandableTableMock, presenterProviderMock,
+				createdEventProviderMock, removedEventProviderMock);
 	}
 
 	/**
@@ -132,8 +127,7 @@ public class ExpandableTablePresenterImplTest {
 	public void addAndCheckEvent() {
 
 		// set up the mocks.
-		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock =
-				setupCreateMocks();
+		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock = setupCreateMocks();
 		when(presenterMock.getModel()).thenReturn("Some String");
 
 		// try to add.
@@ -144,7 +138,6 @@ public class ExpandableTablePresenterImplTest {
 		verify(eventMock).setPresenter(presenterMock);
 		verify(eventBusMock).fireEvent(eventMock);
 		verify(expandableTableMock).add(viewMock);
-		verify(viewMock).render();
 
 		// check that the model was added to the Presenters list of models.
 		Assert.assertEquals(presenter.getModel().size(), 1);
@@ -191,8 +184,7 @@ public class ExpandableTablePresenterImplTest {
 	public void fireRemoveEventNoView() {
 
 		// set up the mocks.
-		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock =
-				mock(PresenterRemovedEvent.class);
+		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock = mock(PresenterRemovedEvent.class);
 		when(removedEventProviderMock.get()).thenReturn(removeEventMock);
 		setupCreateMocks();
 		ViewMock someOtherView = mock(ViewMock.class);
@@ -214,8 +206,7 @@ public class ExpandableTablePresenterImplTest {
 	public void removeAndCheckEvent() {
 
 		// set up the mocks.
-		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock =
-				mock(PresenterRemovedEvent.class);
+		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock = mock(PresenterRemovedEvent.class);
 		when(removedEventProviderMock.get()).thenReturn(removeEventMock);
 		setupCreateMocks();
 
@@ -260,8 +251,7 @@ public class ExpandableTablePresenterImplTest {
 	@Test
 	public void setModels() {
 
-		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock =
-				setupCreateMocks();
+		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock = setupCreateMocks();
 		when(presenterMock.getModel()).thenReturn("Some String");
 
 		// create the list of models and set it.
@@ -287,8 +277,7 @@ public class ExpandableTablePresenterImplTest {
 	public void clickedAddButton() {
 
 		// set up mocks.
-		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock =
-				setupCreateMocks();
+		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock = setupCreateMocks();
 
 		// add button mock setup.
 		AddButton addButtonMock = mock(AddButton.class);
@@ -316,11 +305,9 @@ public class ExpandableTablePresenterImplTest {
 	public void clickedRemoveButton() {
 
 		// set up the mocks.
-		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock =
-				mock(PresenterRemovedEvent.class);
+		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock = mock(PresenterRemovedEvent.class);
 		when(removedEventProviderMock.get()).thenReturn(removeEventMock);
-		PresenterCreatedEvent<Presenter<ViewMock, String>> createdEventMock =
-				setupCreateMocks();
+		PresenterCreatedEvent<Presenter<ViewMock, String>> createdEventMock = setupCreateMocks();
 		when(expandableTableMock.remove(removeButtonMock)).thenReturn(viewMock);
 
 		// remove button mock setup.
@@ -359,8 +346,7 @@ public class ExpandableTablePresenterImplTest {
 	 */
 	@SuppressWarnings("unchecked")
 	private PresenterCreatedEvent<Presenter<ViewMock, String>> setupCreateMocks() {
-		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock =
-				mock(PresenterCreatedEvent.class);
+		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock = mock(PresenterCreatedEvent.class);
 		when(createdEventProviderMock.get()).thenReturn(eventMock);
 		when(presenterProviderMock.get()).thenReturn(presenterMock);
 		when(presenterMock.getView()).thenReturn(viewMock);
