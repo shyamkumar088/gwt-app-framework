@@ -20,8 +20,6 @@
  */
 package org.gwtaf.widgets.expanding;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -55,8 +53,6 @@ import com.google.inject.Provider;
  */
 public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends View, M>
 		implements ExpandableTablePresenter<P, V, M> {
-
-	private PropertyChangeSupport props = new PropertyChangeSupport(this);
 
 	/**
 	 * The {@link EventBus} to fire events on.
@@ -218,11 +214,6 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 				.get();
 		presenterCreated.setPresenter(presenter);
 		eventBus.fireEvent(presenterCreated);
-
-		// fire props change if needed
-		if (fireProps) {
-			props.firePropertyChange("model", false, true);
-		}
 	}
 
 	/**
@@ -245,7 +236,6 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 					.get();
 			presenterRemovedEvent.setPresenter(presenter);
 			eventBus.fireEvent(presenterRemovedEvent);
-			props.firePropertyChange("model", false, true);
 		}
 	}
 
@@ -266,13 +256,5 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 				}
 			}
 		}
-	}
-
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		props.addPropertyChangeListener(listener);
-	}
-
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		props.removePropertyChangeListener(listener);
 	}
 }
