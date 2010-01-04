@@ -22,7 +22,6 @@ package org.gwtaf.widgets.expanding;
 
 import java.util.List;
 
-import org.gwt.beansbinding.core.client.util.HasPropertyChangeSupport;
 import org.gwtaf.widgets.Presenter;
 import org.gwtaf.widgets.View;
 
@@ -39,5 +38,5 @@ import org.gwtaf.widgets.View;
  *            the model that we're working with.
  */
 public interface ExpandableTablePresenter<P extends Presenter<V, M>, V extends View, M>
-		extends Presenter<ExpandableTable<V>, List<M>>,HasPropertyChangeSupport {
+		extends Presenter<ExpandableTable<V>, List<M>> {
 }
