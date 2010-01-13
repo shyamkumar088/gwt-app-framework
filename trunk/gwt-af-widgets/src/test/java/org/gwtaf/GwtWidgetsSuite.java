@@ -23,6 +23,7 @@ package org.gwtaf;
 import org.gwtaf.widgets.expanding.GwtTestExpandableTable;
 import org.gwtaf.widgets.expanding.GwtTestExpandableTablePresenter;
 import org.gwtaf.widgets.generic.GwtTestGwtAfListBox;
+import org.gwtaf.widgets.generic.GwtTestRadioButtonGroup;
 import org.gwtaf.widgets.generic.GwtTestUiBundleWidget;
 import org.gwtaf.widgets.search.GwtTestSearchResultScrollTable;
 
@@ -48,6 +49,7 @@ public class GwtWidgetsSuite extends TestCase {
 		suite.addTestSuite(GwtTestExpandableTablePresenter.class);
 		suite.addTestSuite(GwtTestSearchResultScrollTable.class);
 		suite.addTestSuite(GwtTestGwtAfListBox.class);
+		suite.addTestSuite(GwtTestRadioButtonGroup.class);
 		return suite;
 	}
 }
