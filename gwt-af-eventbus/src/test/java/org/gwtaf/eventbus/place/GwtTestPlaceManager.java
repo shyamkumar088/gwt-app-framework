@@ -16,8 +16,9 @@ import com.google.gwt.user.client.History;
  * Test of the Place classes.
  * 
  * @author Sergey Vesselov
+ * @author Arthur Kalmenson
  */
-public class GwtTestPlace extends GWTTestCase {
+public class GwtTestPlaceManager extends GWTTestCase {
 
 	/**
 	 * The injected place manager
@@ -28,6 +29,8 @@ public class GwtTestPlace extends GWTTestCase {
 	 * The injected event bus
 	 */
 	private EventBus bus;
+	
+	private ReactionClass listeningClass;
 
 	@GinModules(EventBusGinModule.class)
 	public static interface PlaceGinjector extends Ginjector {
@@ -46,21 +49,22 @@ public class GwtTestPlace extends GWTTestCase {
 
 		// inject the event bus
 		bus = injector.getEventBus();
+		
+		// create the listening class.
+		listeningClass = new ReactionClass(bus);
 	}
 
 	/**
-	 * Test PlaceChangedEvent, History changes and the catching of
-	 * PlaceRequestEvent.
+	 * Test firing a {@link PlaceRequestEvent} on the bus and ensure that the
+	 * {@link History} is changed and the event is translated into a
+	 * {@link PlaceChangeEvent}.
 	 */
 	public void testChangeEventRequestEvent() {
-
-		// create a listening class
-		ReactionClass listeningClass = new ReactionClass(bus);
 
 		// create a request
 		Place place = new Place("New Place");
 		PlaceRequest request = new PlaceRequest(place);
-		PlaceChangedEvent event = new PlaceChangedEvent(request);
+		PlaceRequestEvent event = new PlaceRequestEvent(request);
 
 		// fire event
 		bus.fireEvent(event);
@@ -77,23 +81,32 @@ public class GwtTestPlace extends GWTTestCase {
 	 */
 	public void testHistoryThrowing() {
 
-		// create a listening class
-		ReactionClass listeningClass = new ReactionClass(bus);
-
 		// make a new history class
 		History.newItem("Home Page");
 
-		// make sure listening classes get the event
-		Assert.assertTrue(listeningClass.getValueCaught().equals("Home Page"));
+		// make sure listening classes get the change event.
+		assertTrue(listeningClass.getValueCaught().equals("Home Page"));
+	}
+	
+	/**
+	 * Test firing the current place.
+	 */
+	public void testFireCurrentPlace() {
+		
+		// add a new place.
+		History.newItem("current-place", false);
+		
+		// now fire it and check that the listening class go the translated class.
+		manager.fireCurrentPlace();
+		assertTrue(listeningClass.getValueCaught().equals("current-place"));
 	}
 
 	/**
-	 * Sample class to catch {@link PlaceRequestEvent}s
+	 * Sample class to catch {@link PlaceChangeEvent}s
 	 * 
 	 * @author Sergey Vesselov
-	 * 
 	 */
-	private class ReactionClass implements PlaceChangedHandler {
+	private class ReactionClass implements PlaceChangeHandler {
 
 		/**
 		 * Value of the place caught.
@@ -101,10 +114,10 @@ public class GwtTestPlace extends GWTTestCase {
 		private String valueCaught;
 
 		public ReactionClass(EventBus bus) {
-			bus.addHandler(PlaceChangedEvent.getType(), this);
+			bus.addHandler(PlaceChangeEvent.getType(), this);
 		}
 
-		public void onPlaceChange(PlaceChangedEvent event) {
+		public void onPlaceChange(PlaceChangeEvent event) {
 			valueCaught = event.getRequest().getPlace().getId();
 		}
 

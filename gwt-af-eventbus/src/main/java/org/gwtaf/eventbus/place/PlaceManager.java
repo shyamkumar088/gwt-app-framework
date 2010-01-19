@@ -16,7 +16,7 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class PlaceManager implements ValueChangeHandler<String>,
-		PlaceChangedHandler {
+		PlaceRequestHandler {
 	private final EventBus eventBus;
 
 	@Inject
@@ -27,7 +27,7 @@ public class PlaceManager implements ValueChangeHandler<String>,
 		History.addValueChangeHandler(this);
 
 		// Listen for manual place change events.
-		eventBus.addHandler(PlaceChangedEvent.getType(), this);
+		eventBus.addHandler(PlaceRequestEvent.getType(), this);
 	}
 
 	/**
@@ -35,19 +35,10 @@ public class PlaceManager implements ValueChangeHandler<String>,
 	 */
 	public void onValueChange(ValueChangeEvent<String> event) {
 		try {
-			eventBus.fireEvent(new PlaceChangedEvent(PlaceRequest
+			eventBus.fireEvent(new PlaceRequestEvent(PlaceRequest
 					.fromString(event.getValue()), true));
 		} catch (PlaceParsingException e) {
 			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Requests Place Manager to change place.
-	 */
-	public void onPlaceChange(PlaceChangedEvent event) {
-		if (!event.isFromHistory()) {
-			newPlace(event.getRequest());
 		}
 	}
 
@@ -56,8 +47,17 @@ public class PlaceManager implements ValueChangeHandler<String>,
 	}
 
 	public void fireCurrentPlace() {
-		if (History.getToken() != null)
+		if (History.getToken() != null) {
 			History.fireCurrentHistoryState();
+		}
 	}
 
+	public void onPlaceRequest(PlaceRequestEvent event) {
+		if (!event.isFromHistory() && event.isChangeHistory()) {
+			newPlace(event.getRequest());
+		}
+
+		// forward the request to the event bus, doing no processing.
+		eventBus.fireEvent(new PlaceChangeEvent(event.getRequest()));
+	}
 }
