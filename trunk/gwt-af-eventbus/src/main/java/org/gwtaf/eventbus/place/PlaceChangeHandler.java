@@ -7,7 +7,7 @@ import com.google.gwt.event.shared.EventHandler;
  * 
  * @author David Peterson
  */
-public interface PlaceChangedHandler extends EventHandler {
+public interface PlaceChangeHandler extends EventHandler {
 	/**
 	 * Called after the current place has already changed. Allows handlers to
 	 * update any internal tracking, etc.
@@ -15,5 +15,5 @@ public interface PlaceChangedHandler extends EventHandler {
 	 * @param event
 	 *            The event.
 	 */
-	void onPlaceChange(PlaceChangedEvent event);
+	void onPlaceChange(PlaceChangeEvent event);
 }

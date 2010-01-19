@@ -1,6 +1,6 @@
 package org.gwtaf;
 
-import org.gwtaf.eventbus.place.GwtTestPlace;
+import org.gwtaf.eventbus.place.GwtTestPlaceManager;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -19,7 +19,7 @@ public class GwtWidgetsSuite extends TestCase {
 		GWTTestSuite suite = new GWTTestSuite(
 				"GWTTestSuite for gwt-af-eventbus.");
 
-		suite.addTestSuite(GwtTestPlace.class);
+		suite.addTestSuite(GwtTestPlaceManager.class);
 		return suite;
 	}
 }
