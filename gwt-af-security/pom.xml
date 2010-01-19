@@ -5,12 +5,11 @@
 	<parent>
 		<groupId>org.gwtaf</groupId>
 		<artifactId>gwt-af-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
 	</parent>
 	<groupId>org.gwtaf</groupId>
 	<artifactId>gwt-af-security</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>GWT App Framework Security</name>
 	<description>The security module of the GWT App Framework project.</description>
 
@@ -40,4 +39,27 @@
 			</resource>
 		</resources>
 	</build>
+
+	<dependencies>
+
+		<!-- GWT dependencies. -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
+
+		<!-- GWT third party dependencies. -->
+		<dependency>
+			<groupId>com.google.code.gin</groupId>
+			<artifactId>google-gin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.guice</groupId>
+			<artifactId>guice</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>aopalliance</groupId>
+			<artifactId>aopalliance</artifactId>
+		</dependency>
+	</dependencies>
 </project>
