@@ -18,23 +18,44 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.gin.annotation;
+package org.gwtaf.security.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static org.mockito.Mockito.verify;
 
-import com.google.inject.BindingAnnotation;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.google.gwt.event.shared.GwtEvent.Type;
 
 /**
- * An annotation to denote the Login aspect of the client side Security for GIN
- * injection.
+ * Unit test {@link ReturnedCurrentUserEvent}.
  * 
  * @author Arthur Kalmenson
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.PARAMETER })
-@BindingAnnotation
-public @interface SecurityLogin {
+public class ReturnedCurrentUserEventTest {
+
+	@Mock
+	private ReturnedCurrentUserEventHandler handlerMock;
+
+	@Mock
+	private Type<ReturnedCurrentUserEventHandler> type;
+
+	private ReturnedCurrentUserEvent event;
+
+	@BeforeMethod
+	public void initBefore() {
+		MockitoAnnotations.initMocks(this);
+		event = new ReturnedCurrentUserEvent(type);
+	}
+
+	/**
+	 * Ensure dispatch calls the required handler.
+	 */
+	@Test
+	public void dispatchCallsHandler() {
+		event.dispatch(handlerMock);
+		verify(handlerMock).onReturnedCurrentUser(event);
+	}
 }

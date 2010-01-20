@@ -18,23 +18,31 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.gin.annotation;
+package org.gwtaf.security.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static org.mockito.Mockito.*;
+import org.testng.annotations.Test;
 
-import com.google.inject.BindingAnnotation;
+import com.google.gwt.event.shared.GwtEvent.Type;
 
 /**
- * An annotation to denote the Login aspect of the client side Security for GIN
- * injection.
+ * Unit test the {@link LoginFailedEvent}.
  * 
  * @author Arthur Kalmenson
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.PARAMETER })
-@BindingAnnotation
-public @interface SecurityLogin {
+public class LoginFailedEventTest {
+
+	/**
+	 * Ensure dispatch calls the required handler.
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void dispatchCallsHandler() {
+		Type<LoginFailedEventHandler> typeMock = mock(Type.class);
+		LoginFailedEventHandler handlerMock =
+				mock(LoginFailedEventHandler.class);
+		LoginFailedEvent event = new LoginFailedEvent(typeMock);
+		event.dispatch(handlerMock);
+		verify(handlerMock).onLoginFailed(event);
+	}
 }

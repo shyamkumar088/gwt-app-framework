@@ -18,23 +18,37 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.gin.annotation;
+package org.gwtaf.security.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.gwtaf.eventbus.event.GenericPayloadEvent;
+import org.gwtaf.security.domain.User;
 
-import com.google.inject.BindingAnnotation;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.inject.Inject;
 
 /**
- * An annotation to denote the Login aspect of the client side Security for GIN
- * injection.
+ * A {@link GwtEvent} that represents a response to the request for the current
+ * {@link User}. It contains the current {@link User} and null if there isn't
+ * one.
  * 
  * @author Arthur Kalmenson
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.PARAMETER })
-@BindingAnnotation
-public @interface SecurityLogin {
+public class ReturnedCurrentUserEvent extends
+		GenericPayloadEvent<User, ReturnedCurrentUserEventHandler> {
+
+	/**
+	 * Creates a new <code>ReturnedCurrentUserEvent</code> with the inject Type.
+	 * 
+	 * @param type
+	 *            the type for this event.
+	 */
+	@Inject
+	public ReturnedCurrentUserEvent(Type<ReturnedCurrentUserEventHandler> type) {
+		super(type);
+	}
+
+	@Override
+	protected void dispatch(ReturnedCurrentUserEventHandler handler) {
+		handler.onReturnedCurrentUser(this);
+	}
 }
