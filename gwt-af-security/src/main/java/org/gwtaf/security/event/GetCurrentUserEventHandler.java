@@ -18,23 +18,22 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.gin.annotation;
+package org.gwtaf.security.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import com.google.inject.BindingAnnotation;
+import com.google.gwt.event.shared.EventHandler;
 
 /**
- * An annotation to denote the Login aspect of the client side Security for GIN
- * injection.
+ * The {@link EventHandler} for {@link GetCurrentUserEvent}.
  * 
  * @author Arthur Kalmenson
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.PARAMETER })
-@BindingAnnotation
-public @interface SecurityLogin {
+public interface GetCurrentUserEventHandler extends EventHandler {
+
+	/**
+	 * Handle a {@link GetCurrentUserEvent}.
+	 * 
+	 * @param event
+	 *            the event to handle.
+	 */
+	void onGetCurrentUser(GetCurrentUserEvent event);
 }

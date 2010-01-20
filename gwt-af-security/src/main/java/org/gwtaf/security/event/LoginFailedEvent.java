@@ -1,10 +1,5 @@
 /*
- * Copyright 2010. Mount Sinai Hospital, Toronto, Canada.
- * 
- * Licensed under the Apache License, Version 2.0. You
- * can find a copy of the license at:
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
+ * Copyright 2009. Mount Sinai Hospital, Toronto, Canada.
  * 
  * IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR DIRECT, 
  * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST 
@@ -18,23 +13,34 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.gin.annotation;
+package org.gwtaf.security.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.gwtaf.eventbus.event.GenericPayloadEvent;
 
-import com.google.inject.BindingAnnotation;
+import com.google.inject.Inject;
 
 /**
- * An annotation to denote the Login aspect of the client side Security for GIN
- * injection.
+ * An event representing a failed login attempt and contains the error message
+ * to display to the user.
  * 
  * @author Arthur Kalmenson
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.PARAMETER })
-@BindingAnnotation
-public @interface SecurityLogin {
+public class LoginFailedEvent extends
+		GenericPayloadEvent<String, LoginFailedEventHandler> {
+
+	/**
+	 * Creates a new <code>LoginFailedEvent</code> with the injected type.
+	 * 
+	 * @param type
+	 *            the type of this event.
+	 */
+	@Inject
+	public LoginFailedEvent(Type<LoginFailedEventHandler> type) {
+		super(type);
+	}
+
+	@Override
+	protected void dispatch(LoginFailedEventHandler handler) {
+		handler.onLoginFailed(this);
+	}
 }

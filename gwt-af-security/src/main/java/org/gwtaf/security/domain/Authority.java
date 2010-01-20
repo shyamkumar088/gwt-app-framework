@@ -1,5 +1,5 @@
 /*
- * Copyright 2008. Mount Sinai Hospital, Toronto, Canada.
+ * Copyright 2010. Mount Sinai Hospital, Toronto, Canada.
  * 
  * Licensed under the Apache License, Version 2.0. You
  * can find a copy of the license at:
@@ -18,7 +18,6 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-
 package org.gwtaf.security.domain;
 
 import java.io.Serializable;

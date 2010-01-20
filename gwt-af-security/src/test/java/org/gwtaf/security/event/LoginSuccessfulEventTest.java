@@ -18,23 +18,44 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.gin.annotation;
+package org.gwtaf.security.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static org.mockito.Mockito.verify;
 
-import com.google.inject.BindingAnnotation;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.google.gwt.event.shared.GwtEvent.Type;
 
 /**
- * An annotation to denote the Login aspect of the client side Security for GIN
- * injection.
+ * Unit test the {@link LoginSuccessfulEvent}.
  * 
  * @author Arthur Kalmenson
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.PARAMETER })
-@BindingAnnotation
-public @interface SecurityLogin {
+public class LoginSuccessfulEventTest {
+
+	@Mock
+	private LoginSuccessfulEventHandler handlerMock;
+
+	@Mock
+	private Type<LoginSuccessfulEventHandler> typeMock;
+
+	private LoginSuccessfulEvent event;
+
+	@BeforeMethod
+	public void initBefore() {
+		MockitoAnnotations.initMocks(this);
+		event = new LoginSuccessfulEvent(typeMock);
+	}
+
+	/**
+	 * Ensure that the handler is called.
+	 */
+	@Test
+	public void dispatchToHandler() {
+		event.dispatch(handlerMock);
+		verify(handlerMock).onLoginSuccessful(event);
+	}
 }
