@@ -18,35 +18,15 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.event;
+package org.gwtaf.security.command;
 
-import org.gwtaf.eventbus.event.GenericEvent;
-import org.gwtaf.security.domain.User;
-
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.inject.Inject;
+import org.gwtaf.command.shared.Action;
 
 /**
- * A {@link GwtEvent} that represents a request to get the current {@link User}.
+ * A command used to request the current logged in user.
  * 
  * @author Arthur Kalmenson
  */
-public class GetCurrentUserEvent extends
-		GenericEvent<GetCurrentUserEventHandler> {
+public class GetLoggedInUser implements Action<GetLoggedInResponse> {
 
-	/**
-	 * Creates a new <code>GetCurrentUserEvent</code> with the injected Type.
-	 * 
-	 * @param type
-	 *            the type for this event.
-	 */
-	@Inject
-	public GetCurrentUserEvent(Type<GetCurrentUserEventHandler> type) {
-		super(type);
-	}
-
-	@Override
-	protected void dispatch(GetCurrentUserEventHandler handler) {
-		handler.onGetCurrentUser(this);
-	}
 }

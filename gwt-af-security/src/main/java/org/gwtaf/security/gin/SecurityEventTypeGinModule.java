@@ -21,7 +21,7 @@
 package org.gwtaf.security.gin;
 
 import org.gwtaf.security.event.AuthorizationErrorEventHandler;
-import org.gwtaf.security.event.GetCurrentUserEventHandler;
+import org.gwtaf.security.event.RequestCurrentUserEventHandler;
 import org.gwtaf.security.event.LoginFailedEvent;
 import org.gwtaf.security.event.LoginSuccessfulEvent;
 import org.gwtaf.security.event.ReturnedCurrentUserEvent;
@@ -43,7 +43,7 @@ public class SecurityEventTypeGinModule extends AbstractGinModule {
 	protected void configure() {
 		bind(new TypeLiteral<Type<AuthorizationErrorEventHandler>>() {
 		}).in(Singleton.class);
-		bind(new TypeLiteral<Type<GetCurrentUserEventHandler>>() {
+		bind(new TypeLiteral<Type<RequestCurrentUserEventHandler>>() {
 		}).in(Singleton.class);
 		bind(new TypeLiteral<Type<LoginFailedEvent>>() {
 		}).in(Singleton.class);

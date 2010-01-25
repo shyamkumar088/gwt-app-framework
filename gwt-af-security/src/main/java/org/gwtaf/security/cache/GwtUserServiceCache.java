@@ -18,41 +18,20 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.cache;
+package org.gwtaf.security.cache;
 
+import org.gwtaf.eventbus.EventBus;
 import org.gwtaf.security.domain.User;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.gwtaf.security.event.RequestCurrentUserEventHandler;
+import org.gwtaf.security.event.ReturnedLoggedInUserEventHandler;
 
 /**
  * A cache for the client side {@link User} to prevent going to the server each
- * time we want the current user.
+ * time we want the current user. This cache works with the {@link EventBus} to
+ * provide get and store users.
  * 
  * @author Arthur Kalmenson
  */
-public interface GwtUserServiceCache {
-
-	/**
-	 * Returns the current authenticated {@link User} if they are in the cache
-	 * or asks the server if they aren't.
-	 * 
-	 * @param callback
-	 *            the {@link AsyncCallback} that gets called when the user is
-	 *            known.
-	 */
-	public void getCurrentUser(AsyncCallback<User> callback);
-
-	/**
-	 * Clears the cache of the current user.
-	 */
-	public void clear();
-
-	/**
-	 * Sets the number of seconds before a {@link User} is automatically removed
-	 * from cache and has to be re-authenticated with the server.
-	 * 
-	 * @param timeOutSeconds
-	 *            the number of seconds.
-	 */
-	public void setCacheTimeout(Integer timeOutSeconds);
+public interface GwtUserServiceCache extends RequestCurrentUserEventHandler,
+		ReturnedLoggedInUserEventHandler {
 }

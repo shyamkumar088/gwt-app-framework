@@ -1,5 +1,10 @@
 /*
- * Copyright 2009. Mount Sinai Hospital, Toronto, Canada.
+ * Copyright 2010. Mount Sinai Hospital, Toronto, Canada.
+ * 
+ * Licensed under the Apache License, Version 2.0. You
+ * can find a copy of the license at:
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
  * IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR DIRECT, 
  * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST 
@@ -13,20 +18,22 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.cache;
+package org.gwtaf.security.event;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import com.google.gwt.event.shared.EventHandler;
 
 /**
- * Test the {@link GwtUserServiceCache} class.
+ * An {@link EventHandler} for {@link RequestLoggedInUserEvent}.
  * 
  * @author Arthur Kalmenson
  */
-public class GwtUserServiceCacheTest {
+public interface RequestLoggedInUserEventHandler extends EventHandler {
 
-	@Test
-	public void simple() {
-		Assert.assertTrue(true);
-	}
+	/**
+	 * Handle the given {@link RequestLoggedInUserEvent}.
+	 * 
+	 * @param event
+	 *            the event to handle.
+	 */
+	void onGetLoggedInUser(RequestLoggedInUserEvent event);
 }

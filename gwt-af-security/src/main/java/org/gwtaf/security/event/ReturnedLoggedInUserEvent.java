@@ -20,50 +20,33 @@
  */
 package org.gwtaf.security.event;
 
-import org.mockito.Mock;
-import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.gwtaf.eventbus.event.GenericPayloadEvent;
+import org.gwtaf.security.domain.User;
 
-import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.inject.Inject;
 
 /**
- * Unit test the {@link GetCurrentUserEvent} class.
+ * An event that represents the returned logged in {@link User}.
  * 
  * @author Arthur Kalmenson
  */
-public class GetCurrentUserEventTest {
-
-	@Mock
-	private GetCurrentUserEventHandler handlerMock;
-
-	@Mock
-	private Type<GetCurrentUserEventHandler> type;
-	
-	private GetCurrentUserEvent event;
-
-	@BeforeMethod
-	public void initBefore() {
-		MockitoAnnotations.initMocks(this);
-		event = new GetCurrentUserEvent(type);
-	}
+public class ReturnedLoggedInUserEvent extends
+		GenericPayloadEvent<User, ReturnedLoggedInUserEventHandler> {
 
 	/**
-	 * Ensure that the handler is called.
+	 * Creates a new <code>ReturnedCurrentUserEvent</code> with the injected
+	 * type.
+	 * 
+	 * @param type
+	 *            the {@link Type} for this event.
 	 */
-	@Test
-	public void dispatchToHandler() {
-		event.dispatch(handlerMock);
-		verify(handlerMock).onGetCurrentUser(event);
+	@Inject
+	public ReturnedLoggedInUserEvent(Type<ReturnedLoggedInUserEventHandler> type) {
+		super(type);
 	}
-	
-	/**
-	 * Ensure the type given in the constructor is saved.
-	 */
-	@Test
-	public void typeSaved() {
-		Assert.assertEquals(event.getAssociatedType(), type);
+
+	@Override
+	protected void dispatch(ReturnedLoggedInUserEventHandler handler) {
+		handler.onReturnedLoggedInUser(this);
 	}
 }
