@@ -20,20 +20,31 @@
  */
 package org.gwtaf.security.event;
 
-import com.google.gwt.event.shared.EventHandler;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import org.testng.annotations.Test;
+
+import com.google.gwt.event.shared.GwtEvent.Type;
 
 /**
- * The {@link EventHandler} for {@link GetCurrentUserEvent}.
+ * Unit test the {@link RequestLoggedInUserEvent}.
  * 
  * @author Arthur Kalmenson
  */
-public interface GetCurrentUserEventHandler extends EventHandler {
+public class RequestLoggedInUserEventTest {
 
 	/**
-	 * Handle a {@link GetCurrentUserEvent}.
-	 * 
-	 * @param event
-	 *            the event to handle.
+	 * Ensure dispatch calls the required handler.
 	 */
-	void onGetCurrentUser(GetCurrentUserEvent event);
+	@SuppressWarnings("unchecked")
+	@Test
+	public void dispatchCallsHandler() {
+		Type<RequestLoggedInUserEventHandler> typeMock = mock(Type.class);
+		RequestLoggedInUserEventHandler handlerMock =
+				mock(RequestLoggedInUserEventHandler.class);
+		RequestLoggedInUserEvent event = new RequestLoggedInUserEvent(typeMock);
+		event.dispatch(handlerMock);
+		verify(handlerMock).onGetLoggedInUser(event);
+	}
 }

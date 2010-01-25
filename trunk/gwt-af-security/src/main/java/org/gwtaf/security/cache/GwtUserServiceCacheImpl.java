@@ -18,14 +18,19 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.client.cache;
+package org.gwtaf.security.cache;
 
+import org.gwtaf.eventbus.EventBus;
 import org.gwtaf.security.client.gin.annotation.SecurityLogin;
 import org.gwtaf.security.domain.User;
+import org.gwtaf.security.event.RequestCurrentUserEvent;
+import org.gwtaf.security.event.RequestLoggedInUserEvent;
+import org.gwtaf.security.event.ReturnedCurrentUserEvent;
+import org.gwtaf.security.event.ReturnedLoggedInUserEvent;
 
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 /**
@@ -45,12 +50,13 @@ public class GwtUserServiceCacheImpl implements GwtUserServiceCache {
 	/**
 	 * The timeout in seconds before userCache are removed from the
 	 */
-	private Integer timeout;
+	private final Integer timeout;
 
-	/**
-	 * The User we're keeping in cache.
-	 */
 	private User userInCache;
+
+	private EventBus eventBus;
+	private Provider<RequestLoggedInUserEvent> requestLoggedInUserProvider;
+	private Provider<ReturnedCurrentUserEvent> returnedCurrentUserProvider;
 
 	/**
 	 * Creates a new <code>GwtUserServiceCacheImpl</code> with the given
@@ -60,21 +66,14 @@ public class GwtUserServiceCacheImpl implements GwtUserServiceCache {
 	 *            the timeout for objects in the cache.
 	 */
 	@Inject
-	public GwtUserServiceCacheImpl(
-			@SecurityLogin Integer timeOut) {
+	public GwtUserServiceCacheImpl(@SecurityLogin Integer timeOut,
+			EventBus eventBus,
+			Provider<RequestLoggedInUserEvent> getCurrentUserProvider,
+			Provider<ReturnedCurrentUserEvent> returnedCurrentUserProvider) {
 		this.timeout = timeOut;
-	}
-
-	public void getCurrentUser(final AsyncCallback<User> callback) {
-
-		// if the current user is null, we need to ask the server, otherwise
-		// just return the current user.
-		if (userInCache == null) {
-
-
-		} else {
-			callback.onSuccess(userInCache);
-		}
+		this.eventBus = eventBus;
+		this.requestLoggedInUserProvider = getCurrentUserProvider;
+		this.returnedCurrentUserProvider = returnedCurrentUserProvider;
 	}
 
 	/**
@@ -100,11 +99,32 @@ public class GwtUserServiceCacheImpl implements GwtUserServiceCache {
 		timeoutTimer.scheduleRepeating(timeout);
 	}
 
-	public void clear() {
+	protected void clear() {
 		userInCache = null;
 	}
 
-	public void setCacheTimeout(Integer timeOutSeconds) {
-		this.timeout = timeOutSeconds;
+	public void onGetCurrentUser(RequestCurrentUserEvent event) {
+
+		// if the cache isn't empty, fire off the returning event. Otherwise, we
+		// need to fire a RequestLoggedInUserEvent and let that handler fire the
+		// returning event.
+		if (userInCache != null) {
+			ReturnedCurrentUserEvent returnedCurrentUserEvent =
+					returnedCurrentUserProvider.get();
+			returnedCurrentUserEvent.setPayload(userInCache);
+			eventBus.fireEvent(returnedCurrentUserEvent);
+		} else {
+			RequestLoggedInUserEvent requestLoggedInUserEvent =
+					requestLoggedInUserProvider.get();
+			eventBus.fireEvent(requestLoggedInUserEvent);
+		}
+	}
+
+	public void onReturnedLoggedInUser(ReturnedLoggedInUserEvent event) {
+		cacheUser(event.getPayload());
+		ReturnedCurrentUserEvent returnedCurrentUserEvent =
+				returnedCurrentUserProvider.get();
+		returnedCurrentUserEvent.setPayload(userInCache);
+		eventBus.fireEvent(returnedCurrentUserEvent);
 	}
 }
