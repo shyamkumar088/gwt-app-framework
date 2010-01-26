@@ -147,6 +147,10 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		assert dataFromModel != null : getClass().getName()
 				+ ": cannot set a null list of models.";
 
+		// copy over the arguments
+		List<M> argumentCopy = new ArrayList<M>();
+		argumentCopy.addAll(dataFromModel);
+
 		// clear everything.
 		view.clear();
 		viewToPresenter.clear();
@@ -156,7 +160,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 
 		// do not fire property change event when adding models. We don't want
 		// the source (model) to sync with the incomplete models of the ExFT.
-		for (M modelToAdd : dataFromModel) {
+		for (M modelToAdd : argumentCopy) {
 			addAndFireEvent(modelToAdd);
 		}
 	}
