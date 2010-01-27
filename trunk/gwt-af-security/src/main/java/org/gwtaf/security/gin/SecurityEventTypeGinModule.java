@@ -21,10 +21,13 @@
 package org.gwtaf.security.gin;
 
 import org.gwtaf.security.event.AuthorizationErrorEventHandler;
+import org.gwtaf.security.event.LoginFailedEventHandler;
+import org.gwtaf.security.event.LoginSuccessfulEventHandler;
 import org.gwtaf.security.event.RequestCurrentUserEventHandler;
 import org.gwtaf.security.event.LoginFailedEvent;
 import org.gwtaf.security.event.LoginSuccessfulEvent;
 import org.gwtaf.security.event.ReturnedCurrentUserEvent;
+import org.gwtaf.security.event.ReturnedCurrentUserEventHandler;
 
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.inject.client.AbstractGinModule;
@@ -45,11 +48,11 @@ public class SecurityEventTypeGinModule extends AbstractGinModule {
 		}).in(Singleton.class);
 		bind(new TypeLiteral<Type<RequestCurrentUserEventHandler>>() {
 		}).in(Singleton.class);
-		bind(new TypeLiteral<Type<LoginFailedEvent>>() {
+		bind(new TypeLiteral<Type<LoginFailedEventHandler>>() {
 		}).in(Singleton.class);
-		bind(new TypeLiteral<Type<LoginSuccessfulEvent>>() {
+		bind(new TypeLiteral<Type<LoginSuccessfulEventHandler>>() {
 		}).in(Singleton.class);
-		bind(new TypeLiteral<Type<ReturnedCurrentUserEvent>>() {
+		bind(new TypeLiteral<Type<ReturnedCurrentUserEventHandler>>() {
 		}).in(Singleton.class);
 	}
 }
