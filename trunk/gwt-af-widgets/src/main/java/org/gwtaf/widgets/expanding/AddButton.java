@@ -30,4 +30,12 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
  * @author Arthur Kalmenson
  */
 public interface AddButton extends IsWidget, HasClickHandlers {
+
+	/**
+	 * Sets the text of the add button.
+	 * 
+	 * @param text
+	 *            the new text to set.
+	 */
+	public void setText(String text);
 }

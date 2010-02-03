@@ -110,7 +110,7 @@ public class ExpandableFlexTable<T> extends Composite implements
 		mainPanel = flexTable;
 		this.addButton = addButton;
 		this.removeButtonProvider = removeButtonProvider;
-
+		
 		// init the widget.
 		initWidget(mainPanel);
 	}

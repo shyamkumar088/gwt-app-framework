@@ -39,4 +39,6 @@ import org.gwtaf.widgets.View;
  */
 public interface ExpandableTablePresenter<P extends Presenter<V, M>, V extends View, M>
 		extends Presenter<ExpandableTable<V>, List<M>> {
+	
+	void setAddButtonText(String newText);
 }
