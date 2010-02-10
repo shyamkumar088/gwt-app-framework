@@ -63,6 +63,25 @@ public class GwtAfListBox extends ListBox implements HasText, HasValue<String> {
 		}
 	}
 
+	/**
+	 * Adds the provided list of items assigning their specified values
+	 * 
+	 * @param text
+	 *            the list of items to add
+	 * @param values
+	 *            the list of associated values
+	 */
+	public void addItems(String[] text, String[] values) {
+
+		assert text.length == values.length : this.getClass().getName()
+				+ " wrong array parameters. ";
+
+		for (int i = 0; i < text.length; i++) {
+			addItem(text[i], values[i]);
+		}
+
+	}
+
 	public String getText() {
 		int index = getSelectedIndex();
 
