@@ -100,13 +100,13 @@ public class GwtRpcEndPointHandlerAdapter extends RemoteServiceServlet
 		 */
 
 		try {
-			RPCRequest rpcRequest = RPC.decodeRequest(payload,
-					getCurrentHandler().getClass());
-
-			String retVal = RPC.invokeAndEncodeResponse(getCurrentHandler(),
-					rpcRequest.getMethod(), rpcRequest.getParameters());
-
-			return retVal;
+			RPCRequest rpcRequest =
+					RPC.decodeRequest(payload, getCurrentHandler().getClass(),
+							this);
+			onAfterRequestDeserialized(rpcRequest);
+			return RPC.invokeAndEncodeResponse(getCurrentHandler(), rpcRequest
+					.getMethod(), rpcRequest.getParameters(), rpcRequest
+					.getSerializationPolicy());
 
 		} catch (Throwable t) {
 			return RPC.encodeResponseForFailure(null, t);

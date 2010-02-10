@@ -75,7 +75,6 @@ public class JsonpRemoteServiceServlet extends RemoteServiceServlet {
 			// the responseStr by default is a GWT-RPC string. We'll need to
 			// turn it into a JSON object, and pad it with the
 			// callback function.
-			System.out.println(encodedResponse);
 			String responseStr = callbackFunction + "({\"entry\":\""
 					+ encodedResponse.replaceAll("\"", "\\\\\"") + "\"});";
 			return responseStr;
