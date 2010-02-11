@@ -20,29 +20,47 @@
  */
 package org.gwtaf.security.event;
 
-import static org.mockito.Mockito.*;
-import org.testng.annotations.Test;
-
-import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.inject.Inject;
 
 /**
- * Unit test the {@link ReturnedLoginFailedEvent}.
+ * An event to request a user to be logged in.
  * 
  * @author Arthur Kalmenson
  */
-public class LoginFailedEventTest {
+public class RequestLoginEvent extends GwtEvent<RequestLoginEventHandler> {
 
-	/**
-	 * Ensure dispatch calls the required handler.
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void dispatchCallsHandler() {
-		Type<ReturnedLoginFailedEventHandler> typeMock = mock(Type.class);
-		ReturnedLoginFailedEventHandler handlerMock =
-				mock(ReturnedLoginFailedEventHandler.class);
-		ReturnedLoginFailedEvent event = new ReturnedLoginFailedEvent(typeMock);
-		event.dispatch(handlerMock);
-		verify(handlerMock).onLoginFailed(event);
+	private String username, password;
+	private Type<RequestLoginEventHandler> type;
+	
+	@Inject
+	public RequestLoginEvent(Type<RequestLoginEventHandler> type) {
+		this.type = type;
+	}
+	
+	@Override
+	protected void dispatch(RequestLoginEventHandler handler) {
+		handler.onRequestLoginEvent(this);
+	}
+
+	@Override
+	public Type<RequestLoginEventHandler> getAssociatedType() {
+		return type;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

@@ -30,24 +30,24 @@ import org.testng.annotations.Test;
 import com.google.gwt.event.shared.GwtEvent.Type;
 
 /**
- * Unit test the {@link LoginSuccessfulEvent}.
+ * Unit test the {@link ReturnedLoginSuccessfulEvent}.
  * 
  * @author Arthur Kalmenson
  */
 public class LoginSuccessfulEventTest {
 
 	@Mock
-	private LoginSuccessfulEventHandler handlerMock;
+	private ReturnedLoginSuccessfulEventHandler handlerMock;
 
 	@Mock
-	private Type<LoginSuccessfulEventHandler> typeMock;
+	private Type<ReturnedLoginSuccessfulEventHandler> typeMock;
 
-	private LoginSuccessfulEvent event;
+	private ReturnedLoginSuccessfulEvent event;
 
 	@BeforeMethod
 	public void initBefore() {
 		MockitoAnnotations.initMocks(this);
-		event = new LoginSuccessfulEvent(typeMock);
+		event = new ReturnedLoginSuccessfulEvent(typeMock);
 	}
 
 	/**

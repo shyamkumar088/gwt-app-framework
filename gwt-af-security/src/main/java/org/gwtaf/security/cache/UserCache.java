@@ -18,31 +18,20 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.event;
+package org.gwtaf.security.cache;
 
-import static org.mockito.Mockito.*;
-import org.testng.annotations.Test;
-
-import com.google.gwt.event.shared.GwtEvent.Type;
+import org.gwtaf.eventbus.EventBus;
+import org.gwtaf.security.domain.User;
+import org.gwtaf.security.event.RequestCurrentUserEventHandler;
+import org.gwtaf.security.event.ReturnedLoggedInUserEventHandler;
 
 /**
- * Unit test the {@link ReturnedLoginFailedEvent}.
+ * A cache for the client side {@link User} to prevent going to the server each
+ * time we want the current user. This cache works with the {@link EventBus} to
+ * provide get and store users.
  * 
  * @author Arthur Kalmenson
  */
-public class LoginFailedEventTest {
-
-	/**
-	 * Ensure dispatch calls the required handler.
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void dispatchCallsHandler() {
-		Type<ReturnedLoginFailedEventHandler> typeMock = mock(Type.class);
-		ReturnedLoginFailedEventHandler handlerMock =
-				mock(ReturnedLoginFailedEventHandler.class);
-		ReturnedLoginFailedEvent event = new ReturnedLoginFailedEvent(typeMock);
-		event.dispatch(handlerMock);
-		verify(handlerMock).onLoginFailed(event);
-	}
+public interface UserCache extends RequestCurrentUserEventHandler,
+		ReturnedLoggedInUserEventHandler {
 }

@@ -18,31 +18,16 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.event;
+package org.gwtaf.security.gin;
 
-import static org.mockito.Mockito.*;
-import org.testng.annotations.Test;
-
-import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.inject.client.GinModules;
+import com.google.gwt.inject.client.Ginjector;
 
 /**
- * Unit test the {@link ReturnedLoginFailedEvent}.
+ * A default {@link Ginjector} for the gwt-af-security module.
  * 
  * @author Arthur Kalmenson
  */
-public class LoginFailedEventTest {
-
-	/**
-	 * Ensure dispatch calls the required handler.
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void dispatchCallsHandler() {
-		Type<ReturnedLoginFailedEventHandler> typeMock = mock(Type.class);
-		ReturnedLoginFailedEventHandler handlerMock =
-				mock(ReturnedLoginFailedEventHandler.class);
-		ReturnedLoginFailedEvent event = new ReturnedLoginFailedEvent(typeMock);
-		event.dispatch(handlerMock);
-		verify(handlerMock).onLoginFailed(event);
-	}
+@GinModules( { SecurityEventTypeGinModule.class, SecurityGinModule.class })
+public interface SecurityGinjector extends Ginjector {
 }

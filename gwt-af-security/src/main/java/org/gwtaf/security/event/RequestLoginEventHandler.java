@@ -20,29 +20,20 @@
  */
 package org.gwtaf.security.event;
 
-import static org.mockito.Mockito.*;
-import org.testng.annotations.Test;
-
-import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.event.shared.EventHandler;
 
 /**
- * Unit test the {@link ReturnedLoginFailedEvent}.
+ * Handles the {@link RequestLoginEvent}.
  * 
  * @author Arthur Kalmenson
  */
-public class LoginFailedEventTest {
+public interface RequestLoginEventHandler extends EventHandler {
 
 	/**
-	 * Ensure dispatch calls the required handler.
+	 * Handles the given {@link RequestLoginEvent}.
+	 * 
+	 * @param event
+	 *            the event to handle.
 	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void dispatchCallsHandler() {
-		Type<ReturnedLoginFailedEventHandler> typeMock = mock(Type.class);
-		ReturnedLoginFailedEventHandler handlerMock =
-				mock(ReturnedLoginFailedEventHandler.class);
-		ReturnedLoginFailedEvent event = new ReturnedLoginFailedEvent(typeMock);
-		event.dispatch(handlerMock);
-		verify(handlerMock).onLoginFailed(event);
-	}
+	void onRequestLoginEvent(RequestLoginEvent event);
 }
