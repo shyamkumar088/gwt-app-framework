@@ -18,31 +18,48 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.event;
+package org.gwtaf.security.command;
 
-import static org.mockito.Mockito.*;
-import org.testng.annotations.Test;
-
-import com.google.gwt.event.shared.GwtEvent.Type;
+import org.gwtaf.command.shared.Action;
 
 /**
- * Unit test the {@link ReturnedLoginFailedEvent}.
+ * The {@link Action} to login a user. Contains the username and password.
  * 
  * @author Arthur Kalmenson
  */
-public class LoginFailedEventTest {
+public class LoginUser implements Action<LoginUserResponse> {
+
+	private final String username, password;
 
 	/**
-	 * Ensure dispatch calls the required handler.
+	 * Creates a new <code>LoginUser</code> with the given username and
+	 * password.
+	 * 
+	 * @param username
+	 *            the username.
+	 * @param password
+	 *            the password.
 	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void dispatchCallsHandler() {
-		Type<ReturnedLoginFailedEventHandler> typeMock = mock(Type.class);
-		ReturnedLoginFailedEventHandler handlerMock =
-				mock(ReturnedLoginFailedEventHandler.class);
-		ReturnedLoginFailedEvent event = new ReturnedLoginFailedEvent(typeMock);
-		event.dispatch(handlerMock);
-		verify(handlerMock).onLoginFailed(event);
+	public LoginUser(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
+	/**
+	 * Returns the username.
+	 * 
+	 * @return the username.
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * Returns the password.
+	 * 
+	 * @return the password.
+	 */
+	public String getPassword() {
+		return password;
 	}
 }

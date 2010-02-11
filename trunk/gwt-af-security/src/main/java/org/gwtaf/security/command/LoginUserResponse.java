@@ -18,31 +18,36 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.event;
+package org.gwtaf.security.command;
 
-import static org.mockito.Mockito.*;
-import org.testng.annotations.Test;
-
-import com.google.gwt.event.shared.GwtEvent.Type;
+import org.gwtaf.command.shared.Response;
+import org.gwtaf.security.domain.User;
 
 /**
- * Unit test the {@link ReturnedLoginFailedEvent}.
+ * The {@link Response} for {@link LoginUser} action.
  * 
  * @author Arthur Kalmenson
  */
-public class LoginFailedEventTest {
+public class LoginUserResponse implements Response {
+
+	private final User authenticatedUser;
 
 	/**
-	 * Ensure dispatch calls the required handler.
+	 * Creates a new <code>LoginUserResponse</code> with the given {@link User}.
+	 * 
+	 * @param authenticatedUser
+	 *            the authenticated user.
 	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void dispatchCallsHandler() {
-		Type<ReturnedLoginFailedEventHandler> typeMock = mock(Type.class);
-		ReturnedLoginFailedEventHandler handlerMock =
-				mock(ReturnedLoginFailedEventHandler.class);
-		ReturnedLoginFailedEvent event = new ReturnedLoginFailedEvent(typeMock);
-		event.dispatch(handlerMock);
-		verify(handlerMock).onLoginFailed(event);
+	public LoginUserResponse(User authenticatedUser) {
+		this.authenticatedUser = authenticatedUser;
+	}
+
+	/**
+	 * Returns the authenticated user.
+	 * 
+	 * @return the authenticated user.
+	 */
+	public User getAuthenticatedUser() {
+		return authenticatedUser;
 	}
 }

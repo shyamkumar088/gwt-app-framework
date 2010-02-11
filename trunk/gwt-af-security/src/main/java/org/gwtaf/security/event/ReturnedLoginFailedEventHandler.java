@@ -1,10 +1,5 @@
 /*
- * Copyright 2010. Mount Sinai Hospital, Toronto, Canada.
- * 
- * Licensed under the Apache License, Version 2.0. You
- * can find a copy of the license at:
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
+ * Copyright 2009. Mount Sinai Hospital, Toronto, Canada.
  * 
  * IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR DIRECT, 
  * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST 
@@ -18,15 +13,22 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.command;
+package org.gwtaf.security.event;
 
-import org.gwtaf.command.shared.Action;
+import com.google.gwt.event.shared.EventHandler;
 
 /**
- * A command used to request the current logged in user.
+ * A handler for {@link ReturnedLoginFailedEvent}s.
  * 
  * @author Arthur Kalmenson
  */
-public class GetLoggedInUser implements Action<GetLoggedInUserResponse> {
+public interface ReturnedLoginFailedEventHandler extends EventHandler {
 
+	/**
+	 * Handles the given {@link ReturnedLoginFailedEvent}.
+	 * 
+	 * @param event
+	 *            the event to handle.
+	 */
+	void onLoginFailed(ReturnedLoginFailedEvent event);
 }

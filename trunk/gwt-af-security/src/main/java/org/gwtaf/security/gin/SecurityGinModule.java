@@ -18,31 +18,30 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.event;
+package org.gwtaf.security.gin;
 
-import static org.mockito.Mockito.*;
-import org.testng.annotations.Test;
+import org.gwtaf.security.cache.UserCache;
+import org.gwtaf.security.cache.UserCacheImpl;
+import org.gwtaf.security.gin.annotation.SecurityLogin;
 
-import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.inject.Provides;
 
 /**
- * Unit test the {@link ReturnedLoginFailedEvent}.
+ * A {@link AbstractGinModule} that does some default binding for
+ * gwt-af-security.
  * 
  * @author Arthur Kalmenson
  */
-public class LoginFailedEventTest {
+public class SecurityGinModule extends AbstractGinModule {
 
-	/**
-	 * Ensure dispatch calls the required handler.
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void dispatchCallsHandler() {
-		Type<ReturnedLoginFailedEventHandler> typeMock = mock(Type.class);
-		ReturnedLoginFailedEventHandler handlerMock =
-				mock(ReturnedLoginFailedEventHandler.class);
-		ReturnedLoginFailedEvent event = new ReturnedLoginFailedEvent(typeMock);
-		event.dispatch(handlerMock);
-		verify(handlerMock).onLoginFailed(event);
+	@Override
+	protected void configure() {
+		bind(UserCache.class).to(UserCacheImpl.class).asEagerSingleton();
+	}
+	
+	@Provides @SecurityLogin
+	public Integer getDefaultCacheLenght() {
+		return 1800;
 	}
 }

@@ -18,31 +18,46 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.security.event;
+package org.gwtaf.security.command;
 
-import static org.mockito.Mockito.*;
-import org.testng.annotations.Test;
-
-import com.google.gwt.event.shared.GwtEvent.Type;
+import org.gwtaf.command.shared.Response;
+import org.gwtaf.security.domain.User;
 
 /**
- * Unit test the {@link ReturnedLoginFailedEvent}.
+ * A {@link Response} to the {@link GetLoggedInUser} command, that contains the
+ * currently logged in user, or null if no such user exists.
  * 
  * @author Arthur Kalmenson
  */
-public class LoginFailedEventTest {
+public class GetLoggedInUserResponse implements Response {
+
+	private final User currentUser;
 
 	/**
-	 * Ensure dispatch calls the required handler.
+	 * Creates a new <code>GetCurrentUserResponse</code> with a null current
+	 * user.
 	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void dispatchCallsHandler() {
-		Type<ReturnedLoginFailedEventHandler> typeMock = mock(Type.class);
-		ReturnedLoginFailedEventHandler handlerMock =
-				mock(ReturnedLoginFailedEventHandler.class);
-		ReturnedLoginFailedEvent event = new ReturnedLoginFailedEvent(typeMock);
-		event.dispatch(handlerMock);
-		verify(handlerMock).onLoginFailed(event);
+	public GetLoggedInUserResponse() {
+		currentUser = null;
+	}
+
+	/**
+	 * Creates a new <code>GetCurrentUserResponse</code> with the given
+	 * {@link User}.
+	 * 
+	 * @param currentUser
+	 *            the current user.
+	 */
+	public GetLoggedInUserResponse(User currentUser) {
+		this.currentUser = currentUser;
+	}
+
+	/**
+	 * Returns the current user.
+	 * 
+	 * @return the current user.
+	 */
+	public User getCurrentUser() {
+		return currentUser;
 	}
 }
