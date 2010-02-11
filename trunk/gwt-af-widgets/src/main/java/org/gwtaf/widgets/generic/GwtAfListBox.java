@@ -120,6 +120,11 @@ public class GwtAfListBox extends ListBox implements HasText, HasValue<String> {
 	}
 
 	public void setValue(String value) {
+		
+		if (value == null) {
+			setSelectedIndex(0);
+		}
+		
 		for (int i = 0; i < getItemCount(); i++) {
 			if (getValue(i).equals(value)) {
 				setSelectedIndex(i);
