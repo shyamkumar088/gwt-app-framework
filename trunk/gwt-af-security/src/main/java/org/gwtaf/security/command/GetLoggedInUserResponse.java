@@ -31,14 +31,14 @@ import org.gwtaf.security.domain.User;
  */
 public class GetLoggedInUserResponse implements Response {
 
-	private final User currentUser;
+	private User currentUser = null;
 
 	/**
 	 * Creates a new <code>GetCurrentUserResponse</code> with a null current
 	 * user.
 	 */
 	public GetLoggedInUserResponse() {
-		currentUser = null;
+		
 	}
 
 	/**
