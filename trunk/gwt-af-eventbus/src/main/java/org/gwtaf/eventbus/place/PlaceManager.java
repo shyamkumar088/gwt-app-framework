@@ -17,7 +17,7 @@ import com.google.inject.Singleton;
 @Singleton
 public class PlaceManager implements ValueChangeHandler<String>,
 		PlaceRequestHandler {
-	private final EventBus eventBus;
+	protected final EventBus eventBus;
 
 	@Inject
 	public PlaceManager(EventBus eventBus) {
@@ -42,7 +42,7 @@ public class PlaceManager implements ValueChangeHandler<String>,
 		}
 	}
 
-	private void newPlace(PlaceRequest request) {
+	protected void newPlace(PlaceRequest request) {
 		History.newItem(request.toString(), false);
 	}
 
