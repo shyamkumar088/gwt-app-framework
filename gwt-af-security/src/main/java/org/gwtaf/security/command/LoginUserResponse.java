@@ -30,8 +30,11 @@ import org.gwtaf.security.domain.User;
  */
 public class LoginUserResponse implements Response {
 
-	private final User authenticatedUser;
+	private User authenticatedUser;
 
+	public LoginUserResponse() {
+	}
+	
 	/**
 	 * Creates a new <code>LoginUserResponse</code> with the given {@link User}.
 	 * 

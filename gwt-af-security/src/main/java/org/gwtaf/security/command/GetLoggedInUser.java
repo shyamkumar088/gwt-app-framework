@@ -29,4 +29,7 @@ import org.gwtaf.command.shared.Action;
  */
 public class GetLoggedInUser implements Action<GetLoggedInUserResponse> {
 
+	public GetLoggedInUser() {
+		
+	}
 }
