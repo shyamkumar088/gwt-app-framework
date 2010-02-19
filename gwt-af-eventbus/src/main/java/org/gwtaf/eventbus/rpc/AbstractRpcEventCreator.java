@@ -100,6 +100,7 @@ public abstract class AbstractRpcEventCreator implements RpcEventCreatorService 
 		AsyncCallback<R> callback = new AsyncCallback<R>() {
 
 			public void onFailure(Throwable arg0) {
+				arg0.printStackTrace();
 				eventBus.fireEvent(errorEventProvider.get());
 			}
 
@@ -116,6 +117,10 @@ public abstract class AbstractRpcEventCreator implements RpcEventCreatorService 
 				rpcHandlerType);
 
 		rpcEvent.setActionAndCallback(action, callback);
+
+		System.out.println("who is listening to our RPC? "
+				+ eventBus.getHandlerCount(rpcHandlerType));
+
 		eventBus.fireEvent(rpcEvent);
 
 	}

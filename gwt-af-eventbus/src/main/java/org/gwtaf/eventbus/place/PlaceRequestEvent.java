@@ -44,7 +44,7 @@ public class PlaceRequestEvent extends GwtEvent<PlaceRequestHandler> {
 	 * @param fromHistory
 	 *            a boolean indicating if the request came from History.
 	 */
-	PlaceRequestEvent(PlaceRequest request, boolean fromHistory) {
+	public PlaceRequestEvent(PlaceRequest request, boolean fromHistory) {
 		this.request = request;
 		this.fromHistory = fromHistory;
 	}
@@ -63,7 +63,7 @@ public class PlaceRequestEvent extends GwtEvent<PlaceRequestHandler> {
 		return request;
 	}
 
-	boolean isFromHistory() {
+	public boolean isFromHistory() {
 		return fromHistory;
 	}
 
