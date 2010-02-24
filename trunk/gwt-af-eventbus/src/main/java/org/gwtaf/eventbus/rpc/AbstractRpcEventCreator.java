@@ -115,14 +115,7 @@ public abstract class AbstractRpcEventCreator implements RpcEventCreatorService 
 		// fire off the rpc event
 		RpcEvent<A, AsyncCallback<R>, R> rpcEvent = new RpcEvent<A, AsyncCallback<R>, R>(
 				rpcHandlerType);
-
 		rpcEvent.setActionAndCallback(action, callback);
-
-		System.out.println("who is listening to our RPC? "
-				+ eventBus.getHandlerCount(rpcHandlerType));
-
 		eventBus.fireEvent(rpcEvent);
-
 	}
-
 }
