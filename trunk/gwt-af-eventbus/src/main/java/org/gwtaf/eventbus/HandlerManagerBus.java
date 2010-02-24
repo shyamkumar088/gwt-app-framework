@@ -20,7 +20,14 @@
  */
 package org.gwtaf.eventbus;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.GwtEvent.Type;
 
 /**
  * A concrete implementation of {@link EventBus} using the
@@ -31,9 +38,30 @@ import com.google.gwt.event.shared.HandlerManager;
 public class HandlerManagerBus extends HandlerManager implements EventBus {
 
 	/**
+	 * A {@link Map} with all the {@link EventHandler}s and their associated
+	 * {@link HandlerRegistration}s
+	 */
+	private Map<EventHandler, HandlerRegistration> handlerRegistrationMap;
+
+	/**
 	 * Creates a new <code>HandlerManagerBus</code> with a null source.
 	 */
 	public HandlerManagerBus() {
 		super(null);
+		handlerRegistrationMap = new HashMap<EventHandler, HandlerRegistration>();
 	}
+
+	@Override
+	public <H extends EventHandler> HandlerRegistration addHandler(
+			Type<H> type, H handler) {
+
+		HandlerRegistration registration = super.addHandler(type, handler);
+		handlerRegistrationMap.put(handler, registration);
+		return registration;
+	}
+
+	public Map<EventHandler, HandlerRegistration> getHandlerRegistrationMap() {
+		return handlerRegistrationMap;
+	}
+
 }
