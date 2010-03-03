@@ -25,10 +25,13 @@ import java.util.List;
 
 import org.gwtaf.widgets.search.model.SearchResult;
 
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.SortPolicy;
+import com.google.gwt.gen2.table.event.client.ColumnSortEvent;
+import com.google.gwt.gen2.table.event.client.ColumnSortHandler;
 import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import com.google.gwt.gen2.table.event.client.TableEvent.Row;
 import com.google.gwt.user.client.ui.Composite;
@@ -69,7 +72,25 @@ public class SearchResultScrollTable extends Composite implements
 	 */
 	private RowSelectionHandler rowSelectionHandler;
 
+	/**
+	 * The column index where the unique identifier
+	 */
 	private Integer uniqueIdentifierIndex;
+
+	/**
+	 * Whether or not the unique identifier column should be hidden
+	 */
+	private boolean hideUniqueIdentifier = false;
+
+	/**
+	 * The index of the column last sorted
+	 */
+	private Integer lastSortedColumn;
+
+	/**
+	 * The direction of the column last sorted
+	 */
+	private boolean lastSortDirection;
 
 	/**
 	 * Constructs a new {@Code SearchResultsTable}
@@ -113,6 +134,16 @@ public class SearchResultScrollTable extends Composite implements
 		// pass on the handler
 		dataGrid.addRowSelectionHandler(rowSelectionHandler);
 
+		// add handler for sorting
+		dataGrid.addColumnSortHandler(new ColumnSortHandler() {
+
+			public void onColumnSorted(ColumnSortEvent event) {
+				lastSortedColumn = event.getColumnSortList().getPrimaryColumn();
+				lastSortDirection = event.getColumnSortList()
+						.isPrimaryAscending();
+			}
+		});
+
 		int dataGridIndex = 0;
 
 		// set the values into the list
@@ -140,6 +171,14 @@ public class SearchResultScrollTable extends Composite implements
 		newTable.setResizePolicy(ScrollTable.ResizePolicy.FILL_WIDTH);
 		this.scrollTable = newTable;
 
+		if (hideUniqueIdentifier) {
+			for (int i = 0; i < getScrollTable().getDataTable().getRowCount(); i++) {
+				scrollTable.getDataTable().getCellFormatter().getElement(i, 0)
+						.getStyle().setVisibility(Visibility.HIDDEN);
+
+			}
+		}
+
 		mainPanel.clear();
 		mainPanel.setWidget(0, 0, newTable);
 
@@ -159,6 +198,9 @@ public class SearchResultScrollTable extends Composite implements
 
 		for (int i = 0; i < headerTable.getColumnCount(); i++) {
 			dataGrid.setHTML(row, i, result.getDataValues()[i]);
+			if (isHidingUniqueIdentifier()) {
+				dataGrid.setColumnWidth(uniqueIdentifierIndex, 0);
+			}
 		}
 	}
 
@@ -252,4 +294,21 @@ public class SearchResultScrollTable extends Composite implements
 	public ScrollTable getScrollTable() {
 		return scrollTable;
 	}
+
+	public void setHideUniqueIdentifier(boolean hideUniqueIdentifier) {
+		this.hideUniqueIdentifier = hideUniqueIdentifier;
+	}
+
+	public boolean isHidingUniqueIdentifier() {
+		return hideUniqueIdentifier;
+	}
+
+	public Integer getLastSortedColumn() {
+		return lastSortedColumn;
+	}
+
+	public boolean getlastSortDirection() {
+		return lastSortDirection;
+	}
+
 }
