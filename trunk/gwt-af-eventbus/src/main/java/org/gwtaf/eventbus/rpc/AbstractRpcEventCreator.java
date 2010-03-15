@@ -100,7 +100,7 @@ public abstract class AbstractRpcEventCreator implements RpcEventCreatorService 
 		AsyncCallback<R> callback = new AsyncCallback<R>() {
 
 			public void onFailure(Throwable arg0) {
-				arg0.printStackTrace();
+				System.out.println(arg0);
 				eventBus.fireEvent(errorEventProvider.get());
 			}
 
