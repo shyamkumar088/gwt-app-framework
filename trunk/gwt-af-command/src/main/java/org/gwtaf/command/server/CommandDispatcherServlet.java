@@ -58,7 +58,13 @@ public class CommandDispatcherServlet extends RemoteServiceServlet implements
 		// if it's not null, execute and save the Response to return, otherwise
 		// thrown a NoActionHandlerFoundException.
 		if (handler != null) {
-			response = handler.execute(action);
+			try {
+				response = handler.execute(action);
+			} catch (Exception e) {
+				// something done gone wrong
+				e.printStackTrace();
+				throw new IllegalStateException(e);
+			}
 		} else {
 			throw new NoActionHandlerFoundException(getClass().getName()
 					+ ": No ActionHandler was found for the following Action: "
