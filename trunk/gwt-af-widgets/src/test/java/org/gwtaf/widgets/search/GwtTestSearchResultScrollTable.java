@@ -26,6 +26,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.gwtaf.widgets.search.model.DynamicSearchResults;
 import org.gwtaf.widgets.search.model.SearchResult;
 
 import com.google.gwt.core.client.GWT;
@@ -236,7 +237,7 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 	 */
 	public void testSetNullValue() {
 		try {
-			resultsTable.setValue(null);
+			resultsTable.setDynamicValue(null);
 		} catch (NullPointerException e) {
 			Assert.assertTrue(true);
 		}
@@ -268,6 +269,33 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 		// assert that the null was skipped
 		Assert.assertEquals(returnedResults.get(0), result1);
 		Assert.assertEquals(returnedResults.get(1), result2);
+	}
+
+	public void testDynamicValues() {
+		DynamicSearchResults result = new DynamicSearchResults();
+		ArrayList<String> columns = new ArrayList<String>();
+		columns.add("hi");
+		columns.add("hello");
+		columns.add("bye");
+		SearchResult res1 = new SearchResult(3, new String[] { "one", "two",
+				"three" });
+		SearchResult res2 = new SearchResult(3, new String[] { "23423", "2356",
+				"sdaf" });
+		List<SearchResult> results = new ArrayList<SearchResult>();
+		results.add(res1);
+		results.add(res2);
+		result.setHeadings(columns);
+		result.setResults(results);
+		
+		// set the headings and data
+		resultsTable.setDynamicValue(result);
+		
+		// get the results out
+		List<SearchResult> returnedResults = resultsTable.getResults();
+
+		// assert that the null was skipped
+		Assert.assertEquals(returnedResults.get(0), res1);
+		Assert.assertEquals(returnedResults.get(1), res2);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ package org.gwtaf.widgets.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gwtaf.widgets.search.model.DynamicSearchResults;
 import org.gwtaf.widgets.search.model.SearchResult;
 
 import com.google.gwt.dom.client.Style.Visibility;
@@ -116,12 +117,30 @@ public class SearchResultScrollTable extends Composite implements
 		// the dataGrid and headerTable are passed in but mainTable will already
 		// be constructed using them in the Provider. We need these references
 		// because ScrollTable does not offer setter methods
+		// if nothing is provided, go with a blank setup.
+		if (headerTable.equals(new FixedWidthFlexTable())) {
+			FixedWidthGrid grid = new FixedWidthGrid(1, 0);
+			grid.setSelectionEnabled(true);
+			scrolltable = new ScrollTable(grid, headerTable);
+		}
 
 		this.dataGrid = dataGrid;
 		this.headerTable = headerTable;
 		this.scrollTable = scrolltable;
 
 		initWidget(this.mainPanel);
+	}
+
+	public void setDynamicValue(DynamicSearchResults searchResults) {
+
+		// replace the header table
+		headerTable = new FixedWidthFlexTable();
+		for (int i = 0; i < searchResults.getHeadings().size(); i++) {
+			headerTable.setHTML(0, i, searchResults.getHeadings().get(i));
+		}
+
+		// set the data
+		setValue(searchResults.getResults());
 	}
 
 	public void setValue(List<SearchResult> results) {
@@ -181,7 +200,6 @@ public class SearchResultScrollTable extends Composite implements
 
 		mainPanel.clear();
 		mainPanel.setWidget(0, 0, newTable);
-
 	}
 
 	/**
@@ -310,5 +328,4 @@ public class SearchResultScrollTable extends Composite implements
 	public boolean getlastSortDirection() {
 		return lastSortDirection;
 	}
-
 }
