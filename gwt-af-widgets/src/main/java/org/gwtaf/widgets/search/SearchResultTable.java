@@ -23,6 +23,7 @@ package org.gwtaf.widgets.search;
 import java.util.List;
 
 import org.gwtaf.widgets.View;
+import org.gwtaf.widgets.search.model.DynamicSearchResults;
 import org.gwtaf.widgets.search.model.SearchResult;
 
 /**
@@ -49,6 +50,14 @@ public interface SearchResultTable<T extends SearchResult> extends View {
 	 *            a list of the search results to set
 	 */
 	public void setValue(List<T> searchResult);
+
+	/**
+	 * Populates the table with the given {@link DynamicSearchResults}
+	 * 
+	 * @param searchResults
+	 *            the headings and data to set.
+	 */
+	public void setDynamicValue(DynamicSearchResults searchResults);
 
 	/**
 	 * Clears this {@code SearchResultTable}
