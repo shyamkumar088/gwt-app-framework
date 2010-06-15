@@ -25,6 +25,8 @@ import java.util.List;
 import org.gwtaf.widgets.Presenter;
 import org.gwtaf.widgets.View;
 
+import com.google.gwt.user.client.ui.Button;
+
 /**
  * A {@link Presenter} for the {@link ExpandableTable}.
  * 
@@ -41,4 +43,8 @@ public interface ExpandableTablePresenter<P extends Presenter<V, M>, V extends V
 		extends Presenter<ExpandableTable<V>, List<M>> {
 	
 	void setAddButtonText(String newText);
+	
+	void hideRemoveButtons();
+	
+	AddButton getAddButton();
 }
