@@ -273,4 +273,12 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	public void setAddButtonText(String newText) {
 		view.getAddButton().setText(newText);
 	}
+
+	public void hideRemoveButtons() {
+		view.hideRemoveButtons();
+	}
+
+	public AddButton getAddButton() {
+		return view.getAddButton();
+	}
 }

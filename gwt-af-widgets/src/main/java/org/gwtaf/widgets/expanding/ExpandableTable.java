@@ -79,5 +79,11 @@ public interface ExpandableTable<T> extends View, HasClickHandlers {
 	 * @return the list of {@link RemoveButton}s.
 	 */
 	List<RemoveButton> getRemoveButtons();
-	
+
+	/**
+	 * Hides the remove buttons where information should not be deleted by the
+	 * user.
+	 */
+	void hideRemoveButtons();
+
 }

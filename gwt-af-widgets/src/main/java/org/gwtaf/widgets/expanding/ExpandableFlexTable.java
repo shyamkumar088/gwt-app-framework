@@ -85,6 +85,8 @@ public class ExpandableFlexTable<T> extends Composite implements
 	 */
 	private List<RemoveButton> removeButtons = new ArrayList<RemoveButton>();
 
+	private boolean disabledRemoveButtons;
+
 	/**
 	 * Create a new <code>ExpandableFlexTable</code> with the given flex table,
 	 * add button and remove button provider.
@@ -110,7 +112,7 @@ public class ExpandableFlexTable<T> extends Composite implements
 		mainPanel = flexTable;
 		this.addButton = addButton;
 		this.removeButtonProvider = removeButtonProvider;
-		
+
 		// init the widget.
 		initWidget(mainPanel);
 	}
@@ -132,15 +134,16 @@ public class ExpandableFlexTable<T> extends Composite implements
 		colNum++;
 
 		// add a remove button to the new row.
-		RemoveButton removeButton = removeButtonProvider.get();
-		mainPanel.setWidget(rowNum, colNum, removeButton.getContainingWidget());
+		if (!disabledRemoveButtons) {
+			RemoveButton removeButton = removeButtonProvider.get();
+			mainPanel.setWidget(rowNum, colNum, removeButton
+					.getContainingWidget());
+			removeButtons.add(removeButton);
+		}
 
 		// put the add another button at the bottom.
 		rowNum++;
 		mainPanel.setWidget(rowNum, 0, addButton.getContainingWidget());
-
-		// add the remove button for return later.
-		removeButtons.add(removeButton);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -214,5 +217,9 @@ public class ExpandableFlexTable<T> extends Composite implements
 
 	public FlexTable getMainPanel() {
 		return mainPanel;
+	}
+
+	public void hideRemoveButtons() {
+		this.disabledRemoveButtons = true;
 	}
 }
