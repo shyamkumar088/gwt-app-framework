@@ -48,7 +48,7 @@ public class GwtRpcEndPointHandlerAdapter extends RemoteServiceServlet
 		implements HandlerAdapter, ServletContextAware {
 
 	@SuppressWarnings("unchecked")
-	private static ThreadLocal handlerHolder = new ThreadLocal();
+	protected static ThreadLocal handlerHolder = new ThreadLocal();
 
 	private ServletContext servletContext;
 
