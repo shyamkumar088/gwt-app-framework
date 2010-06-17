@@ -74,6 +74,16 @@ public class User implements Serializable {
 	private Set<Authority> authority = new HashSet<Authority>();
 
 	/**
+	 * The email of the user
+	 */
+	private String email;
+
+	/**
+	 * The Full name of the user.
+	 */
+	private String fullName;
+
+	/**
 	 * Creates a new <code>User</code>.
 	 */
 	public User() {
@@ -189,27 +199,20 @@ public class User implements Serializable {
 		this.authority = authority;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("<User: accountNonExpired=");
-		builder.append(accountNonExpired);
-		builder.append(" / accountNonLocked=");
-		builder.append(accountNonLocked);
-		builder.append(" / authority=");
-		builder.append(authority);
-		builder.append(" / credentialsNonExpired=");
-		builder.append(credentialsNonExpired);
-		builder.append(" / enabled=");
-		builder.append(enabled);
-		builder.append(" / id=");
-		builder.append(id);
-		builder.append(" / password=");
-		builder.append(password);
-		builder.append(" / username=");
-		builder.append(username);
-		builder.append(">");
-		return builder.toString();
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	@Override
@@ -229,7 +232,10 @@ public class User implements Serializable {
 				* result
 				+ ((credentialsNonExpired == null) ? 0 : credentialsNonExpired
 						.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
+		result = prime * result
+				+ ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((password == null) ? 0 : password.hashCode());
@@ -267,10 +273,20 @@ public class User implements Serializable {
 				return false;
 		} else if (!credentialsNonExpired.equals(other.credentialsNonExpired))
 			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
 		if (enabled == null) {
 			if (other.enabled != null)
 				return false;
 		} else if (!enabled.equals(other.enabled))
+			return false;
+		if (fullName == null) {
+			if (other.fullName != null)
+				return false;
+		} else if (!fullName.equals(other.fullName))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -288,5 +304,32 @@ public class User implements Serializable {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("<User: accountNonExpired=");
+		builder.append(accountNonExpired);
+		builder.append(" / accountNonLocked=");
+		builder.append(accountNonLocked);
+		builder.append(" / authority=");
+		builder.append(authority);
+		builder.append(" / credentialsNonExpired=");
+		builder.append(credentialsNonExpired);
+		builder.append(" / email=");
+		builder.append(email);
+		builder.append(" / enabled=");
+		builder.append(enabled);
+		builder.append(" / fullName=");
+		builder.append(fullName);
+		builder.append(" / id=");
+		builder.append(id);
+		builder.append(" / password=");
+		builder.append(password);
+		builder.append(" / username=");
+		builder.append(username);
+		builder.append(">\n");
+		return builder.toString();
 	}
 }
