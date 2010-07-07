@@ -132,6 +132,25 @@ public class GwtAfListBox extends ListBox implements HasText, HasValue<String> {
 			}
 		}
 	}
+	
+	/**
+	 * Returns true if the provided value is a valid choice in the drop down.
+	 * @param value the value to check for
+	 * @return true if this value appears in the choices, false otherwise
+	 */
+	public boolean hasValue(String value) {
+		
+		if (value == null) {
+			return false;
+		}
+		
+		for (int i = 0; i < getItemCount(); i++) {
+			if (getValue(i).equals(value)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void setValue(String value, boolean arg1) {
 		// not firing for now
