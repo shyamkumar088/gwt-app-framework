@@ -222,4 +222,12 @@ public class ExpandableFlexTable<T> extends Composite implements
 	public void hideRemoveButtons() {
 		this.disabledRemoveButtons = true;
 	}
+
+	public void markOdd() {
+		for (int i = 0; i < mainPanel.getRowCount(); i++) {
+			if (i % 2 != 0) {
+				mainPanel.getRowFormatter().addStyleName(i, "exOddRow");
+			}
+		}
+	}
 }
