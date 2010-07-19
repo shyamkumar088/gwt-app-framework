@@ -47,4 +47,7 @@ public interface ExpandableTablePresenter<P extends Presenter<V, M>, V extends V
 	void hideRemoveButtons();
 	
 	AddButton getAddButton();
+	
+	void markOdd();
+
 }

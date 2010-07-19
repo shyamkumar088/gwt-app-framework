@@ -86,4 +86,9 @@ public interface ExpandableTable<T> extends View, HasClickHandlers {
 	 */
 	void hideRemoveButtons();
 
+	/**
+	 * Marks the odd rows with a css style.
+	 */
+	void markOdd();
+
 }

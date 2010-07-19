@@ -281,4 +281,8 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	public AddButton getAddButton() {
 		return view.getAddButton();
 	}
+
+	public void markOdd() {
+		view.markOdd();
+	}
 }
