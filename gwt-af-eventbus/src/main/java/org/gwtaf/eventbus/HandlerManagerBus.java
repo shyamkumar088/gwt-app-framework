@@ -20,6 +20,7 @@
  */
 package org.gwtaf.eventbus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,26 +42,34 @@ public class HandlerManagerBus extends HandlerManager implements EventBus {
 	 * A {@link Map} with all the {@link EventHandler}s and their associated
 	 * {@link HandlerRegistration}s
 	 */
-	private Map<EventHandler, HandlerRegistration> handlerRegistrationMap;
+	private Map<EventHandler, List<HandlerRegistration>> handlerRegistrationMap;
 
 	/**
 	 * Creates a new <code>HandlerManagerBus</code> with a null source.
 	 */
 	public HandlerManagerBus() {
 		super(null);
-		handlerRegistrationMap = new HashMap<EventHandler, HandlerRegistration>();
+		handlerRegistrationMap = new HashMap<EventHandler, List<HandlerRegistration>>();
 	}
 
 	@Override
 	public <H extends EventHandler> HandlerRegistration addHandler(
 			Type<H> type, H handler) {
 
+		// retreive the list of registrations for a handler
+		List<HandlerRegistration> regList = handlerRegistrationMap.get(handler);
+		if (regList == null) {
+			regList = new ArrayList<HandlerRegistration>();
+			handlerRegistrationMap.put(handler, regList);
+		}
+		
+		// create the registration
 		HandlerRegistration registration = super.addHandler(type, handler);
-		handlerRegistrationMap.put(handler, registration);
+		regList.add(registration);
 		return registration;
 	}
 
-	public Map<EventHandler, HandlerRegistration> getHandlerRegistrationMap() {
+	public Map<EventHandler, List<HandlerRegistration>> getHandlerRegistrationMap() {
 		return handlerRegistrationMap;
 	}
 
