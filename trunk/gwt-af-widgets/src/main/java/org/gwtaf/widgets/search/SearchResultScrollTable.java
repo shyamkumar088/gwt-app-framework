@@ -21,12 +21,13 @@
 package org.gwtaf.widgets.search;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gwtaf.widgets.search.model.DynamicSearchResults;
 import org.gwtaf.widgets.search.model.SearchResult;
 
-import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
@@ -35,6 +36,7 @@ import com.google.gwt.gen2.table.event.client.ColumnSortEvent;
 import com.google.gwt.gen2.table.event.client.ColumnSortHandler;
 import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import com.google.gwt.gen2.table.event.client.TableEvent.Row;
+import com.google.gwt.gen2.table.override.client.HTMLTable.RowFormatter;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
@@ -94,6 +96,19 @@ public class SearchResultScrollTable extends Composite implements
 	private boolean lastSortDirection;
 
 	/**
+	 * Should the user wish that the column with the unique record identifier
+	 * not be visible, the unique ID will be stored in this map. Otherwise the
+	 * unique ID can be picked up through the proper identification column on
+	 * the selected row.
+	 */
+	private Map<Integer, String> rowToUniqueId = new HashMap<Integer, String>();
+
+	/**
+	 * Flag to mark all odd rows with a specific css style.
+	 */
+	private boolean markOdd;
+
+	/**
 	 * Constructs a new {@Code SearchResultsTable}
 	 * 
 	 * @param scrolltable
@@ -133,21 +148,61 @@ public class SearchResultScrollTable extends Composite implements
 
 	public void setDynamicValue(DynamicSearchResults searchResults) {
 
+		int colCount = searchResults.getHeadings().size();
+
 		// replace the header table
 		headerTable = new FixedWidthFlexTable();
-		for (int i = 0; i < searchResults.getHeadings().size(); i++) {
-			headerTable.setHTML(0, i, searchResults.getHeadings().get(i));
+		int adjust = 0;
+		for (int i = 0; i < colCount; i++) {
+
+			// skip adding a header for the unique ID column.
+			if (hideUniqueIdentifier && i == uniqueIdentifierIndex) {
+				adjust = 1;
+				continue;
+			}
+
+			headerTable.setHTML(0, i - adjust, searchResults.getHeadings().get(
+					i));
 		}
 
 		// set the data
 		setValue(searchResults.getResults());
+
+		// mark the odd rows
+		if (markOdd) {
+			markOdd();
+		}
+	}
+
+	/**
+	 * Marks all the odd rows with a specific CSS name.
+	 */
+	private void markOdd() {
+		RowFormatter formatter = dataGrid.getRowFormatter();
+		for (int i = 0; i < dataGrid.getRowCount(); i++) {
+			if (i % 2 == 1) {
+				formatter.addStyleName(i, "gwtaf-oddRow");
+			}
+			else {
+				formatter.removeStyleName(i, "gwtaf-oddRow");
+			}
+		}
 	}
 
 	public void setValue(List<SearchResult> results) {
 
+		// nothing to do if there are no results.
+		if (results == null || results.size() == 0) {
+			return;
+		}
+
+		// figure out how many columns we'll need
+		int neededColumns = results.get(0).getDataValues().length;
+		neededColumns = hideUniqueIdentifier ? Math.max(0, neededColumns - 1)
+				: neededColumns;
+
 		// make a new data grid
-		this.dataGrid = createDataGrid(results.size(), headerTable
-				.getColumnCount());
+		this.dataGrid = createDataGrid(results.size(), neededColumns);
 		dataGrid.setCellSpacing(0);
 
 		// pass on the handler
@@ -160,6 +215,7 @@ public class SearchResultScrollTable extends Composite implements
 				lastSortedColumn = event.getColumnSortList().getPrimaryColumn();
 				lastSortDirection = event.getColumnSortList()
 						.isPrimaryAscending();
+				markOdd();
 			}
 		});
 
@@ -190,14 +246,6 @@ public class SearchResultScrollTable extends Composite implements
 		newTable.setResizePolicy(ScrollTable.ResizePolicy.FILL_WIDTH);
 		this.scrollTable = newTable;
 
-		if (hideUniqueIdentifier) {
-			for (int i = 0; i < getScrollTable().getDataTable().getRowCount(); i++) {
-				scrollTable.getDataTable().getCellFormatter().getElement(i, 0)
-						.getStyle().setVisibility(Visibility.HIDDEN);
-
-			}
-		}
-
 		mainPanel.clear();
 		mainPanel.setWidget(0, 0, newTable);
 	}
@@ -212,18 +260,22 @@ public class SearchResultScrollTable extends Composite implements
 	 */
 	private void setSingleResult(SearchResult result, int row) {
 
-		assert result.getNumberOfHeadings() == headerTable.getColumnCount();
+		int adjust = 0;
+		for (int i = 0; i < result.getDataValues().length; i++) {
 
-		for (int i = 0; i < headerTable.getColumnCount(); i++) {
-			dataGrid.setHTML(row, i, result.getDataValues()[i]);
-			if (isHidingUniqueIdentifier()) {
-				dataGrid.setColumnWidth(uniqueIdentifierIndex, 0);
+			// skip adding a header for the unique ID column.
+			if (hideUniqueIdentifier && i == uniqueIdentifierIndex) {
+				rowToUniqueId.put(row, result.getDataValues()[i]);
+				adjust = 1;
+				continue;
 			}
+			dataGrid.setHTML(row, i - adjust, result.getDataValues()[i]);
 		}
 	}
 
 	public void clear() {
 		dataGrid.clearAll();
+		rowToUniqueId.clear();
 	}
 
 	public Widget getContainingWidget() {
@@ -298,6 +350,12 @@ public class SearchResultScrollTable extends Composite implements
 	 * @return the value of the identifier cell of the given row.
 	 */
 	public String valueAtIdentifierOfRow(Row row) {
+
+		if (hideUniqueIdentifier) {
+			return rowToUniqueId.get(row.getRowIndex());
+		}
+
+		// otherwise just do a regular cell lookup
 		return dataGrid.getHTML(row.getRowIndex(), uniqueIdentifierIndex);
 	}
 
@@ -327,5 +385,9 @@ public class SearchResultScrollTable extends Composite implements
 
 	public boolean getlastSortDirection() {
 		return lastSortDirection;
+	}
+
+	public void markOdd(boolean markOdd) {
+		this.markOdd = markOdd;
 	}
 }
