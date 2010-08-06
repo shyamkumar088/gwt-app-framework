@@ -326,6 +326,7 @@ public class SearchResultScrollTable extends Composite implements
 
 	public void render() {
 		mainPanel.setWidget(0, 0, scrollTable);
+		scrollTable.fillWidth();
 	}
 
 	public FixedWidthGrid getDataTable() {
