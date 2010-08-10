@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.gwtaf.widgets.search.model.DynamicSearchResults;
 import org.gwtaf.widgets.search.model.SearchResult;
@@ -34,11 +35,14 @@ import com.google.gwt.gen2.table.client.ScrollTable;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.SortPolicy;
 import com.google.gwt.gen2.table.event.client.ColumnSortEvent;
 import com.google.gwt.gen2.table.event.client.ColumnSortHandler;
+import com.google.gwt.gen2.table.event.client.RowSelectionEvent;
 import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import com.google.gwt.gen2.table.event.client.TableEvent.Row;
 import com.google.gwt.gen2.table.override.client.HTMLTable.RowFormatter;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.SourcesTableEvents;
+import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
@@ -138,6 +142,7 @@ public class SearchResultScrollTable extends Composite implements
 			grid.setSelectionEnabled(true);
 			scrolltable = new ScrollTable(grid, headerTable);
 		}
+
 
 		this.dataGrid = dataGrid;
 		this.headerTable = headerTable;
@@ -358,6 +363,15 @@ public class SearchResultScrollTable extends Composite implements
 
 		// otherwise just do a regular cell lookup
 		return dataGrid.getHTML(row.getRowIndex(), uniqueIdentifierIndex);
+	}
+	
+	public String valueAtIdentifierOfRow(Integer row) {
+		if (hideUniqueIdentifier) {
+			return rowToUniqueId.get(row);
+		}
+
+		// otherwise just do a regular cell lookup
+		return dataGrid.getHTML(row, uniqueIdentifierIndex);
 	}
 
 	public Integer getUniqueIdentifierIndex() {
