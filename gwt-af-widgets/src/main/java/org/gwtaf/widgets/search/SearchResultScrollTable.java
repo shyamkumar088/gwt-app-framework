@@ -24,25 +24,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.gwtaf.widgets.search.model.DynamicSearchResults;
 import org.gwtaf.widgets.search.model.SearchResult;
 
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
-import com.google.gwt.gen2.table.client.FixedWidthGrid;
 import com.google.gwt.gen2.table.client.ScrollTable;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.SortPolicy;
 import com.google.gwt.gen2.table.event.client.ColumnSortEvent;
 import com.google.gwt.gen2.table.event.client.ColumnSortHandler;
-import com.google.gwt.gen2.table.event.client.RowSelectionEvent;
 import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import com.google.gwt.gen2.table.event.client.TableEvent.Row;
 import com.google.gwt.gen2.table.override.client.HTMLTable.RowFormatter;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
@@ -61,9 +56,9 @@ public class SearchResultScrollTable extends Composite implements
 	private ScrollTable scrollTable;
 
 	/**
-	 * The {@link FixedWidthGrid} that holds the data
+	 * The {@link SearchDataGrid} that holds the data
 	 */
-	private FixedWidthGrid dataGrid;
+	private SearchDataGrid dataGrid;
 
 	/**
 	 * The {@link FixedWidthFlexTable} that holds the headers
@@ -112,13 +107,15 @@ public class SearchResultScrollTable extends Composite implements
 	 */
 	private boolean markOdd;
 
+	private CellClickedHandler clickHandler;
+
 	/**
 	 * Constructs a new {@Code SearchResultsTable}
 	 * 
 	 * @param scrolltable
 	 *            the injected {@link ScrollTable}
 	 * @param dataGrid
-	 *            the injected {@link FixedWidthGrid}
+	 *            the injected {@link SearchDataGrid}
 	 * @param headerTable
 	 *            the injected {@link FixedWidthFlexTable}
 	 * @param headings
@@ -126,7 +123,7 @@ public class SearchResultScrollTable extends Composite implements
 	 */
 	@Inject
 	public SearchResultScrollTable(FlexTable flexTable,
-			ScrollTable scrolltable, FixedWidthGrid dataGrid,
+			ScrollTable scrolltable, SearchDataGrid dataGrid,
 			FixedWidthFlexTable headerTable) {
 
 		assert scrolltable != null && dataGrid != null && headerTable != null;
@@ -138,12 +135,11 @@ public class SearchResultScrollTable extends Composite implements
 		// because ScrollTable does not offer setter methods
 		// if nothing is provided, go with a blank setup.
 		if (headerTable.equals(new FixedWidthFlexTable())) {
-			FixedWidthGrid grid = new FixedWidthGrid(1, 0);
+			SearchDataGrid grid = new SearchDataGrid(1, 0);
 			grid.setSelectionEnabled(true);
 			scrolltable = new ScrollTable(grid, headerTable);
 		}
-
-
+		
 		this.dataGrid = dataGrid;
 		this.headerTable = headerTable;
 		this.scrollTable = scrolltable;
@@ -187,8 +183,7 @@ public class SearchResultScrollTable extends Composite implements
 		for (int i = 0; i < dataGrid.getRowCount(); i++) {
 			if (i % 2 == 1) {
 				formatter.addStyleName(i, "gwtaf-oddRow");
-			}
-			else {
+			} else {
 				formatter.removeStyleName(i, "gwtaf-oddRow");
 			}
 		}
@@ -209,6 +204,9 @@ public class SearchResultScrollTable extends Composite implements
 		// make a new data grid
 		this.dataGrid = createDataGrid(results.size(), neededColumns);
 		dataGrid.setCellSpacing(0);
+		
+		// pass on the cell selection handler
+		dataGrid.addCellClickHandler(clickHandler);
 
 		// pass on the handler
 		dataGrid.addRowSelectionHandler(rowSelectionHandler);
@@ -217,6 +215,7 @@ public class SearchResultScrollTable extends Composite implements
 		dataGrid.addColumnSortHandler(new ColumnSortHandler() {
 
 			public void onColumnSorted(ColumnSortEvent event) {
+				
 				lastSortedColumn = event.getColumnSortList().getPrimaryColumn();
 				lastSortDirection = event.getColumnSortList()
 						.isPrimaryAscending();
@@ -297,10 +296,10 @@ public class SearchResultScrollTable extends Composite implements
 	 *            the number of columns we have.
 	 * @return the data table to display lists of search results.
 	 */
-	private FixedWidthGrid createDataGrid(int rowCount, int colCount) {
+	private SearchDataGrid createDataGrid(int rowCount, int colCount) {
 
 		// Create a new table
-		FixedWidthGrid dataTable = new FixedWidthGrid(rowCount, colCount);
+		SearchDataGrid dataTable = new SearchDataGrid(rowCount, colCount);
 
 		// Return the data table
 		return dataTable;
@@ -334,7 +333,7 @@ public class SearchResultScrollTable extends Composite implements
 		scrollTable.fillWidth();
 	}
 
-	public FixedWidthGrid getDataTable() {
+	public SearchDataGrid getDataTable() {
 		return dataGrid;
 	}
 
@@ -364,7 +363,7 @@ public class SearchResultScrollTable extends Composite implements
 		// otherwise just do a regular cell lookup
 		return dataGrid.getHTML(row.getRowIndex(), uniqueIdentifierIndex);
 	}
-	
+
 	public String valueAtIdentifierOfRow(Integer row) {
 		if (hideUniqueIdentifier) {
 			return rowToUniqueId.get(row);
@@ -372,6 +371,10 @@ public class SearchResultScrollTable extends Composite implements
 
 		// otherwise just do a regular cell lookup
 		return dataGrid.getHTML(row, uniqueIdentifierIndex);
+	}
+
+	public void addCellClickedHandler(CellClickedHandler clickHandler) {
+		this.clickHandler = clickHandler;
 	}
 
 	public Integer getUniqueIdentifierIndex() {
