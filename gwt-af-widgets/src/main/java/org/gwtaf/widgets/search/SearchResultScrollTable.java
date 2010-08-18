@@ -139,7 +139,7 @@ public class SearchResultScrollTable extends Composite implements
 			grid.setSelectionEnabled(true);
 			scrolltable = new ScrollTable(grid, headerTable);
 		}
-		
+
 		this.dataGrid = dataGrid;
 		this.headerTable = headerTable;
 		this.scrollTable = scrolltable;
@@ -192,19 +192,20 @@ public class SearchResultScrollTable extends Composite implements
 	public void setValue(List<SearchResult> results) {
 
 		// nothing to do if there are no results.
-		if (results == null || results.size() == 0) {
+		if (results == null) {
 			return;
 		}
 
 		// figure out how many columns we'll need
-		int neededColumns = results.get(0).getDataValues().length;
+		int neededColumns = results.size() == 0 ? 0 : results.get(0)
+				.getDataValues().length;
 		neededColumns = hideUniqueIdentifier ? Math.max(0, neededColumns - 1)
 				: neededColumns;
 
 		// make a new data grid
 		this.dataGrid = createDataGrid(results.size(), neededColumns);
 		dataGrid.setCellSpacing(0);
-		
+
 		// pass on the cell selection handler
 		dataGrid.addCellClickHandler(clickHandler);
 
@@ -215,7 +216,7 @@ public class SearchResultScrollTable extends Composite implements
 		dataGrid.addColumnSortHandler(new ColumnSortHandler() {
 
 			public void onColumnSorted(ColumnSortEvent event) {
-				
+
 				lastSortedColumn = event.getColumnSortList().getPrimaryColumn();
 				lastSortDirection = event.getColumnSortList()
 						.isPrimaryAscending();
