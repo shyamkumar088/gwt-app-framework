@@ -93,6 +93,19 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	private Provider<PresenterRemovedEvent<P>> presenterRemovedEventProvider;
 
 	/**
+	 * Keeping in memory old presenters to be used for re-population. Do not
+	 * want to have to re-inject at every setModel as it is far too CPU
+	 * consuming.
+	 */
+	private List<P> injectedPresenters;
+
+	/**
+	 * Keeps track of how many cached presenters are in use. If all are in use,
+	 * a new one will be painfully injected.
+	 */
+	private int cachedPresentersInUse = 0;
+
+	/**
 	 * Creates a new <code>ExpandableTablePresenterImpl</code> with the given
 	 * injected parameters.
 	 * 
@@ -118,11 +131,28 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		this.presenterCreatedEventProvider = presenterCreatedEventProvider;
 		this.presenterRemovedEventProvider = presenterRemovedEventProvider;
 
+		// add at least one default presenter
+		injectedPresenters = new ArrayList<P>();
+		injectedPresenters.add(presenterProvider.get());
+
 		this.view.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				viewClicked(Element.as(event.getNativeEvent().getEventTarget()));
 			}
 		});
+	}
+
+	public P giveMeACachedPresenter() {
+
+		int availablePresenters = injectedPresenters.size();
+		// if no cached presenters are available inject one via provider.
+		if (cachedPresentersInUse >= availablePresenters) {
+			System.out.println("gwtaf-gwtaf-gwtaf-gwtaf-Painful inject");
+			P newPresenter = presenterProvider.get();
+			injectedPresenters.add(newPresenter);
+		}
+
+		return injectedPresenters.get(cachedPresentersInUse++);
 	}
 
 	public ExpandableTable<V> getView() {
@@ -154,6 +184,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		// clear everything.
 		view.clear();
 		viewToPresenter.clear();
+		cachedPresentersInUse = 0;
 		List<M> oldData = models;
 
 		models.clear();
@@ -205,7 +236,7 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	protected void addAndFireEvent(M model) {
 
 		// create the presenter and add it's view to the expandable table.
-		P presenter = presenterProvider.get();
+		P presenter = giveMeACachedPresenter();
 		V viewToAdd = presenter.getView();
 		// viewToAdd.render();
 		view.add(viewToAdd);

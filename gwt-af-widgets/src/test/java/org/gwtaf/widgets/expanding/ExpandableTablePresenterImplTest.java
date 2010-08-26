@@ -117,34 +117,6 @@ public class ExpandableTablePresenterImplTest {
 	}
 
 	/**
-	 * Test calling the {@link ExpandableTablePresenterImpl#addAndFireEvent()}.
-	 * Ensure the expandable table adds a new element and a
-	 * {@link PresenterCreatedEvent} is fired. We're also expecting the new
-	 * model that was created to be stored and available in
-	 * {@link ExpandableTablePresenterImpl#getModel()}.
-	 */
-	@Test
-	public void addAndCheckEvent() {
-
-		// set up the mocks.
-		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock = setupCreateMocks();
-		when(presenterMock.getModel()).thenReturn("Some String");
-
-		// try to add.
-		presenter.addAndFireEvent();
-
-		// verify that the event was fired and the view of the created presenter
-		// was added to the ExpandableTable.
-		verify(eventMock).setPresenter(presenterMock);
-		verify(eventBusMock).fireEvent(eventMock);
-		verify(expandableTableMock).add(viewMock);
-
-		// check that the model was added to the Presenters list of models.
-		Assert.assertEquals(presenter.getModel().size(), 1);
-		Assert.assertEquals(presenter.getModel().get(0), "Some String");
-	}
-
-	/**
 	 * Try removing with a null {@link RemoveButton}. We're expecting an
 	 * {@link AssertionError} to be thrown.
 	 */
@@ -176,50 +148,6 @@ public class ExpandableTablePresenterImplTest {
 	}
 
 	/**
-	 * Test firing a remove event when the View provided doesn't exist in the
-	 * {@link ExpandableTablePresenter}.
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void fireRemoveEventNoView() {
-
-		// set up the mocks.
-		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock = mock(PresenterRemovedEvent.class);
-		when(removedEventProviderMock.get()).thenReturn(removeEventMock);
-		setupCreateMocks();
-		ViewMock someOtherView = mock(ViewMock.class);
-
-		// add one view but first remove for another.
-		presenter.addAndFireEvent();
-		presenter.fireRemoveEvent(someOtherView);
-
-		// check to make sure no events were fired.
-		verify(eventBusMock, never()).fireEvent(removeEventMock);
-	}
-
-	/**
-	 * Test removing a row. We want to ensure the correct event is fired once
-	 * the row is removed with the correct Presenter.
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void removeAndCheckEvent() {
-
-		// set up the mocks.
-		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock = mock(PresenterRemovedEvent.class);
-		when(removedEventProviderMock.get()).thenReturn(removeEventMock);
-		setupCreateMocks();
-
-		// add and then remove the view added.
-		presenter.addAndFireEvent();
-		presenter.fireRemoveEvent(viewMock);
-
-		// verify that the event was fired and the model was removed.
-		verify(eventBusMock).fireEvent(removeEventMock);
-		Assert.assertEquals(presenter.getModel().size(), 0);
-	}
-
-	/**
 	 * Test setting a null model, we're expecting an {@link AssertionError} to
 	 * be thrown because clearing the table should be through setting an empty
 	 * model, not a null one.
@@ -241,102 +169,6 @@ public class ExpandableTablePresenterImplTest {
 
 		verify(expandableTableMock).clear();
 		Assert.assertEquals(presenter.getModel().size(), 0);
-	}
-
-	/**
-	 * Test setting a list of a few models. We're expecting everything to be
-	 * cleared and then three views added to the {@link ExpandableTable} and
-	 * three events to be thrown.
-	 */
-	@Test
-	public void setModels() {
-
-		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock = setupCreateMocks();
-		when(presenterMock.getModel()).thenReturn("Some String");
-
-		// create the list of models and set it.
-		List<String> models = Arrays.asList("hello", "hi", "hey");
-		presenter.setModel(models);
-
-		// verify that the event was fired and the view of the created presenter
-		// was added to the ExpandableTable.
-		verify(eventMock, times(3)).setPresenter(presenterMock);
-		verify(eventBusMock, times(3)).fireEvent(eventMock);
-		verify(expandableTableMock, times(3)).add(viewMock);
-
-		// check that the model was added to the Presenters list of models.
-		Assert.assertEquals(presenter.getModel().size(), 3);
-		Assert.assertEquals(presenter.getModel().get(0), "Some String");
-	}
-
-	/**
-	 * Pretend the AddButton is clicked. We're expecting the
-	 * {@link ExpandableTablePresenterImpl#addAndFireEvent()} to be called.
-	 */
-	@Test
-	public void clickedAddButton() {
-
-		// set up mocks.
-		PresenterCreatedEvent<Presenter<ViewMock, String>> eventMock = setupCreateMocks();
-
-		// add button mock setup.
-		AddButton addButtonMock = mock(AddButton.class);
-		Widget widgetMock = mock(Widget.class);
-		when(addButtonMock.getContainingWidget()).thenReturn(widgetMock);
-		Element elementMock = mock(Element.class);
-		when(addButtonMock.getContainingWidget().getElement()).thenReturn(
-				elementMock);
-		when(expandableTableMock.getAddButton()).thenReturn(addButtonMock);
-
-		// add button clicked.
-		presenter.viewClicked(elementMock);
-
-		// verify that the new event was fired.
-		verify(eventBusMock).fireEvent(eventMock);
-	}
-
-	/**
-	 * Pretend a RemoveButton is clicked. We're expecting the
-	 * {@link ExpandableTablePresenterImpl#removeRow(RemoveButton)} and
-	 * {@link ExpandableTablePresenterImpl#fireRemoveEvent(View)} to be called.
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void clickedRemoveButton() {
-
-		// set up the mocks.
-		PresenterRemovedEvent<Presenter<ViewMock, String>> removeEventMock = mock(PresenterRemovedEvent.class);
-		when(removedEventProviderMock.get()).thenReturn(removeEventMock);
-		PresenterCreatedEvent<Presenter<ViewMock, String>> createdEventMock = setupCreateMocks();
-		when(expandableTableMock.remove(removeButtonMock)).thenReturn(viewMock);
-
-		// remove button mock setup.
-		Widget removeWidgetMock = mock(Widget.class);
-		when(removeButtonMock.getContainingWidget()).thenReturn(
-				removeWidgetMock);
-		Element removeElementMock = mock(Element.class);
-		when(removeButtonMock.getContainingWidget().getElement()).thenReturn(
-				removeElementMock);
-		List<RemoveButton> removeButtons = new ArrayList<RemoveButton>();
-		removeButtons.add(removeButtonMock);
-		when(expandableTableMock.getRemoveButtons()).thenReturn(removeButtons);
-
-		// mock out the add button too.
-		AddButton addButtonMock = mock(AddButton.class);
-		Widget widgetMock = mock(Widget.class);
-		when(addButtonMock.getContainingWidget()).thenReturn(widgetMock);
-		Element elementMock = mock(Element.class);
-		when(addButtonMock.getContainingWidget().getElement()).thenReturn(
-				elementMock);
-		when(expandableTableMock.getAddButton()).thenReturn(addButtonMock);
-
-		// add and then remove pretend the remove button is pressed.
-		presenter.addAndFireEvent();
-		presenter.viewClicked(removeElementMock);
-
-		// verify that the add then remove events are fired.
-		verify(eventBusMock).fireEvent(createdEventMock);
-		verify(eventBusMock).fireEvent(removeEventMock);
 	}
 
 	/**

@@ -28,6 +28,8 @@ import java.util.Map;
 import org.gwtaf.widgets.search.model.DynamicSearchResults;
 import org.gwtaf.widgets.search.model.SearchResult;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.ScrollTable;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.SortPolicy;
@@ -101,6 +103,8 @@ public class SearchResultScrollTable extends Composite implements
 	 * the selected row.
 	 */
 	private Map<Integer, String> rowToUniqueId = new HashMap<Integer, String>();
+
+	private List<Integer> hiddenColumns = new ArrayList<Integer>();
 
 	/**
 	 * Flag to mark all odd rows with a specific css style.
@@ -251,6 +255,30 @@ public class SearchResultScrollTable extends Composite implements
 		newTable.setResizePolicy(ScrollTable.ResizePolicy.FILL_WIDTH);
 		this.scrollTable = newTable;
 
+		// hide invisible columns
+		for (int col : hiddenColumns) {
+
+			for (int i = 0; i < getScrollTable().getDataTable().getRowCount(); i++) {
+				getDataTable().getCellFormatter().getElement(i, col).getStyle()
+						.setVisibility(Visibility.HIDDEN);
+				getDataTable().getCellFormatter().getElement(i, col).getStyle()
+						.setPaddingLeft(0, Unit.PX);
+			}
+
+			newHeaderTable.getCellFormatter().getElement(0, col).getStyle()
+					.setVisibility(Visibility.HIDDEN);
+			newHeaderTable.getCellFormatter().getElement(0, col).getStyle()
+			.setPaddingLeft(0, Unit.PX);
+
+			// newHeaderTable.getCellFormatter().addStyleName(0, col, "hideMe");
+			newHeaderTable.setColumnWidth(col, 0);
+			dataGrid.setColumnWidth(col, 0);
+			// for (int row = 0; row < dataGrid.getRowCount(); row++) {
+			// dataGrid.getCellFormatter().addStyleName(row, col, "hideMe");
+			// }
+		}
+		// newTable.resetColumnWidths();
+
 		mainPanel.clear();
 		mainPanel.setWidget(0, 0, newTable);
 	}
@@ -281,6 +309,7 @@ public class SearchResultScrollTable extends Composite implements
 	public void clear() {
 		dataGrid.clearAll();
 		rowToUniqueId.clear();
+		hiddenColumns.clear();
 	}
 
 	public Widget getContainingWidget() {
@@ -408,5 +437,9 @@ public class SearchResultScrollTable extends Composite implements
 
 	public void markOdd(boolean markOdd) {
 		this.markOdd = markOdd;
+	}
+
+	public void addHiddenColumn(int col) {
+		hiddenColumns.add(col);
 	}
 }
