@@ -77,6 +77,9 @@ public class ExpandableTablePresenterImplTest {
 	@Mock
 	private RemoveButton removeButtonMock;
 
+	@Mock
+	private Provider<String> modelProviderMock;
+
 	/**
 	 * A simple class to implement {@link View} so we could use it to type the
 	 * {@link Presenter}.
@@ -103,7 +106,7 @@ public class ExpandableTablePresenterImplTest {
 	public void initBefore() {
 		MockitoAnnotations.initMocks(this);
 		presenter = new ExpandableTablePresenterImpl<Presenter<ViewMock, String>, ViewMock, String>(
-				eventBusMock, expandableTableMock, presenterProviderMock,
+				eventBusMock, expandableTableMock, presenterProviderMock, modelProviderMock, 
 				createdEventProviderMock, removedEventProviderMock);
 	}
 

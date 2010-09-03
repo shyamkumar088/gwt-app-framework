@@ -205,33 +205,6 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 	}
 
 	/**
-	 * Tests the setting and getting of results in the
-	 * {@link SearchResultScrollTable}
-	 */
-	public void testSetValueAndGetResults() {
-
-		// set the headings of the table
-
-		SearchResult result1 = new SearchResult(3,
-				new String[] { "A", "B", "C" });
-		SearchResult result2 = new SearchResult(3,
-				new String[] { "D", "E", "F" });
-		SearchResult result3 = new SearchResult(3,
-				new String[] { "G", "H", "I" });
-
-		List<SearchResult> results = new ArrayList<SearchResult>();
-		results.add(result1);
-		results.add(result2);
-		results.add(result3);
-
-		// test the set value
-		resultsTable.setValue(results);
-
-		// verify what you put in is equal to what you get out
-		Assert.assertEquals(resultsTable.getResults(), results);
-	}
-
-	/**
 	 * Tests setting a null list of results into the
 	 * {@link SearchResultScrollTable}
 	 */
@@ -241,61 +214,6 @@ public class GwtTestSearchResultScrollTable extends GWTTestCase {
 		} catch (NullPointerException e) {
 			Assert.assertTrue(true);
 		}
-	}
-
-	/**
-	 * Tests setting a list containing a null value into the scroll table. The
-	 * table itself should have skipped the null value
-	 */
-	public void testSetListWithNullValue() {
-		// create the list
-		List<SearchResult> resultWithNull = new ArrayList<SearchResult>();
-		SearchResult result1 = new SearchResult(3,
-				new String[] { "A", "B", "C" });
-
-		SearchResult result2 = new SearchResult(3,
-				new String[] { "D", "D", "D" });
-
-		// add the items, including a null
-		resultWithNull.add(result1);
-		resultWithNull.add(null);
-		resultWithNull.add(result2);
-
-		resultsTable.setValue(resultWithNull);
-
-		// get the results out
-		List<SearchResult> returnedResults = resultsTable.getResults();
-
-		// assert that the null was skipped
-		Assert.assertEquals(returnedResults.get(0), result1);
-		Assert.assertEquals(returnedResults.get(1), result2);
-	}
-
-	public void testDynamicValues() {
-		DynamicSearchResults result = new DynamicSearchResults();
-		ArrayList<String> columns = new ArrayList<String>();
-		columns.add("hi");
-		columns.add("hello");
-		columns.add("bye");
-		SearchResult res1 = new SearchResult(3, new String[] { "one", "two",
-				"three" });
-		SearchResult res2 = new SearchResult(3, new String[] { "23423", "2356",
-				"sdaf" });
-		List<SearchResult> results = new ArrayList<SearchResult>();
-		results.add(res1);
-		results.add(res2);
-		result.setHeadings(columns);
-		result.setResults(results);
-		
-		// set the headings and data
-		resultsTable.setDynamicValue(result);
-		
-		// get the results out
-		List<SearchResult> returnedResults = resultsTable.getResults();
-
-		// assert that the null was skipped
-		Assert.assertEquals(returnedResults.get(0), res1);
-		Assert.assertEquals(returnedResults.get(1), res2);
 	}
 
 	@Override

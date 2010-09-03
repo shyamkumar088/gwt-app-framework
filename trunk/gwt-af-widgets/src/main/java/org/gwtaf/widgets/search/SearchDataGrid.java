@@ -44,9 +44,9 @@ public class SearchDataGrid extends FixedWidthGrid {
 	}
 
 	private void setUp() {
-		
+
 		this.sinkEvents(Event.ONCLICK);
-		
+
 		addCellHighlightHandler(new CellHighlightHandler() {
 			public void onCellHighlight(CellHighlightEvent event) {
 				Cell cell = event.getValue();
@@ -61,34 +61,40 @@ public class SearchDataGrid extends FixedWidthGrid {
 	}
 
 	protected void unHighlightRow(int rowIndex) {
-		getRowFormatter().removeStyleName(rowIndex, "HighlighedRow");
-		
-		// put back odd row if needed
-		if (rowIndex %2 == 1) {
-			getRowFormatter().addStyleName(lastRowIndex, "gwtaf-oddRow");
+
+		if (rowIndex >= 0) {
+			getRowFormatter().removeStyleName(rowIndex, "HighlighedRow");
+
+			// put back odd row if needed
+			if (rowIndex % 2 == 1) {
+				getRowFormatter().addStyleName(lastRowIndex, "gwtaf-oddRow");
+			}
 		}
 	}
 
 	public void onBrowserEvent(Event event) {
 		super.onBrowserEvent(event);
-		
-		if (event.getType().equals("click"))  {
+
+		if (event.getType().equals("click")) {
 			clickHandler.onCellClicked(lastRowIndex, lastCellIndex);
 		}
 	}
 
 	protected void registerHighlight(int rowIndex, int cellIndex) {
 
-		this.lastRowIndex = rowIndex;
-		this.lastCellIndex = cellIndex;
-		
-		// remove odd row if needed
-		if (rowIndex %2 == 1) {
-			getRowFormatter().removeStyleName(lastRowIndex, "gwtaf-oddRow");
+		if (rowIndex >= 0 && cellIndex >= 0) {
+
+			this.lastRowIndex = rowIndex;
+			this.lastCellIndex = cellIndex;
+
+			// remove odd row if needed
+			if (rowIndex % 2 == 1) {
+				getRowFormatter().removeStyleName(lastRowIndex, "gwtaf-oddRow");
+			}
+
+			// add highlight to new row.
+			getRowFormatter().addStyleName(lastRowIndex, "HighlighedRow");
 		}
-		
-		// add highlight to new row.
-		getRowFormatter().addStyleName(lastRowIndex, "HighlighedRow");
 	}
 
 	public void addCellClickHandler(CellClickedHandler clickHandler) {

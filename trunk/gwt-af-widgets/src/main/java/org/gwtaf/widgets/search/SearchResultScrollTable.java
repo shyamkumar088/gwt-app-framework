@@ -21,15 +21,11 @@
 package org.gwtaf.widgets.search;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.gwtaf.widgets.search.model.DynamicSearchResults;
 import org.gwtaf.widgets.search.model.SearchResult;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.gen2.table.client.FixedWidthFlexTable;
 import com.google.gwt.gen2.table.client.ScrollTable;
 import com.google.gwt.gen2.table.client.AbstractScrollTable.SortPolicy;
@@ -47,6 +43,7 @@ import com.google.inject.Inject;
  * A concrete implementation of {@link SearchResultTable}
  * 
  * @author Jason Kong
+ * @author Sergey Vesselov
  * 
  */
 public class SearchResultScrollTable extends Composite implements
@@ -82,11 +79,6 @@ public class SearchResultScrollTable extends Composite implements
 	private Integer uniqueIdentifierIndex;
 
 	/**
-	 * Whether or not the unique identifier column should be hidden
-	 */
-	private boolean hideUniqueIdentifier = false;
-
-	/**
 	 * The index of the column last sorted
 	 */
 	private Integer lastSortedColumn;
@@ -96,14 +88,6 @@ public class SearchResultScrollTable extends Composite implements
 	 */
 	private boolean lastSortDirection;
 
-	/**
-	 * Should the user wish that the column with the unique record identifier
-	 * not be visible, the unique ID will be stored in this map. Otherwise the
-	 * unique ID can be picked up through the proper identification column on
-	 * the selected row.
-	 */
-	private Map<Integer, String> rowToUniqueId = new HashMap<Integer, String>();
-
 	private List<Integer> hiddenColumns = new ArrayList<Integer>();
 
 	/**
@@ -112,6 +96,8 @@ public class SearchResultScrollTable extends Composite implements
 	private boolean markOdd;
 
 	private CellClickedHandler clickHandler;
+
+	private DynamicSearchResults fullResults;
 
 	/**
 	 * Constructs a new {@Code SearchResultsTable}
@@ -153,25 +139,58 @@ public class SearchResultScrollTable extends Composite implements
 
 	public void setDynamicValue(DynamicSearchResults searchResults) {
 
-		int colCount = searchResults.getHeadings().size();
+		this.fullResults = searchResults;
+
+		/********************************
+		 * Filter the results
+		 *******************************/
+		int neededCols = searchResults.getHeadings().size()
+				- hiddenColumns.size();
+		DynamicSearchResults filtered = new DynamicSearchResults();
+
+		// parse the old columns
+		List<String> headings = new ArrayList<String>();
+		for (int i = 0; i < searchResults.getHeadings().size(); i++) {
+			if (hiddenColumns.contains(i)) {
+				continue;
+			}
+			headings.add(searchResults.getHeadings().get(i));
+		}
+		filtered.setHeadings(headings);
+
+		// parse the old data
+		List<SearchResult> results = new ArrayList<SearchResult>();
+		for (int i = 0; i < searchResults.getResults().size(); i++) {
+
+			SearchResult orig = searchResults.getResults().get(i);
+			SearchResult newSearch = new SearchResult(neededCols);
+			int validColIndex = 0;
+			for (int col = 0; col < orig.getNumberOfHeadings(); col++) {
+				if (hiddenColumns.contains(col)) {
+					continue;
+				}
+				newSearch.setData(validColIndex, orig.getDataValues()[col]);
+				validColIndex++;
+			}
+			results.add(newSearch);
+		}
+		filtered.setResults(results);
+
+		/********************************
+		 * Proceed with filtered results.
+		 *******************************/
+		int colCount = filtered.getHeadings().size();
 
 		// replace the header table
 		headerTable = new FixedWidthFlexTable();
-		int adjust = 0;
 		for (int i = 0; i < colCount; i++) {
-
-			// skip adding a header for the unique ID column.
-			if (hideUniqueIdentifier && i == uniqueIdentifierIndex) {
-				adjust = 1;
-				continue;
-			}
-
-			headerTable.setHTML(0, i - adjust, searchResults.getHeadings().get(
-					i));
+			String heading = filtered.getHeadings().get(i);
+			heading = "<div class='gwtAf-Heading'>" + heading + "</div>";
+			headerTable.setHTML(0, i, heading);
 		}
 
 		// set the data
-		setValue(searchResults.getResults());
+		setValue(filtered.getResults());
 
 		// mark the odd rows
 		if (markOdd) {
@@ -187,8 +206,10 @@ public class SearchResultScrollTable extends Composite implements
 		for (int i = 0; i < dataGrid.getRowCount(); i++) {
 			if (i % 2 == 1) {
 				formatter.addStyleName(i, "gwtaf-oddRow");
+				formatter.removeStyleName(i, "gwtaf-evenRow");
 			} else {
 				formatter.removeStyleName(i, "gwtaf-oddRow");
+				formatter.addStyleName(i, "gwtaf-evenRow");
 			}
 		}
 	}
@@ -203,8 +224,6 @@ public class SearchResultScrollTable extends Composite implements
 		// figure out how many columns we'll need
 		int neededColumns = results.size() == 0 ? 0 : results.get(0)
 				.getDataValues().length;
-		neededColumns = hideUniqueIdentifier ? Math.max(0, neededColumns - 1)
-				: neededColumns;
 
 		// make a new data grid
 		this.dataGrid = createDataGrid(results.size(), neededColumns);
@@ -220,7 +239,6 @@ public class SearchResultScrollTable extends Composite implements
 		dataGrid.addColumnSortHandler(new ColumnSortHandler() {
 
 			public void onColumnSorted(ColumnSortEvent event) {
-
 				lastSortedColumn = event.getColumnSortList().getPrimaryColumn();
 				lastSortDirection = event.getColumnSortList()
 						.isPrimaryAscending();
@@ -254,31 +272,6 @@ public class SearchResultScrollTable extends Composite implements
 		newTable.setSortPolicy(SortPolicy.SINGLE_CELL);
 		newTable.setResizePolicy(ScrollTable.ResizePolicy.FILL_WIDTH);
 		this.scrollTable = newTable;
-
-		// hide invisible columns
-		for (int col : hiddenColumns) {
-
-			for (int i = 0; i < getScrollTable().getDataTable().getRowCount(); i++) {
-				getDataTable().getCellFormatter().getElement(i, col).getStyle()
-						.setVisibility(Visibility.HIDDEN);
-				getDataTable().getCellFormatter().getElement(i, col).getStyle()
-						.setPaddingLeft(0, Unit.PX);
-			}
-
-			newHeaderTable.getCellFormatter().getElement(0, col).getStyle()
-					.setVisibility(Visibility.HIDDEN);
-			newHeaderTable.getCellFormatter().getElement(0, col).getStyle()
-			.setPaddingLeft(0, Unit.PX);
-
-			// newHeaderTable.getCellFormatter().addStyleName(0, col, "hideMe");
-			newHeaderTable.setColumnWidth(col, 0);
-			dataGrid.setColumnWidth(col, 0);
-			// for (int row = 0; row < dataGrid.getRowCount(); row++) {
-			// dataGrid.getCellFormatter().addStyleName(row, col, "hideMe");
-			// }
-		}
-		// newTable.resetColumnWidths();
-
 		mainPanel.clear();
 		mainPanel.setWidget(0, 0, newTable);
 	}
@@ -292,23 +285,21 @@ public class SearchResultScrollTable extends Composite implements
 	 *            the row to set it to
 	 */
 	private void setSingleResult(SearchResult result, int row) {
-
-		int adjust = 0;
 		for (int i = 0; i < result.getDataValues().length; i++) {
 
 			// skip adding a header for the unique ID column.
-			if (hideUniqueIdentifier && i == uniqueIdentifierIndex) {
-				rowToUniqueId.put(row, result.getDataValues()[i]);
-				adjust = 1;
-				continue;
+			if (i == uniqueIdentifierIndex) {
+				String uniqueId = fullResults.getResults().get(row)
+						.getDataValues()[i];
+				dataGrid.getRowFormatter().getElement(row).setAttribute(
+						"uniqId", uniqueId);
 			}
-			dataGrid.setHTML(row, i - adjust, result.getDataValues()[i]);
+			dataGrid.setHTML(row, i, result.getDataValues()[i]);
 		}
 	}
 
 	public void clear() {
 		dataGrid.clearAll();
-		rowToUniqueId.clear();
 		hiddenColumns.clear();
 	}
 
@@ -385,22 +376,12 @@ public class SearchResultScrollTable extends Composite implements
 	 * @return the value of the identifier cell of the given row.
 	 */
 	public String valueAtIdentifierOfRow(Row row) {
-
-		if (hideUniqueIdentifier) {
-			return rowToUniqueId.get(row.getRowIndex());
-		}
-
-		// otherwise just do a regular cell lookup
-		return dataGrid.getHTML(row.getRowIndex(), uniqueIdentifierIndex);
+		return valueAtIdentifierOfRow(row.getRowIndex());
 	}
 
 	public String valueAtIdentifierOfRow(Integer row) {
-		if (hideUniqueIdentifier) {
-			return rowToUniqueId.get(row);
-		}
-
-		// otherwise just do a regular cell lookup
-		return dataGrid.getHTML(row, uniqueIdentifierIndex);
+		return dataGrid.getRowFormatter().getElement(row)
+				.getAttribute("uniqId");
 	}
 
 	public void addCellClickedHandler(CellClickedHandler clickHandler) {
@@ -419,14 +400,6 @@ public class SearchResultScrollTable extends Composite implements
 		return scrollTable;
 	}
 
-	public void setHideUniqueIdentifier(boolean hideUniqueIdentifier) {
-		this.hideUniqueIdentifier = hideUniqueIdentifier;
-	}
-
-	public boolean isHidingUniqueIdentifier() {
-		return hideUniqueIdentifier;
-	}
-
 	public Integer getLastSortedColumn() {
 		return lastSortedColumn;
 	}
@@ -441,5 +414,14 @@ public class SearchResultScrollTable extends Composite implements
 
 	public void addHiddenColumn(int col) {
 		hiddenColumns.add(col);
+	}
+
+	/**
+	 * Returns the value at the specified row and column of an unfiltered
+	 * (excluding all hidden columns) result set. Useful for grabbing IDs of
+	 * elements you don't want displayed.
+	 */
+	public String valueAtFullResultTable(int row, int col) {
+		return fullResults.getResults().get(row).getDataValues()[col];
 	}
 }
