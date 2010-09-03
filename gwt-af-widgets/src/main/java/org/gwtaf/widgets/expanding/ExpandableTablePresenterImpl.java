@@ -105,6 +105,8 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	 */
 	private int cachedPresentersInUse = 0;
 
+	private Provider<M> modelProvider;
+
 	/**
 	 * Creates a new <code>ExpandableTablePresenterImpl</code> with the given
 	 * injected parameters.
@@ -122,12 +124,13 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	 */
 	@Inject
 	public ExpandableTablePresenterImpl(EventBus eventBus,
-			ExpandableTable<V> view, Provider<P> presenterProvider,
+			ExpandableTable<V> view, Provider<P> presenterProvider, Provider<M> modelProvider,
 			Provider<PresenterCreatedEvent<P>> presenterCreatedEventProvider,
 			Provider<PresenterRemovedEvent<P>> presenterRemovedEventProvider) {
 		this.eventBus = eventBus;
 		this.view = view;
 		this.presenterProvider = presenterProvider;
+		this.modelProvider = modelProvider;
 		this.presenterCreatedEventProvider = presenterCreatedEventProvider;
 		this.presenterRemovedEventProvider = presenterRemovedEventProvider;
 
@@ -244,6 +247,9 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		// if the given model isn't null, set it in the presenter.
 		if (model != null) {
 			presenter.setModel(model);
+		}
+		else {
+			presenter.setModel(modelProvider.get());
 		}
 
 		// store the created model in our list of models.
