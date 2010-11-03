@@ -215,6 +215,9 @@ public class SearchResultScrollTable extends Composite implements
 	}
 
 	public void setValue(List<SearchResult> results) {
+		
+		fullResults = new DynamicSearchResults();
+		fullResults.setResults(results);
 
 		// nothing to do if there are no results.
 		if (results == null) {
