@@ -190,7 +190,7 @@ public class SearchResultScrollTable extends Composite implements
 		}
 
 		// set the data
-		setValue(filtered.getResults());
+		setValue(filtered.getResults(), false);
 
 		// mark the odd rows
 		if (markOdd) {
@@ -215,9 +215,16 @@ public class SearchResultScrollTable extends Composite implements
 	}
 
 	public void setValue(List<SearchResult> results) {
-		
-		fullResults = new DynamicSearchResults();
-		fullResults.setResults(results);
+		setValue(results, true);
+	}
+
+	private void setValue(List<SearchResult> results, boolean saveFullResult) {
+
+		// store the full results if necessary.
+		if (saveFullResult) {
+			fullResults = new DynamicSearchResults();
+			fullResults.setResults(results);
+		}
 
 		// nothing to do if there are no results.
 		if (results == null) {
