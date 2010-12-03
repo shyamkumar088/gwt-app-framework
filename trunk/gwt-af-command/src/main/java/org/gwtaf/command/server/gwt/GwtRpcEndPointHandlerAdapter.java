@@ -72,6 +72,8 @@ public class GwtRpcEndPointHandlerAdapter extends RemoteServiceServlet
 			// store the handler for retrieval in processCall()
 			handlerHolder.set(handler);
 			doPost(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			// clear out thread local to avoid resource leak
 			handlerHolder.set(null);
@@ -100,9 +102,8 @@ public class GwtRpcEndPointHandlerAdapter extends RemoteServiceServlet
 		 */
 
 		try {
-			RPCRequest rpcRequest =
-					RPC.decodeRequest(payload, getCurrentHandler().getClass(),
-							this);
+			RPCRequest rpcRequest = RPC.decodeRequest(payload,
+					getCurrentHandler().getClass(), this);
 			onAfterRequestDeserialized(rpcRequest);
 			return RPC.invokeAndEncodeResponse(getCurrentHandler(), rpcRequest
 					.getMethod(), rpcRequest.getParameters(), rpcRequest
