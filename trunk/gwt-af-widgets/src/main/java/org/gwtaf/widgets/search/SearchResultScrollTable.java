@@ -359,6 +359,14 @@ public class SearchResultScrollTable extends Composite implements
 		return result;
 	}
 
+	public List<String> getHeadings() {
+		List<String> head = new ArrayList<String>();
+		for (int i = 0; i < headerTable.getColumnCount(); i++) {
+			head.add(headerTable.getText(0, i));
+		}
+		return head;
+	}
+
 	public void render() {
 		mainPanel.setWidget(0, 0, scrollTable);
 		scrollTable.fillWidth();
@@ -434,4 +442,5 @@ public class SearchResultScrollTable extends Composite implements
 	public String valueAtFullResultTable(int row, int col) {
 		return fullResults.getResults().get(row).getDataValues()[col];
 	}
+
 }
