@@ -77,6 +77,16 @@ public class BindingBuilder {
 				targetPropertyName, tvClass, converter, null, adapterProviders);
 	}
 
+	public <SS, SV, TS, TV> Binding<SS, SV, TS, TV> createBindingWithConverterAndListener(
+			SS source, String sourcePropertyName, Class<SV> svClass, TS target,
+			String targetPropertyName, Class<TV> tvClass,
+			Converter<SV, TV> converter, BindingListener listener,
+			BeanAdapterProvider... adapterProviders) {
+		return createFullBinding(source, sourcePropertyName, svClass, target,
+				targetPropertyName, tvClass, converter, listener,
+				adapterProviders);
+	}
+
 	/**
 	 * Creates a binding provided a listener. The listener is attached before
 	 * bind() is called, giving the listener a chance to react at initial
