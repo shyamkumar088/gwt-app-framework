@@ -30,6 +30,7 @@ import org.gwtaf.command.shared.Action;
 public class LoginUser implements Action<LoginUserResponse> {
 
 	private String username, password;
+	private String uniqueId;
 
 	public LoginUser () {
 		
@@ -48,6 +49,22 @@ public class LoginUser implements Action<LoginUserResponse> {
 		this.username = username;
 		this.password = password;
 	}
+	
+	/**
+	 * Creates a new <code>LoginUser</code> with the given username and
+	 * password.
+	 * 
+	 * @param username
+	 *            the username.
+	 * @param password
+	 *            the password.
+	 */
+	public LoginUser(String username, String password, String uniqueId) {
+		this.username = username;
+		this.password = password;
+		this.uniqueId = uniqueId;
+	}
+
 
 	/**
 	 * Returns the username.
@@ -73,5 +90,13 @@ public class LoginUser implements Action<LoginUserResponse> {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getUniqueId() {
+		return uniqueId;
+	}
+
+	public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
 	}
 }
