@@ -32,6 +32,7 @@ public class RequestLoginEvent extends GwtEvent<RequestLoginEventHandler> {
 
 	private String username, password;
 	private Type<RequestLoginEventHandler> type;
+	private String uniqueId;
 	
 	@Inject
 	public RequestLoginEvent(Type<RequestLoginEventHandler> type) {
@@ -62,5 +63,13 @@ public class RequestLoginEvent extends GwtEvent<RequestLoginEventHandler> {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
+	}
+
+	public String getUniqueId() {
+		return uniqueId;
 	}
 }
