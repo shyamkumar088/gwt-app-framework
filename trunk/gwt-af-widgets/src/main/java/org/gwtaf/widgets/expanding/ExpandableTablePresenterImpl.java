@@ -64,6 +64,11 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	 * {@link ExpandableTable}.
 	 */
 	private List<M> models = new ArrayList<M>();
+	
+	/**
+	 * Presenters currently being used by the expandable table.
+	 */
+	private List<P> currentPresenters = new ArrayList<P>();
 
 	/**
 	 * A map of views to the presenters that contain them. This map is only for
@@ -107,6 +112,8 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 
 	private Provider<M> modelProvider;
 
+	private boolean scrollDownOnAdd = true;
+
 	/**
 	 * Creates a new <code>ExpandableTablePresenterImpl</code> with the given
 	 * injected parameters.
@@ -124,7 +131,8 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 	 */
 	@Inject
 	public ExpandableTablePresenterImpl(EventBus eventBus,
-			ExpandableTable<V> view, Provider<P> presenterProvider, Provider<M> modelProvider,
+			ExpandableTable<V> view, Provider<P> presenterProvider,
+			Provider<M> modelProvider,
 			Provider<PresenterCreatedEvent<P>> presenterCreatedEventProvider,
 			Provider<PresenterRemovedEvent<P>> presenterRemovedEventProvider) {
 		this.eventBus = eventBus;
@@ -176,6 +184,14 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 
 	public void setModel(List<M> dataFromModel) {
 
+		// clear everything.
+		view.clear();
+		viewToPresenter.clear();
+		currentPresenters.clear();
+		cachedPresentersInUse = 0;
+		List<M> oldData = models;
+		models.clear();
+		
 		// check parameters.
 		assert dataFromModel != null : getClass().getName()
 				+ ": cannot set a null list of models.";
@@ -183,14 +199,6 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		// copy over the arguments
 		List<M> argumentCopy = new ArrayList<M>();
 		argumentCopy.addAll(dataFromModel);
-
-		// clear everything.
-		view.clear();
-		viewToPresenter.clear();
-		cachedPresentersInUse = 0;
-		List<M> oldData = models;
-
-		models.clear();
 
 		// do not fire property change event when adding models. We don't want
 		// the source (model) to sync with the incomplete models of the ExFT.
@@ -213,7 +221,13 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		assert removeButton != null : getClass().getName()
 				+ ": RemoveButton must be instantiated to be removed.";
 
-		return view.remove(removeButton);
+		// remove the view
+		V removedView = view.remove(removeButton);
+
+		// remove the removed presenter from our list.
+		currentPresenters.remove(viewToPresenter.get(removedView));
+				
+		return removedView;
 	}
 
 	/**
@@ -247,13 +261,14 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		// if the given model isn't null, set it in the presenter.
 		if (model != null) {
 			presenter.setModel(model);
-		}
-		else {
+		} else {
 			presenter.setModel(modelProvider.get());
 		}
 
 		// store the created model in our list of models.
 		models.add(presenter.getModel());
+		
+		currentPresenters.add(presenter);
 
 		// add a map for the view to the presenter.
 		viewToPresenter.put(presenter.getView(), presenter);
@@ -263,6 +278,13 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 				.get();
 		presenterCreated.setPresenter(presenter);
 		eventBus.fireEvent(presenterCreated);
+
+		// scroll down by the height of the added component if needed.
+		if (scrollDownOnAdd) {
+			int scrollDownBy = viewToAdd.getContainingWidget().getElement()
+					.getClientHeight();
+			scrollBy(scrollDownBy);
+		}
 	}
 
 	/**
@@ -321,5 +343,21 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 
 	public void markOdd() {
 		view.markOdd();
+	}
+
+	public boolean isScrollDownOnAdd() {
+		return scrollDownOnAdd;
+	}
+
+	public void setScrollDownOnAdd(boolean scrollDownOnAdd) {
+		this.scrollDownOnAdd = scrollDownOnAdd;
+	}
+
+	public static native void scrollBy(int val) /*-{
+												$wnd.scrollBy(0, val);
+												}-*/;
+
+	public List<P> getPresenters() {
+		return currentPresenters;
 	}
 }
