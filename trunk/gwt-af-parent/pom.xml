@@ -1,24 +1,16 @@
 
-	<!--
-		Copyright 2008. Mount Sinai Hospital, Toronto, Canada. Licensed under
-		the Apache License, Version 2.0. You can find a copy of the license
-		at:
-	-->
-	<!-- http://www.apache.org/licenses/LICENSE-2.0 -->
-	<!--
-		IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR
-		DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES,
-		INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND
-		ITS DOCUMENTATION, EVEN IF MOUNT SINAI HOSPITAL HAS BEEN ADVISED OF
-		THE POSSIBILITY OF SUCH DAMAGE.
-	-->
-	<!--
-		MOUNT SINAI HOSPITAL SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTIES OF
-		MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE AND
-		ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS
-		IS". MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE,
-		SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-	-->
+<!-- Copyright 2008. Mount Sinai Hospital, Toronto, Canada. Licensed under 
+	the Apache License, Version 2.0. You can find a copy of the license at: -->
+<!-- http://www.apache.org/licenses/LICENSE-2.0 -->
+<!-- IN NO EVENT SHALL MOUNT SINAI HOSPITAL BE LIABLE TO ANY PARTY FOR DIRECT, 
+	INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, 
+	ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF MOUNT 
+	SINAI HOSPITAL HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
+<!-- MOUNT SINAI HOSPITAL SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTIES OF 
+	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING 
+	DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS". MOUNT SINAI 
+	HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, 
+	OR MODIFICATIONS. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -42,7 +34,7 @@
 
 	<!-- Properties declared to not copy version numbers around. -->
 	<properties>
-		<!--  tell the compiler we can use 1.5 -->
+		<!-- tell the compiler we can use 1.5 -->
 		<maven.compiler.source>1.5</maven.compiler.source>
 		<maven.compiler.target>1.5</maven.compiler.target>
 
@@ -60,10 +52,8 @@
 					<artifactId>gwt-maven-plugin</artifactId>
 					<version>1.2</version>
 
-					<!--
-						Exclude regular tests so the GWT compiler doesn't try to compile
-						them.
-					-->
+					<!-- Exclude regular tests so the GWT compiler doesn't try to compile 
+						them. -->
 					<executions>
 						<execution>
 							<goals>
@@ -102,7 +92,7 @@
 
 		<dependencies>
 
-			<!--  GWT dependencies (from central repo) -->
+			<!-- GWT dependencies (from central repo) -->
 			<dependency>
 				<groupId>com.google.gwt</groupId>
 				<artifactId>gwt-servlet</artifactId>
@@ -157,15 +147,62 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--
-			Add JUnit so Eclipse stops being annoying when creating new JUnit 4
-			tests (which turn into TestNG tests).
-		-->
+		<!-- Add JUnit so Eclipse stops being annoying when creating new JUnit 
+			4 tests (which turn into TestNG tests). -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- conflict resolution for slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
