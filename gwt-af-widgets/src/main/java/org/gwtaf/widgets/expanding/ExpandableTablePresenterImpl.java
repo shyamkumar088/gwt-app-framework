@@ -189,8 +189,6 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		viewToPresenter.clear();
 		currentPresenters.clear();
 		cachedPresentersInUse = 0;
-		List<M> oldData = models;
-		models.clear();
 		
 		// check parameters.
 		assert dataFromModel != null : getClass().getName()
@@ -199,6 +197,8 @@ public class ExpandableTablePresenterImpl<P extends Presenter<V, M>, V extends V
 		// copy over the arguments
 		List<M> argumentCopy = new ArrayList<M>();
 		argumentCopy.addAll(dataFromModel);
+		
+		models.clear();
 
 		// do not fire property change event when adding models. We don't want
 		// the source (model) to sync with the incomplete models of the ExFT.
