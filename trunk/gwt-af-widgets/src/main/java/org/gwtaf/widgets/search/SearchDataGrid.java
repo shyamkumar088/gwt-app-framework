@@ -62,7 +62,7 @@ public class SearchDataGrid extends FixedWidthGrid {
 
 	protected void unHighlightRow(int rowIndex) {
 
-		if (rowIndex >= 0) {
+		if (rowIndex >= 0 && rowIndex <= getRowCount()) {
 			getRowFormatter().removeStyleName(rowIndex, "HighlighedRow");
 
 			// put back odd row if needed
@@ -75,7 +75,7 @@ public class SearchDataGrid extends FixedWidthGrid {
 	public void onBrowserEvent(Event event) {
 		super.onBrowserEvent(event);
 
-		if (event.getType().equals("click")) {
+		if (event.getType().equals("click") && clickHandler != null) {
 			clickHandler.onCellClicked(lastRowIndex, lastCellIndex);
 		}
 	}

@@ -176,9 +176,9 @@ public class SearchResultScrollTable extends Composite implements
 		}
 		filtered.setResults(results);
 
-		/********************************
-		 * Proceed with filtered results.
-		 *******************************/
+		/***********************************
+		 * Proceed with filtered results
+		 ***********************************/
 		int colCount = filtered.getHeadings().size();
 
 		// replace the header table
@@ -338,8 +338,11 @@ public class SearchResultScrollTable extends Composite implements
 
 	public List<SearchResult> getResults() {
 		List<SearchResult> results = new ArrayList<SearchResult>();
+		RowFormatter formatter = dataGrid.getRowFormatter();
 		for (int i = 0; i < dataGrid.getRowCount(); i++) {
-			results.add(createSingleResultFromRow(i));
+			if (formatter.isVisible(i)) {
+				results.add(createSingleResultFromRow(i));
+			}
 		}
 		return results;
 	}

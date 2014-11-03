@@ -18,42 +18,20 @@
  * MOUNT SINAI HOSPITAL HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
  * UPDATES, ENHANCEMENTS, OR MODIFICATIONS. 
  */
-package org.gwtaf.widgets;
+package org.gwtaf.widgets.expanding;
 
+import com.google.gwt.i18n.client.Constants;
 
 /**
- * * An interface representing the Presenter in the Model-View-Presenter
- * pattern.
+ * Externised constants for the {@link LabelRemoveButton}.
  * 
  * @author Arthur Kalmenson
- * 
- * @param <V>
- *            the type of view.
- * @param <M>
- *            the type of model.
  */
-public interface Presenter<V extends View, M> {
+public interface ExpandableTableConstants extends Constants {
 
-	/**
-	 * Returns the View associated with this Presenter.
-	 * 
-	 * @return the View associated with this Presenter.
-	 */
-	public V getView();
-
-	/**
-	 * Returns the Model of this Presenter.
-	 * 
-	 * @return the Model of this Presenter.
-	 */
-	public M getModel();
-
-	/**
-	 * Sets the new Model for this Presenter.
-	 * 
-	 * @param model
-	 *            the new Model for this Presenter.
-	 */
-	public void setModel(M model);
-
+	@DefaultStringValue("remove")
+	String removeLabel();
+	
+	@DefaultStringValue("add")
+	String addLabel();
 }
