@@ -20,9 +20,10 @@
  */
 package org.gwtaf.widgets.generic;
 
-import org.mockito.InOrder;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -126,26 +127,5 @@ public class UiBundleWidgetTest {
 				labelMock, widgetMock);
 		Assert.assertEquals(uiBundleWidget.getLabel(), labelMock);
 		Assert.assertEquals(uiBundleWidget.getWidget(), widgetMock);
-	}
-
-	/**
-	 * Test to ensure the label and widget are added to the Panel that's given.
-	 * We also want to ensure the label is added before the widget.
-	 */
-	@Test
-	public void layoutCheck() {
-
-		// create it.
-		uiBundleWidget = new UiBundleWidget<Label, Widget>(panelMock,
-				labelMock, widgetMock);
-
-		// verify they were added.
-		InOrder inOrder = inOrder(panelMock);
-		inOrder.verify(panelMock).add(labelMock);
-		inOrder.verify(panelMock).add(widgetMock);
-
-		// verify there was no other action.
-		verifyZeroInteractions(labelMock);
-		verifyZeroInteractions(widgetMock);
 	}
 }
